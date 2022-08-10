@@ -289,6 +289,8 @@ struct DistinctCountDef {
     static void init_set(SetT* addr) { new (addr) SetT(); }
 
     static int64_t set_size(SetT* set) {
+        std::mutex m_mutex;
+        std::lock_guard lock(m_mutex);
         int64_t size = set->size();
         set->clear();
         set->~SetT();
@@ -298,6 +300,8 @@ struct DistinctCountDef {
     template <typename V>
     struct UpdateImpl {
         static SetT* update_set(SetT* set, V value) {
+            std::mutex m_mutex;
+            std::lock_guard lock(m_mutex);
             set->insert(value);
             return set;
         }
@@ -306,6 +310,8 @@ struct DistinctCountDef {
     template <typename V>
     struct UpdateImpl<V*> {
         static SetT* update_set(SetT* set, V* value) {
+            std::mutex m_mutex;
+            std::lock_guard lock(m_mutex);
             set->insert(*value);
             return set;
         }
