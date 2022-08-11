@@ -16,15 +16,18 @@
 
 #include "udf/default_udf_library.h"
 
+#include <functional>
+#include <queue>
 #include <string>
 #include <tuple>
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <queue>
-#include <functional>
 
+#include "absl/base/thread_annotations.h"
+#include "absl/container/btree_set.h"
 #include "absl/strings/str_cat.h"
+#include "absl/synchronization/mutex.h"
 #include "codegen/date_ir_builder.h"
 #include "codegen/string_ir_builder.h"
 #include "codegen/timestamp_ir_builder.h"
@@ -273,9 +276,30 @@ struct AvgUdafDef {
 };
 
 template <typename T>
+struct ConcurrentTreeSet {
+    void clear() noexcept LOCKS_EXCLUDED(mutex_) {
+        absl::MutexLock lock(&mutex_);
+        data_.clear();
+    }
+
+    auto insert(const T& __x) LOCKS_EXCLUDED(mutex_) {
+        absl::MutexLock lock(&mutex_);
+        return data_.insert(__x);
+    }
+
+    size_t size() const noexcept LOCKS_EXCLUDED(mutex_) {
+        absl::MutexLock lock(&mutex_);
+        return data_.size();
+    }
+
+    mutable absl::Mutex mutex_;  // protects data_
+    absl::btree_set<T> data_ GUARDED_BY(mutex_);
+};
+
+template <typename T>
 struct DistinctCountDef {
     using ArgT = typename DataTypeTrait<T>::CCallArgType;
-    using SetT = std::unordered_set<T>;
+    using SetT = ConcurrentTreeSet<T>;
 
     void operator()(UdafRegistryHelper& helper) {  // NOLINT
         std::string suffix = ".opaque_std_set_" + DataTypeTrait<T>::to_string();

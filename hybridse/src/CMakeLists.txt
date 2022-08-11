@@ -58,6 +58,10 @@ if (LLVM_EXT_ENABLE)
     add_definitions(-DLLVM_EXT_ENABLE)
 endif ()
 
+if(CMAKE_CXX_COMPILER_ID MATCHES "(AppleClang)|(Clang)")
+    add_definitions(-Wthread-safety)
+endif()
+
 add_library(hybridse_flags STATIC ${CMAKE_CURRENT_SOURCE_DIR}/flags.cc)
 target_link_libraries(hybridse_flags ${GFLAGS_LIBRARY})
 
