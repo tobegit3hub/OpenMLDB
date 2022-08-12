@@ -185,16 +185,19 @@ void FillNullStringOffset(int8_t* buf, uint32_t start, uint32_t addr_length,
         }
     }
 
-
 }
 
 bool RowBuilder::AppendNULL() {
-    int8_t* ptr = buf_ + HEADER_LENGTH + (cnt_ >> 3);
-    *(reinterpret_cast<uint8_t*>(ptr)) |= 1 << (cnt_ & 0x07);
 
     if (FLAGS_enable_spark_unsaferow_format) {
+        int8_t* ptr = buf_ + HEADER_LENGTH + (cnt_ >> 6);
+        *(reinterpret_cast<uint8_t*>(ptr)) |= 1 << (cnt_ & 0x07f);
         // Do not fill null for UnsafeRowOpt
+
     } else {
+        int8_t* ptr = buf_ + HEADER_LENGTH + (cnt_ >> 3);
+        *(reinterpret_cast<uint8_t*>(ptr)) |= 1 << (cnt_ & 0x07);
+
         const ::hybridse::type::ColumnDef& column = schema_.Get(cnt_);
         if (column.type() == ::hybridse::type::kVarchar) {
             FillNullStringOffset(buf_, str_field_start_offset_, str_addr_length_,
