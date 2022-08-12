@@ -26,6 +26,9 @@
 #include "base/string_ref.h"
 #include "base/type.h"
 #include "glog/logging.h"
+#include "gflags/gflags.h"
+
+DECLARE_bool(enable_spark_unsaferow_format);
 
 namespace hybridse {
 namespace codec {
@@ -51,12 +54,23 @@ uint32_t CalcTotalLength(uint32_t primary_size, uint32_t str_field_cnt,
                          uint32_t str_size, uint32_t* str_addr_space);
 
 inline void AppendNullBit(int8_t* buf_ptr, uint32_t col_idx, int8_t is_null) {
-    int8_t* ptr = buf_ptr + HEADER_LENGTH + (col_idx >> 3);
-    if (is_null) {
-        *(reinterpret_cast<uint8_t*>(ptr)) |= 1 << (col_idx & 0x07);
+
+    if (FLAGS_enable_spark_unsaferow_format) {
+        int8_t* ptr = buf_ptr + HEADER_LENGTH + (col_idx >> 6);
+        if (is_null) {
+            *(reinterpret_cast<uint8_t*>(ptr)) |= 1 << (col_idx & 0x07f);
+        } else {
+            *(reinterpret_cast<uint8_t*>(ptr)) &= ~(1 << (col_idx & 0x07f));
+        }
     } else {
-        *(reinterpret_cast<uint8_t*>(ptr)) &= ~(1 << (col_idx & 0x07));
+        int8_t* ptr = buf_ptr + HEADER_LENGTH + (col_idx >> 3);
+        if (is_null) {
+            *(reinterpret_cast<uint8_t*>(ptr)) |= 1 << (col_idx & 0x07);
+        } else {
+            *(reinterpret_cast<uint8_t*>(ptr)) &= ~(1 << (col_idx & 0x07));
+        }
     }
+
 }
 
 inline int32_t AppendInt16(int8_t* buf_ptr, uint32_t buf_size, int16_t val,

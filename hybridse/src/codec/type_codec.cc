@@ -185,9 +185,14 @@ int32_t AppendString(int8_t* buf_ptr, uint32_t buf_size, uint32_t col_idx,
                      uint32_t str_addr_space, uint32_t str_body_offset) {
     if (is_null) {
         AppendNullBit(buf_ptr, col_idx, true);
-        size_t str_addr_length = GetAddrLength(buf_size);
-        FillNullStringOffset(buf_ptr, str_start_offset, str_addr_length,
-                             str_field_offset, str_body_offset);
+        if (FLAGS_enable_spark_unsaferow_format) {
+
+        } else {
+            size_t str_addr_length = GetAddrLength(buf_size);
+            FillNullStringOffset(buf_ptr, str_start_offset, str_addr_length,
+                                 str_field_offset, str_body_offset);
+        }
+
         return str_body_offset;
     }
 
