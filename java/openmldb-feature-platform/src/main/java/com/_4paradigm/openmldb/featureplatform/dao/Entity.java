@@ -5,10 +5,14 @@ import lombok.Data;
 @Data
 public class Entity {
     private String name;
-    private String primary_keys;
+    private String primaryKeys;
 
-    public Entity(String name, String primary_keys) {
+    public Entity() {
+
+    }
+
+    public Entity(String name, String primaryKeys) {
         this.name = name;
-        this.primary_keys = primary_keys;
+        this.primaryKeys = primaryKeys;
     }
 }

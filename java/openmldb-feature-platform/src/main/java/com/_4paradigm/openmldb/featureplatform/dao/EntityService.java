@@ -60,6 +60,8 @@ public class EntityService {
                     return entity;
                 }
             }
+
+            openmldbStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,4 +69,37 @@ public class EntityService {
         return null;
     }
 
+    public boolean addEntity(Entity entity) {
+        try {
+            // TODO: It would be better to use JDBC prepared statement from connection
+            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.entities values ('%s', '%s')", entity.getName(), entity.getPrimaryKeys());
+
+            Statement openmldbStatement = openmldbConnection.createStatement();
+            openmldbStatement.execute(sql);
+            openmldbStatement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean deleteEntity(String name) {
+        try {
+            // TODO: It would be better to use JDBC prepared statement from connection
+            String sql = String.format("DELETE FROM SYSTEM_FEATURE_PLATFORM.entities WHERE name='%s'", name);
+
+            Statement openmldbStatement = openmldbConnection.createStatement();
+            openmldbStatement.execute(sql);
+            openmldbStatement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }
