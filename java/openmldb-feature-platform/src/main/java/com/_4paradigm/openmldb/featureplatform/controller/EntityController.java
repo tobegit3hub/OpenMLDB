@@ -20,14 +20,13 @@ public class EntityController {
     }
 
     @GetMapping
-    public List<Entity> test() {
-        entityService.test();
-        return null;
+    public List<Entity> getEntities() {
+        return entityService.getEntities();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{name}")
     public Entity getEntityByName(@PathVariable String name) {
-        return null;
+        return entityService.getEntityByName(name);
     }
 
     @PostMapping

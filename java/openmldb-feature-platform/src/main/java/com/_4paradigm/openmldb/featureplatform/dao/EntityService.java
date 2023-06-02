@@ -2,35 +2,69 @@ package com._4paradigm.openmldb.featureplatform.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class EntityService {
 
-    private final Statement openmldbStatement;
+    private final Connection openmldbConnection;
 
     @Autowired
-    public EntityService(Statement openmldbStatement) {
-        this.openmldbStatement = openmldbStatement;
+    public EntityService(Connection openmldbConnection) {
+        this.openmldbConnection = openmldbConnection;
     }
 
-    public void test() {
-        String sql = "select 100";
+    public List<Entity> getEntities() {
+        String sql = "SELECT name, primary_keys FROM entities";
+
+        ArrayList<Entity> entities = new ArrayList<>();
 
         try {
+            Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);
-            if (sql.toLowerCase().startsWith("select")) {
-                ResultSet result = openmldbStatement.getResultSet();
+            ResultSet result = openmldbStatement.getResultSet();
+
+            while (result.next()) {
+                Entity entity = new Entity(result.getString(1), result.getString(2));
+                entities.add(entity);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return entities;
+    }
+
+
+    public Entity getEntityByName(String name) {
+        try {
+            // TODO: Set database before
+            String sql = "SELECT name, primary_keys FROM SYSTEM_FEATURE_PLATFORM.entities WHERE name=?";
+
+            PreparedStatement openmldbStatement = openmldbConnection.prepareStatement(sql);
+            openmldbStatement.setString(1, name);
+
+            ResultSet result = openmldbStatement.executeQuery();
+
+            if (result.getFetchSize() == 0) {
+                System.out.print("Can not get entity with the name: " + name);
+                return null;
+            } else if (result.getFetchSize() > 1) {
+                System.out.print("Get more entities with the same name");
+                return null;
+            } else {
                 while (result.next()) {
-                    System.out.println(result.getInt(1));
+                    Entity entity = new Entity(result.getString(1), result.getString(2));
+                    return entity;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
 }
