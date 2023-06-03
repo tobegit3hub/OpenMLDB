@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -15,7 +14,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import com._4paradigm.openmldb.featureplatform.dao.Entity;
 
@@ -40,7 +38,17 @@ public class FeaturePlatformClient {
         EntityUtils.consume(entity);
     }
 
-    public List<Entity> listEntities() throws IOException {
+    public List<String> getOpenmldbTables() throws IOException {
+        String endpoint = this.apiEndpoint + "tables";
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
+    }
+
+    public List<Entity> getEntities() throws IOException {
         String endpoint = this.apiEndpoint + "entities";
         HttpGet request = new HttpGet(endpoint);
         HttpResponse response = httpClient.execute(request);
@@ -79,7 +87,7 @@ public class FeaturePlatformClient {
         return true;
     }
 
-    public List<FeatureView> listFeatureViews() throws IOException {
+    public List<FeatureView> getFeatureViews() throws IOException {
         String endpoint = this.apiEndpoint + "featureviews";
         HttpGet request = new HttpGet(endpoint);
         HttpResponse response = httpClient.execute(request);
@@ -118,7 +126,7 @@ public class FeaturePlatformClient {
         return true;
     }
 
-    public List<FeatureService> listFeatureServices() throws IOException {
+    public List<FeatureService> getFeatureServices() throws IOException {
         String endpoint = this.apiEndpoint + "featureservices";
         HttpGet request = new HttpGet(endpoint);
         HttpResponse response = httpClient.execute(request);
