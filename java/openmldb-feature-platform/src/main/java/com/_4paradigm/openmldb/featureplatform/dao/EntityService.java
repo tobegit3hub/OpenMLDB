@@ -37,7 +37,6 @@ public class EntityService {
         return entities;
     }
 
-
     public Entity getEntityByName(String name) {
         try {
             // TODO: Set database before
