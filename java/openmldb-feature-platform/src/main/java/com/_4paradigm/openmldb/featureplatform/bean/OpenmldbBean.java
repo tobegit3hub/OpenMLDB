@@ -30,7 +30,8 @@ public class OpenmldbBean {
             Statement stmt = connection.createStatement();
 
             stmt.execute("SET @@execute_mode='online'");
-            stmt.execute("use SYSTEM_FEATURE_PLATFORM");
+            stmt.execute("CREATE DATABASE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM");
+            stmt.execute("USE SYSTEM_FEATURE_PLATFORM");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
