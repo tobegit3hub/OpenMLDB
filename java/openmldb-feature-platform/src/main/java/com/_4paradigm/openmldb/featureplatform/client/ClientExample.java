@@ -8,9 +8,28 @@ import java.util.List;
 
 public class ClientExample {
 
-    public static void main(String[] args) {
+    private static FeaturePlatformClient client = new FeaturePlatformClient("127.0.0.1", 8888);
 
-        FeaturePlatformClient client = new FeaturePlatformClient("127.0.0.1", 8888);
+    
+    public static void validateSql() throws IOException {
+        String sql = "SELECT 100";
+        boolean result = client.validateSql(sql);
+        System.out.println(result);
+    }
+
+    public static void querySql() throws IOException {
+        String sql = "SELECT 100";
+        boolean result = client.querySql(sql);
+        System.out.println(result);
+    }
+
+    public static void executeSql() throws IOException {
+        String sql = "CREATE DATABASE db1";
+        boolean result = client.executeSql(sql);
+        System.out.println(result);
+    }
+
+    public static void main(String[] args) {
 
         try {
             // List all entities
@@ -42,19 +61,22 @@ public class ClientExample {
             //client.deleteFeatureView("feature_view1");
 
             // List all feature services
-            List<FeatureService> featureServices = client.listFeatureServices();
-            System.out.println(featureServices);
+            //List<FeatureService> featureServices = client.listFeatureServices();
+            //System.out.println(featureServices);
 
             // Create a feature service
-            client.createFeatureService("feature_service_1", "feature_view1, feature_view2");
+            //client.createFeatureService("feature_service_1", "feature_view1, feature_view2");
 
             // Get a feature view
-            FeatureService featureService = client.getFeatureService("feature_service_1");
-            System.out.println(featureService);
+            //FeatureService featureService = client.getFeatureService("feature_service_1");
+            //System.out.println(featureService);
 
             // Delete a feature view
-            client.deleteFeatureService("feature_service_1");
+            //client.deleteFeatureService("feature_service_1");
 
+            //validateSql();
+
+            executeSql();
         } catch (IOException e) {
             e.printStackTrace();
         }

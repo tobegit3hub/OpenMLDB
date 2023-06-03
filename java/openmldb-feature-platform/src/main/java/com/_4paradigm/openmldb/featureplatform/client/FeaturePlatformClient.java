@@ -54,7 +54,6 @@ public class FeaturePlatformClient {
         String endpoint = this.apiEndpoint + "entities";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        List<NameValuePair> postParameters = new ArrayList<>();
         postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"primaryKeys\":\"%s\"}", name, primaryKeys)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
@@ -94,7 +93,6 @@ public class FeaturePlatformClient {
         String endpoint = this.apiEndpoint + "featureviews";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        List<NameValuePair> postParameters = new ArrayList<>();
         postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"entityName\":\"%s\", \"sql\":\"%s\"}", name, entityName, sql)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
@@ -134,7 +132,6 @@ public class FeaturePlatformClient {
         String endpoint = this.apiEndpoint + "featureservices";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        List<NameValuePair> postParameters = new ArrayList<>();
         postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"feature_view_names\":\"%s\"}", name, feature_view_names)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
@@ -160,4 +157,36 @@ public class FeaturePlatformClient {
         return true;
     }
 
+    public boolean validateSql(String sql) throws IOException {
+        String endpoint = this.apiEndpoint + "sql/validate";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(String.format("{\"sql\":\"%s\"}", sql)));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        printResponse(postResponse);
+        // TODO: Check response status code
+        return true;
+    }
+
+    public boolean querySql(String sql) throws IOException {
+        String endpoint = this.apiEndpoint + "sql/query";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(String.format("{\"sql\":\"%s\"}", sql)));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        printResponse(postResponse);
+        // TODO: Check response status code
+        return true;
+    }
+
+    public boolean executeSql(String sql) throws IOException {
+        String endpoint = this.apiEndpoint + "sql/execute";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(String.format("{\"sql\":\"%s\"}", sql)));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        printResponse(postResponse);
+        // TODO: Check response status code
+        return true;
+    }
 }
