@@ -1,7 +1,9 @@
 <script setup>
 
-import EntitiesList from "./components/EntitiesList.vue";
 import TableList from "./components/TableList.vue";
+import EntitiesList from "./components/EntitiesList.vue";
+import FeatureViewList from "./components/FeatureViewList.vue"
+import FeatureServiceList from "./components/FeatureServiceList.vue"
 
 </script>
 
@@ -16,6 +18,13 @@ import TableList from "./components/TableList.vue";
     <EntitiesList />
   </div>
   
+  <div>
+    <FeatureViewList />
+  </div>
+
+  <div>
+    <FeatureServiceList />
+  </div>
 </body>
 
 </template>

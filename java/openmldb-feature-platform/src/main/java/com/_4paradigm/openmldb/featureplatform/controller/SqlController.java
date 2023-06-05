@@ -30,21 +30,21 @@ public class SqlController {
     public ResponseEntity<String> query(@RequestBody SqlRequest sqlRequest) {
         System.out.println("Try to query sql: " + sqlRequest.getSql());
         openmldbDbService.querySql(sqlRequest.getSql());
-        return new ResponseEntity<>("Success to validate", HttpStatus.OK);
+        return new ResponseEntity<>("Success to query sql", HttpStatus.OK);
     }
 
     @PostMapping("/execute")
     public ResponseEntity<String> execute(@RequestBody SqlRequest sqlRequest) {
         System.out.println("Try to execute sql: " + sqlRequest.getSql());
         openmldbDbService.executeSql(sqlRequest.getSql());
-        return new ResponseEntity<>("Success to validate", HttpStatus.OK);
+        return new ResponseEntity<>("Success to execute sql", HttpStatus.OK);
     }
 
     @PostMapping("/request_query")
     public ResponseEntity<String> requestQuery(@RequestBody SqlRequest sqlRequest) {
         System.out.println("Try to query sql in request mode: " + sqlRequest.getSql());
         // TODO: query in request mode
-        return new ResponseEntity<>("Success to validate", HttpStatus.OK);
+        return new ResponseEntity<>("Success to query in request mode", HttpStatus.OK);
     }
 
 }

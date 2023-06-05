@@ -38,7 +38,14 @@ public class FeaturePlatformClient {
         EntityUtils.consume(entity);
     }
 
-    public List<String> getOpenmldbTables() throws IOException {
+    /**
+     * Get all OpenMLDB tables.
+     * TODO: Notice that now it can get system tables and no table schema.
+     *
+     * @return
+     * @throws IOException
+     */
+    public List<String> getTables() throws IOException {
         String endpoint = this.apiEndpoint + "tables";
         HttpGet request = new HttpGet(endpoint);
         HttpResponse response = httpClient.execute(request);
@@ -140,7 +147,7 @@ public class FeaturePlatformClient {
         String endpoint = this.apiEndpoint + "featureservices";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"feature_view_names\":\"%s\"}", name, feature_view_names)));
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"featureViewNames\":\"%s\"}", name, feature_view_names)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
         // TODO: Check response status code

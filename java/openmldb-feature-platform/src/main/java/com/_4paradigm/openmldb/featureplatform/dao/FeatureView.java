@@ -7,6 +7,7 @@ public class FeatureView {
     private String name;
     private String entityName;
     private String sql;
+    private String featureNames;
 
     public FeatureView() {
 

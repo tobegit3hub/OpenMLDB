@@ -72,7 +72,7 @@ public class FeatureViewService {
     public boolean addFeatureView(FeatureView featureView) {
         try {
             // TODO: It would be better to use JDBC prepared statement from connection
-            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views values ('%s', '%s', '%s', '')", featureView.getName(), featureView.getEntityName(), featureView.getSql());
+            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_name, sql) values ('%s', '%s', '%s')", featureView.getName(), featureView.getEntityName(), featureView.getSql());
 
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);

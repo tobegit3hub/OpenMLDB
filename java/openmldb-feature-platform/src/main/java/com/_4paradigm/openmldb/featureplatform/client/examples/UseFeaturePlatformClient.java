@@ -1,12 +1,13 @@
-package com._4paradigm.openmldb.featureplatform.client;
+package com._4paradigm.openmldb.featureplatform.client.examples;
 
+import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
 import com._4paradigm.openmldb.featureplatform.dao.Entity;
 import com._4paradigm.openmldb.featureplatform.dao.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.FeatureView;
 import java.io.IOException;
 import java.util.List;
 
-public class ClientExample {
+public class UseFeaturePlatformClient {
 
     private static FeaturePlatformClient client = new FeaturePlatformClient("127.0.0.1", 8888);
 
@@ -77,7 +78,7 @@ public class ClientExample {
     }
 
     public static void useOtherApis() throws IOException {
-        List<String> tables = client.getOpenmldbTables();
+        List<String> tables = client.getTables();
         System.out.println(tables);
     }
 

@@ -1,9 +1,9 @@
 <template>
     <div>
-      <h2>Entities</h2>
+      <h2>FeatureViews</h2>
       <ul>
-        <li v-for="entity in entities" :key="entity.name">
-          Name: {{ entity.name }}, Primary keys: {{ entity.primaryKeys }}
+        <li v-for="featureView in featureViews" :key="featureView.name">
+          Name: {{ featureView.name }}, EntityName: {{ featureView.entityName }}, SQL: {{ featureView.sql }}
         </li>
       </ul>
     </div>
@@ -13,7 +13,7 @@
   export default {
     data() {
       return {
-        entities: [],
+        featureViews: [],
       };
     },
     mounted() {
@@ -21,10 +21,10 @@
     },
     methods: {
       fetchEntities() {
-        fetch("http://127.0.0.1:8888/api/entities")
+        fetch("http://127.0.0.1:8888/api/featureviews")
           .then((response) => response.json())
           .then((data) => {
-            this.entities = data;
+            this.featureViews = data;
           })
           .catch((error) => {
             console.error("Error fetching entities:", error);
