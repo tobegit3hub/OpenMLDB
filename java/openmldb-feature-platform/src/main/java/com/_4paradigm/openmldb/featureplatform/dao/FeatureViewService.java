@@ -1,5 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,12 +42,17 @@ public class FeatureViewService {
     public FeatureView getFeatureViewByName(String name) {
         try {
             // TODO: Set database before
+            /*
             String sql = "SELECT name, entity_name, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE name=?";
-
             PreparedStatement openmldbStatement = openmldbConnection.prepareStatement(sql);
             openmldbStatement.setString(1, name);
-
             ResultSet result = openmldbStatement.executeQuery();
+            */
+
+            String sql = String.format("SELECT name, entity_name, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE name='%s'", name);
+            Statement openmldbStatement = openmldbConnection.createStatement();
+            openmldbStatement.execute(sql);
+            ResultSet result = openmldbStatement.getResultSet();
 
             if (result.getFetchSize() == 0) {
                 System.out.print("Can not get FeatureView with the name: " + name);
@@ -57,6 +63,7 @@ public class FeatureViewService {
             } else {
                 while (result.next()) {
                     FeatureView featureView = new FeatureView(result.getString(1), result.getString(2), result.getString(3));
+                    System.out.print("Get feature view: " + featureView);
                     return featureView;
                 }
             }
@@ -66,11 +73,15 @@ public class FeatureViewService {
             e.printStackTrace();
         }
 
+        System.out.print("Fail to get feature view with name: " + name);
         return null;
     }
 
     public boolean addFeatureView(FeatureView featureView) {
         try {
+            // TODO: Get feature names by compiling SQL
+
+
             // TODO: It would be better to use JDBC prepared statement from connection
             String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_name, sql) values ('%s', '%s', '%s')", featureView.getName(), featureView.getEntityName(), featureView.getSql());
 

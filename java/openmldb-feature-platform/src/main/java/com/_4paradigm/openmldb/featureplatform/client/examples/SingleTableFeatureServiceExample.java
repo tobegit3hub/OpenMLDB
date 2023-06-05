@@ -19,11 +19,10 @@ public class SingleTableFeatureServiceExample {
             client.createFeatureView("featureview1", "", "select name, age from test_db.user");
 
             // Create feature service
-            client.createFeatureService("featureservice2", "featureview2");
+            client.createFeatureService("featureservice1", "featureview1");
 
             // Test feature service
-
-
+            client.testFeatureService("http://127.0.0.1:9080", "featureservice1", "{\"input\": [[\"abc\", 123]]}");
 
         } catch (IOException e) {
             e.printStackTrace();

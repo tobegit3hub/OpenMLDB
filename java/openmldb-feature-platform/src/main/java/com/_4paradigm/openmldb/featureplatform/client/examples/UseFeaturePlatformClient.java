@@ -1,9 +1,9 @@
 package com._4paradigm.openmldb.featureplatform.client.examples;
 
 import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
-import com._4paradigm.openmldb.featureplatform.dao.Entity;
-import com._4paradigm.openmldb.featureplatform.dao.FeatureService;
-import com._4paradigm.openmldb.featureplatform.dao.FeatureView;
+import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import java.io.IOException;
 import java.util.List;
 

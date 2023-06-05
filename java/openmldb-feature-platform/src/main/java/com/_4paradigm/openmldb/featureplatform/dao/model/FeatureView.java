@@ -1,0 +1,28 @@
+package com._4paradigm.openmldb.featureplatform.dao.model;
+
+import lombok.Data;
+
+@Data
+public class FeatureView {
+    private String name;
+    private String entityName;
+    private String sql;
+    private String featureNames;
+
+    public FeatureView() {
+
+    }
+
+    public FeatureView(String name, String entityName, String sql) {
+        this.name = name;
+        this.entityName = entityName;
+        this.sql = sql;
+    }
+
+    public FeatureView(String name, String entityName, String sql, String featureNames) {
+        this.name = name;
+        this.entityName = entityName;
+        this.sql = sql;
+        this.featureNames = featureNames;
+    }
+}

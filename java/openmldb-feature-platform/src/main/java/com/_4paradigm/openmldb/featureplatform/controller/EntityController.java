@@ -1,7 +1,7 @@
 package com._4paradigm.openmldb.featureplatform.controller;
 
 import com._4paradigm.openmldb.featureplatform.dao.EntityService;
-import com._4paradigm.openmldb.featureplatform.dao.Entity;
+import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

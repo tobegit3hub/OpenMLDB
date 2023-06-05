@@ -1,7 +1,7 @@
 package com._4paradigm.openmldb.featureplatform.client;
 
-import com._4paradigm.openmldb.featureplatform.dao.FeatureService;
-import com._4paradigm.openmldb.featureplatform.dao.FeatureView;
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
@@ -15,7 +15,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.List;
-import com._4paradigm.openmldb.featureplatform.dao.Entity;
+import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
 
 public class FeaturePlatformClient {
 
@@ -203,5 +203,19 @@ public class FeaturePlatformClient {
         printResponse(postResponse);
         // TODO: Check response status code
         return true;
+    }
+
+    public HttpResponse requestFeatureService(String apiServerEndpoint, String featureService, String requestData) throws IOException {
+        String endpoint = String.format("%s/dbs/SYSTEM_FEATURE_PLATFORM/deployments/FEATURE_PLATFORM_%s", apiServerEndpoint, featureService);
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(requestData));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        return postResponse;
+    }
+
+    public void testFeatureService(String apiServerEndpoint, String featureService, String requestData) throws IOException {
+        HttpResponse response = requestFeatureService(apiServerEndpoint, featureService, requestData);
+        printResponse(response);
     }
 }
