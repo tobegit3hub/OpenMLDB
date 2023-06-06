@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h2>FeatureViews</h2>
+      <h2>Features</h2>
       <ul>
         <li v-for="feature in features" :key="feature.featureName">
           FeatureViewName: {{ feature.featureViewName }}, FeatureName: {{ feature.featureName }}

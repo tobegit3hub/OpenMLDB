@@ -1,6 +1,8 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
+import com._4paradigm.openmldb.sdk.SdkOption;
+import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,10 +14,12 @@ import java.util.List;
 public class FeatureViewService {
 
     private final Connection openmldbConnection;
+    private final SqlClusterExecutor openmldbSqlExecutor;
 
     @Autowired
-    public FeatureViewService(Connection openmldbConnection) {
+    public FeatureViewService(Connection openmldbConnection, SqlClusterExecutor openmldbSqlExecutor) {
         this.openmldbConnection = openmldbConnection;
+        this.openmldbSqlExecutor = openmldbSqlExecutor;
     }
 
     public List<FeatureView> getFeatureViews() {
@@ -80,6 +84,11 @@ public class FeatureViewService {
     public boolean addFeatureView(FeatureView featureView) {
         try {
             // TODO: Get feature names by compiling SQL
+
+
+
+
+
 
 
             // TODO: It would be better to use JDBC prepared statement from connection

@@ -2,6 +2,7 @@ package com._4paradigm.openmldb.featureplatform.dao;
 
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
+import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,10 +14,12 @@ import java.util.List;
 public class FeatureServiceService {
 
     private final Connection openmldbConnection;
+    private final SqlClusterExecutor openmldbSqlExecutor;
 
     @Autowired
-    public FeatureServiceService(Connection openmldbConnection) {
+    public FeatureServiceService(Connection openmldbConnection, SqlClusterExecutor openmldbSqlExecutor) {
         this.openmldbConnection = openmldbConnection;
+        this.openmldbSqlExecutor = openmldbSqlExecutor;
     }
 
     public List<FeatureService> getFeatureServices() {
@@ -95,7 +98,7 @@ public class FeatureServiceService {
             // Merge SQL from FeatureViews
             List<String> sqlList = new ArrayList<>();
             String[] featureViewNames = featureService.getFeatureViewNames().split(",");
-            FeatureViewService featureViewService = new FeatureViewService(openmldbConnection);
+            FeatureViewService featureViewService = new FeatureViewService(openmldbConnection, openmldbSqlExecutor);
             for (String featureViewName: featureViewNames) {
                 FeatureView featureView = featureViewService.getFeatureViewByName(featureViewName.trim());
                 sqlList.add(featureView.getSql());

@@ -4,6 +4,8 @@ import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
 import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
+import com._4paradigm.openmldb.featureplatform.dao.model.SimpleTableInfo;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -78,17 +80,17 @@ public class UseFeaturePlatformClient {
     }
 
     public static void useOtherApis() throws IOException {
-        List<String> tables = client.getTables();
+        List<SimpleTableInfo> tables = client.getTables();
         System.out.println(tables);
     }
 
     public static void main(String[] args) {
 
         try {
-            useEntity();
+            //useEntity();
             //validateSql();
             //executeSql();
-            //useOtherApis();
+            useOtherApis();
         } catch (IOException e) {
             e.printStackTrace();
         }

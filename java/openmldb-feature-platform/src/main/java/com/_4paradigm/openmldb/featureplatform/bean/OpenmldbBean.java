@@ -1,5 +1,8 @@
 package com._4paradigm.openmldb.featureplatform.bean;
 
+import com._4paradigm.openmldb.sdk.SdkOption;
+import com._4paradigm.openmldb.sdk.SqlException;
+import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,5 +57,19 @@ public class OpenmldbBean {
 
         return openmldbStatement;
     }
+
+
+    @Bean
+    public SqlClusterExecutor openmldbSqlExecutor() throws SqlException {
+        String zkHost = env.getProperty("openmldb.zk_cluster");
+        String zkPath = env.getProperty("openmldb.zk_path");
+
+        SdkOption option = new SdkOption();
+        option.setZkCluster(zkHost);
+        option.setZkPath(zkPath);
+        SqlClusterExecutor sqlExecutor = new SqlClusterExecutor(option);
+        return sqlExecutor;
+    }
+
 
 }

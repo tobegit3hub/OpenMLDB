@@ -2,6 +2,7 @@ package com._4paradigm.openmldb.featureplatform.client;
 
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
+import com._4paradigm.openmldb.featureplatform.dao.model.SimpleTableInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
@@ -45,14 +46,14 @@ public class FeaturePlatformClient {
      * @return
      * @throws IOException
      */
-    public List<String> getTables() throws IOException {
+    public List<SimpleTableInfo> getTables() throws IOException {
         String endpoint = this.apiEndpoint + "tables";
         HttpGet request = new HttpGet(endpoint);
         HttpResponse response = httpClient.execute(request);
 
         HttpEntity entity = response.getEntity();
         String responseBody = EntityUtils.toString(entity);
-        return objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
+        return objectMapper.readValue(responseBody, new TypeReference<List<SimpleTableInfo>>() {});
     }
 
     public List<Entity> getEntities() throws IOException {
