@@ -104,11 +104,11 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<FeatureView>>() {});
     }
 
-    public boolean createFeatureView(String name, String entityName, String sql) throws IOException {
+    public boolean createFeatureView(String name, String entityNames, String sql) throws IOException {
         String endpoint = this.apiEndpoint + "featureviews";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"entityName\":\"%s\", \"sql\":\"%s\"}", name, entityName, sql)));
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"entityNames\":\"%s\", \"sql\":\"%s\"}", name, entityNames, sql)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
         // TODO: Check response status code

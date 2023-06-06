@@ -19,7 +19,7 @@ public class FeatureViewService {
     }
 
     public List<FeatureView> getFeatureViews() {
-        String sql = "SELECT name, entity_name, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views";
+        String sql = "SELECT name, entity_names, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views";
 
         ArrayList<FeatureView> featureViews = new ArrayList<>();
 
@@ -43,13 +43,13 @@ public class FeatureViewService {
         try {
             // TODO: Set database before
             /*
-            String sql = "SELECT name, entity_name, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE name=?";
+            String sql = "SELECT name, entity_names, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE name=?";
             PreparedStatement openmldbStatement = openmldbConnection.prepareStatement(sql);
             openmldbStatement.setString(1, name);
             ResultSet result = openmldbStatement.executeQuery();
             */
 
-            String sql = String.format("SELECT name, entity_name, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE name='%s'", name);
+            String sql = String.format("SELECT name, entity_names, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE name='%s'", name);
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);
             ResultSet result = openmldbStatement.getResultSet();
@@ -83,7 +83,7 @@ public class FeatureViewService {
 
 
             // TODO: It would be better to use JDBC prepared statement from connection
-            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_name, sql) values ('%s', '%s', '%s')", featureView.getName(), featureView.getEntityName(), featureView.getSql());
+            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_names, sql) values ('%s', '%s', '%s')", featureView.getName(), featureView.getEntityNames(), featureView.getSql());
 
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);

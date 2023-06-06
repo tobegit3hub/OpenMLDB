@@ -97,7 +97,7 @@ public class FeatureServiceService {
             String[] featureViewNames = featureService.getFeatureViewNames().split(",");
             FeatureViewService featureViewService = new FeatureViewService(openmldbConnection);
             for (String featureViewName: featureViewNames) {
-                FeatureView featureView = featureViewService.getFeatureViewByName(featureViewName);
+                FeatureView featureView = featureViewService.getFeatureViewByName(featureViewName.trim());
                 sqlList.add(featureView.getSql());
             }
 
@@ -123,13 +123,19 @@ public class FeatureServiceService {
 
     public boolean deleteFeatureService(String name) {
         try {
+            Statement openmldbStatement = openmldbConnection.createStatement();
+
+            // Delete the deployment
+            FeatureService featureService = getFeatureServiceByName(name);
+            String dropDeploymentSql = String.format("DROP DEPLOYMENT %s", featureService.getDeployment());
+            System.out.println("Try to drop deployment with sql: " + dropDeploymentSql);
+            openmldbStatement.execute(dropDeploymentSql);
+
             // TODO: It would be better to use JDBC prepared statement from connection
             String sql = String.format("DELETE FROM SYSTEM_FEATURE_PLATFORM.feature_services WHERE name='%s'", name);
-
-            Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);
-            openmldbStatement.close();
 
+            openmldbStatement.close();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
