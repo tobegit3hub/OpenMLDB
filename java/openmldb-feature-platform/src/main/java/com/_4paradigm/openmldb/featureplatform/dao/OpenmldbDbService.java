@@ -28,8 +28,8 @@ public class OpenmldbDbService {
         sql = "CREATE TABLE IF NOT EXISTS entities (name string, primary_keys string)";
         openmldbStatement.execute(sql);
 
-        //sql = "CREATE TABLE IF NOT EXISTS features (feature_view_name String, name string, type string)";
-        //openmldbStatement.execute(sql);
+        sql = "CREATE TABLE IF NOT EXISTS features (feature_view_name String, feature_name string, type string)";
+        openmldbStatement.execute(sql);
 
         sql = "CREATE TABLE IF NOT EXISTS feature_views (name string, entity_names string, sql string, feature_names string)";
         openmldbStatement.execute(sql);

@@ -18,8 +18,8 @@ public class SingleTableMultiFeatureViewExample {
             client.createEntity("name", "name");
 
             // Create feature view
-            client.createFeatureView("featureview1", "name", "select name from test_db.user");
-            client.createFeatureView("featureview2", "name", "select age + 10 as new_age from test_db.user");
+            client.createFeatureView("featureview1", "name", "SELECT name FROM test_db.user");
+            client.createFeatureView("featureview2", "name", "SELECT age + 10 AS new_age FROM test_db.user");
 
             // Create feature service
             client.createFeatureService("featureservice1", "featureview1, featureview2");

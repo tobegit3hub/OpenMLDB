@@ -15,7 +15,7 @@ public class SingleTableSingleFeatureViewExample {
             client.executeSql("CREATE TABLE IF NOT EXISTS test_db.user (name string, age int)");
 
             // Create feature view
-            client.createFeatureView("featureview1", "", "select name, age + 10 as new_age from test_db.user");
+            client.createFeatureView("featureview1", "", "SELECT name, age + 10 AS new_age FROM test_db.user");
 
             // Create feature service
             client.createFeatureService("featureservice1", "featureview1");
