@@ -1,14 +1,16 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
+import com._4paradigm.openmldb.featureplatform.dao.model.Feature;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
-import com._4paradigm.openmldb.sdk.SdkOption;
+import com._4paradigm.openmldb.featureplatform.utils.TypeUtil;
+import com._4paradigm.openmldb.sdk.Column;
+import com._4paradigm.openmldb.sdk.Schema;
 import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class FeatureViewService {
@@ -85,17 +87,47 @@ public class FeatureViewService {
         try {
             // TODO: Get feature names by compiling SQL
 
+            Map<String, Map<String, Schema>> schemaMaps = new HashMap<>();
 
+            List<String> databases = openmldbSqlExecutor.showDatabases();
+            for (String database: databases) {
+                List<String> tables = openmldbSqlExecutor.getTableNames(database);
+                Map<String, Schema> dbSchemaMap = new HashMap<>();
 
+                for (String table: tables) {
+                    try {
+                        Schema schema = openmldbSqlExecutor.getTableSchema(database, table);
+                        dbSchemaMap.put(table, schema);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                schemaMaps.put(database, dbSchemaMap);
+            }
 
+            String sql = featureView.getSql();
+            // TODO(huangwei)：Need to support SQL which contains database name
+            try {
+                List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, schemaMaps).getColumnList();
+                for (Column outputSchemaColumn: outputSchemaColumns) {
+                    String name = outputSchemaColumn.getColumnName();
+                    int intType = outputSchemaColumn.getSqlType();
+                    String stringType = TypeUtil.javaSqlTypeToString(intType);
 
-
+                    FeaturesService featuresService = new FeaturesService(openmldbConnection);
+                    Feature feature = new Feature(featureView.getName(), name, stringType);
+                    featuresService.addFeature(feature);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Notice that we can not pass the SQL with database now");
+            }
 
             // TODO: It would be better to use JDBC prepared statement from connection
-            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_names, sql) values ('%s', '%s', '%s')", featureView.getName(), featureView.getEntityNames(), featureView.getSql());
+            String insertSql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_names, sql) values ('%s', '%s', '%s')", featureView.getName(), featureView.getEntityNames(), featureView.getSql());
 
             Statement openmldbStatement = openmldbConnection.createStatement();
-            openmldbStatement.execute(sql);
+            openmldbStatement.execute(insertSql);
             openmldbStatement.close();
 
             return true;

@@ -1,7 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
 import com._4paradigm.openmldb.featureplatform.dao.model.Feature;
-import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class FeatureService {
+public class FeaturesService {
 
     private final Connection openmldbConnection;
 
     @Autowired
-    public FeatureService(Connection openmldbConnection) {
+    public FeaturesService(Connection openmldbConnection) {
         this.openmldbConnection = openmldbConnection;
     }
 

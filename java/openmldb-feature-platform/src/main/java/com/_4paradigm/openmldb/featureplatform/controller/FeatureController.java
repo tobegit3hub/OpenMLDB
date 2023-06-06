@@ -1,6 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.controller;
 
-import com._4paradigm.openmldb.featureplatform.dao.FeatureService;
+import com._4paradigm.openmldb.featureplatform.dao.FeaturesService;
 import com._4paradigm.openmldb.featureplatform.dao.model.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +11,10 @@ import java.util.List;
 @RequestMapping("/api/features")
 public class FeatureController {
 
-    private final FeatureService featureService;
+    private final FeaturesService featureService;
 
     @Autowired
-    public FeatureController(FeatureService featureService) {
+    public FeatureController(FeaturesService featureService) {
         this.featureService = featureService;
     }
 

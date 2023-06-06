@@ -3,7 +3,7 @@
       <h2>Features</h2>
       <ul>
         <li v-for="feature in features" :key="feature.featureName">
-          FeatureViewName: {{ feature.featureViewName }}, FeatureName: {{ feature.featureName }}
+          FeatureViewName: {{ feature.featureViewName }}, FeatureName: {{ feature.featureName }}, Type: {{ feature.type }}
         </li>
       </ul>
     </div>
