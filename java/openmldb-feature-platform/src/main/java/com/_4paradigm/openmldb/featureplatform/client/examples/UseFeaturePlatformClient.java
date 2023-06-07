@@ -1,13 +1,9 @@
 package com._4paradigm.openmldb.featureplatform.client.examples;
 
-import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
-import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
-import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
-import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
-import com._4paradigm.openmldb.featureplatform.dao.model.SimpleTableInfo;
-
 import java.io.IOException;
 import java.util.List;
+import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
+import com._4paradigm.openmldb.featureplatform.dao.model.*;
 
 public class UseFeaturePlatformClient {
 
@@ -29,20 +25,34 @@ public class UseFeaturePlatformClient {
         client.deleteEntity("entity1");
     }
 
+    public static void useFeatures() throws IOException {
+        // List all features
+        List<Feature> features = client.getFeatures();
+        System.out.println(features);
+
+        // List all features of feature view
+        List<Feature> features2 = client.getFeaturesFromFeatureView("featureview1");
+        System.out.println(features2);
+
+        // Get a feature
+        Feature feature = client.getFeature("featureview1", "feature1");
+        System.out.println(feature);
+    }
+
     public static void useFeatureViews() throws IOException {
         // List all feature views
         List<FeatureView> featureViews = client.getFeatureViews();
         System.out.println(featureViews);
 
         // Create a feature view
-        client.createFeatureView("feature_view1", "entity1", "select col1, col2 from entity1");
+        client.createFeatureView("featureview1", "", "SELECT name, age + 10 AS new_age FROM user");
 
         // Get a feature view
-        FeatureView featureView = client.getFeatureView("feature_view1");
+        FeatureView featureView = client.getFeatureView("featureview1");
         System.out.println(featureView);
 
         // Delete a feature view
-        client.deleteFeatureView("feature_view1");
+        client.deleteFeatureView("featureview1");
     }
 
     public static void useFeatureServices() throws IOException {
@@ -88,9 +98,11 @@ public class UseFeaturePlatformClient {
 
         try {
             //useEntity();
+            useFeatures();
+            //useFeatureViews();
             //validateSql();
             //executeSql();
-            useOtherApis();
+            //useOtherApis();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,7 +4,7 @@
   <groupId>com.4paradigm.openmldb</groupId>
   <artifactId>openmldb-feature-platform</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.8-SNAPSHOT</version>
   <name>openmldb-feature-platform-server</name>
   <url>http://maven.apache.org</url>
 
@@ -83,18 +83,22 @@
     <dependency>
       <groupId>com.4paradigm.openmldb</groupId>
       <artifactId>openmldb-jdbc</artifactId>
-      <version>0.8.0</version>
+      <version>0.7.0-SNAPSHOT</version>
+      <!-- TODO: Upgrade for mergeSQL API -->
+      <!-- <version>0.8.0</version> -->
     </dependency>
     <dependency>
       <groupId>com.4paradigm.openmldb</groupId>
       <artifactId>openmldb-native</artifactId>
-      <version>0.8.0-allinone</version>
+      <version>0.7.0-SNAPSHOT</version>
+      <!-- <version>0.8.0-allinone</version> -->
     </dependency>
 
   </dependencies>
 
   <build>
     <plugins>
+      <!-- TODO: Comment out this to package Java SDK -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -113,6 +117,7 @@
           </execution>
         </executions>
       </plugin>
+
     </plugins>
 
   </build>

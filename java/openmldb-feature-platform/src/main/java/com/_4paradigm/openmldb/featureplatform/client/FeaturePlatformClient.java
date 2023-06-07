@@ -1,8 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.client;
 
-import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
-import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
-import com._4paradigm.openmldb.featureplatform.dao.model.SimpleTableInfo;
+import com._4paradigm.openmldb.featureplatform.dao.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
@@ -16,7 +14,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.List;
-import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
 
 public class FeaturePlatformClient {
 
@@ -103,6 +100,36 @@ public class FeaturePlatformClient {
         HttpEntity entity = response.getEntity();
         String responseBody = EntityUtils.toString(entity);
         return objectMapper.readValue(responseBody, new TypeReference<List<FeatureView>>() {});
+    }
+
+    public List<Feature> getFeatures() throws IOException {
+        String endpoint = this.apiEndpoint + "features";
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<Feature>>() {});
+    }
+
+    public List<Feature> getFeaturesFromFeatureView(String featureViewName) throws IOException {
+        String endpoint = this.apiEndpoint + "features/" + featureViewName;
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<Feature>>() {});
+    }
+
+    public Feature getFeature(String featureViewName, String featureName) throws IOException {
+        String endpoint = this.apiEndpoint + "features/" + featureViewName + "/" + featureName;
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, Feature.class);
     }
 
     public boolean createFeatureView(String name, String entityNames, String sql) throws IOException {

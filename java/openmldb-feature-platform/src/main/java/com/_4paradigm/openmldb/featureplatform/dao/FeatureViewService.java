@@ -1,11 +1,13 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
 import com._4paradigm.openmldb.featureplatform.dao.model.Feature;
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import com._4paradigm.openmldb.featureplatform.utils.TypeUtil;
 import com._4paradigm.openmldb.sdk.Column;
 import com._4paradigm.openmldb.sdk.Schema;
 import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -106,6 +108,9 @@ public class FeatureViewService {
             }
 
             String sql = featureView.getSql();
+
+            // TODO: Validate SQL before creating
+
             // TODO(huangwei)：Need to support SQL which contains database name
             try {
                 List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, schemaMaps).getColumnList();
@@ -120,7 +125,7 @@ public class FeatureViewService {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Notice that we can not pass the SQL with database now");
+                System.out.println("Notice that we can not pass the SQL with database now, skip creating Feature objects");
             }
 
             // TODO: It would be better to use JDBC prepared statement from connection
@@ -140,6 +145,14 @@ public class FeatureViewService {
 
     public boolean deleteFeatureView(String name) {
         try {
+            // Delete the features
+            FeaturesService featuresService = new FeaturesService(openmldbConnection);
+            List<Feature> features = featuresService.getFeaturesByFeatureView(name);
+            for (Feature feature: features) {
+                 featuresService.deleteFeature(feature);
+            }
+
+            // Delete the feature view
             // TODO: It would be better to use JDBC prepared statement from connection
             String sql = String.format("DELETE FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE name='%s'", name);
 

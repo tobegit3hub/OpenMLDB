@@ -79,10 +79,13 @@ public class FeatureServiceService {
         return null;
     }
 
-    public String mergeSqlList(List<String> sqlList) {
+    public String mergeSqlList(SqlClusterExecutor openmldbSqlExecutor, List<String> sqlList) {
         // TODO: Call mergeSQL to merge the SQLs from FeatureViews
         String mergeSql = sqlList.get(0);
         System.out.println("Try to merge SQLs: " + sqlList + ", get merged SQL: " + mergeSql);
+
+        // TODO: Call mergeSQL when it is ready
+        // SqlClusterExecutor.mergeSQL();
         return mergeSql;
     }
 
@@ -104,7 +107,7 @@ public class FeatureServiceService {
                 sqlList.add(featureView.getSql());
             }
 
-            String mergedSql = mergeSqlList(sqlList);
+            String mergedSql = mergeSqlList(openmldbSqlExecutor, sqlList);
 
             String deploymentName = "FEATURE_PLATFORM_" + featureService.getName();
             String deploymentSql = String.format("DEPLOY %s %s", deploymentName, mergedSql);
