@@ -89,9 +89,12 @@ public class UseFeaturePlatformClient {
         System.out.println(result);
     }
 
-    public static void useOtherApis() throws IOException {
+    public static void useTables() throws IOException {
         List<SimpleTableInfo> tables = client.getTables();
         System.out.println(tables);
+
+        SimpleTableInfo table = client.getTable("db1", "t1");
+        System.out.println(table);
     }
 
     public static void main(String[] args) {

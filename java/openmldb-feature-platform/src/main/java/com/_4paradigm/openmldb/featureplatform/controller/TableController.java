@@ -1,6 +1,7 @@
 package com._4paradigm.openmldb.featureplatform.controller;
 
 import com._4paradigm.openmldb.featureplatform.dao.TableService;
+import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
 import com._4paradigm.openmldb.featureplatform.dao.model.SimpleTableInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,11 @@ public class TableController {
     @GetMapping
     public List<SimpleTableInfo> getTables() {
         return tableService.getTables();
+    }
+
+    @GetMapping("/{db}/{table}")
+    public SimpleTableInfo getTable(@PathVariable String db, @PathVariable String table) {
+        return tableService.getTable(db, table);
     }
 
 }

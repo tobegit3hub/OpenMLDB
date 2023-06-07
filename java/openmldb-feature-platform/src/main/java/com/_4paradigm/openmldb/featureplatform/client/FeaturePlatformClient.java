@@ -53,6 +53,16 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<SimpleTableInfo>>() {});
     }
 
+    public SimpleTableInfo getTable(String db, String table) throws IOException {
+        String endpoint = this.apiEndpoint + "tables/" + db + "/" + table;
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, SimpleTableInfo.class);
+    }
+
     public List<Entity> getEntities() throws IOException {
         String endpoint = this.apiEndpoint + "entities";
         HttpGet request = new HttpGet(endpoint);
