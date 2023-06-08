@@ -10,6 +10,9 @@
   </template>
   
 <script>
+
+import axios from 'axios'
+
   export default {
     data() {
       return {
@@ -17,17 +20,16 @@
       };
     },
     mounted() {
-      this.fetchEntities();
+      this.fetchData();
     },
     methods: {
-      fetchEntities() {
-        fetch("http://127.0.0.1:8888/api/featureviews")
-          .then((response) => response.json())
-          .then((data) => {
-            this.featureViews = data;
+      fetchData() {
+        axios.get(`/api/featureviews`)
+          .then(response => {
+            this.featureViews = response.data;
           })
-          .catch((error) => {
-            console.error("Error fetching entities:", error);
+          .catch(error => {
+            console.log(error);
           });
       },
     },
