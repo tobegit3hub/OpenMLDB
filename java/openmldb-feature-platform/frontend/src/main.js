@@ -10,8 +10,6 @@ import 'ant-design-vue/dist/antd.css';
 axios.defaults.baseURL = import.meta.env.VITE_API_ENDPOINT;
 
 const app = createApp(App)
-
 app.use(router)
 app.use(Antd)
-
 app.mount('#app')
