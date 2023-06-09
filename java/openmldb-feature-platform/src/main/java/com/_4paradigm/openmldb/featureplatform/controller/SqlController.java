@@ -2,10 +2,15 @@ package com._4paradigm.openmldb.featureplatform.controller;
 
 import com._4paradigm.openmldb.featureplatform.dao.OpenmldbDbService;
 import com._4paradigm.openmldb.featureplatform.dao.SqlRequest;
+import com._4paradigm.openmldb.featureplatform.utils.ResultSetUtil;
+import com._4paradigm.openmldb.jdbc.SQLResultSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -26,25 +31,19 @@ public class SqlController {
         return new ResponseEntity<>("Success to validate", HttpStatus.OK);
     }
 
-    @PostMapping("/query")
-    public ResponseEntity<String> query(@RequestBody SqlRequest sqlRequest) {
-        System.out.println("Try to query sql: " + sqlRequest.getSql());
-        openmldbDbService.querySql(sqlRequest.getSql());
-        return new ResponseEntity<>("Success to query sql", HttpStatus.OK);
-    }
-
     @PostMapping("/execute")
     public ResponseEntity<String> execute(@RequestBody SqlRequest sqlRequest) {
-        System.out.println("Try to execute sql: " + sqlRequest.getSql());
-        openmldbDbService.executeSql(sqlRequest.getSql());
-        return new ResponseEntity<>("Success to execute sql", HttpStatus.OK);
-    }
-
-    @PostMapping("/request_query")
-    public ResponseEntity<String> requestQuery(@RequestBody SqlRequest sqlRequest) {
-        System.out.println("Try to query sql in request mode: " + sqlRequest.getSql());
-        // TODO: query in request mode
-        return new ResponseEntity<>("Success to query in request mode", HttpStatus.OK);
+        try {
+            SQLResultSet resultSet = openmldbDbService.executeSql(sqlRequest.getSql());
+            String responseMessage = "Success to execute sql: " + sqlRequest.getSql();
+            if (resultSet != null) {
+                responseMessage = ResultSetUtil.resultSetToString(resultSet);
+                System.out.println("Result set to string: " + responseMessage);
+            }
+            return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        } catch (SQLException e) {
+            return new ResponseEntity<>("Fail to execute sql and get exception: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

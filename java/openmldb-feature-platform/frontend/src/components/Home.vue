@@ -24,6 +24,9 @@
       <a-menu-item key="6">
         <router-link to='/featureservices'>Feature Services</router-link>
       </a-menu-item>
+      <a-menu-item key="7">
+        <router-link to='/sql'>SQL</router-link>
+      </a-menu-item>
     </a-menu>
   </a-layout-header>
 </a-layout>

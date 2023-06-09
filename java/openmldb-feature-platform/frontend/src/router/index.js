@@ -6,6 +6,7 @@ import EntitiesPage from '../components/EntitiesPage.vue'
 import FeaturesPage from '../components/FeaturesPage.vue'
 import FeatureViewsPage from '../components/FeatureViewsPage.vue'
 import FeatureServicesPage from '../components/FeatureServicesPage.vue'
+import SqlPage from '../components/SqlPage.vue'
 
 const router = createRouter({
   history: createWebHistory("/"),
@@ -16,6 +17,7 @@ const router = createRouter({
     { path: '/features', component: FeaturesPage},
     { path: '/featureviews', component: FeatureViewsPage},
     { path: '/featureservices', component: FeatureServicesPage},
+    { path: '/sql', component: SqlPage},
     { path: '/404', redirect: "/" },
     { path: '/:pathMatch(.*)*', redirect: "/404" }
   ]

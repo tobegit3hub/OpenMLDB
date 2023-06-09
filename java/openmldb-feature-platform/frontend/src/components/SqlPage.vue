@@ -8,7 +8,7 @@
       <a-typography-paragraph>
         <p>Execute SQLs in OpenMLDB.</p>
         <p>eg. CREATE DATABASE IF NOT EXISTS db1</p>
-        <p>eg. DROP DATABASE db1</p>
+        <p>eg. SELECT * FROM SYSTEM_FEATURE_PLATFORM.feature_services</p>
       </a-typography-paragraph>
     </a-typography>
     <!-- Create form -->
@@ -36,6 +36,8 @@
 <script>
 import axios from 'axios'
 import { message } from 'ant-design-vue';
+import { Modal } from 'ant-design-vue';
+import { h } from 'vue';
 
 export default {
   data() {
@@ -46,9 +48,7 @@ export default {
     };
   },
 
-  mounted() {
-
-  },
+  mounted() {},
 
   methods: {
     handleSubmit() {
@@ -57,10 +57,22 @@ export default {
       })
       .then(response => {
         message.success(`Success to execute SQL: ${this.formState.sql}`);
-        this.initData();
+
+        Modal.success({
+          title: 'Execute result',
+          content: h('div', {}, [
+            h('p', JSON.stringify(response.data)),
+          ]),
+          onOk() {},
+        });
       })
       .catch(error => {
-        message.error(error.message);
+        console.log(error);
+        if ("response" in error && "data" in error.response) {
+          message.error(error.response.data);
+        } else {
+          message.error(error.message);
+        }
       });
     },
   },

@@ -89,16 +89,15 @@ public class UseFeaturePlatformClient {
         System.out.println(result);
     }
 
-    public static void querySql() throws IOException {
-        String sql = "SELECT 100";
-        boolean result = client.querySql(sql);
-        System.out.println(result);
-    }
+    public static void accessExecuteSql() throws IOException {
 
-    public static void executeSql() throws IOException {
         String sql = "CREATE DATABASE db1";
-        boolean result = client.executeSql(sql);
-        System.out.println(result);
+        HttpResponse response = client.executeSql(sql);
+        client.printResponse(response);
+
+        String sql2 = "SELECT 'abc', 100";
+        HttpResponse response2 = client.executeSql(sql2);
+        client.printResponse(response2);
     }
 
     public static void useTables() throws IOException {
@@ -118,7 +117,8 @@ public class UseFeaturePlatformClient {
             //executeSql();
             //useOtherApis();
             //useFeatureServices();
-            requestApiServer();
+            //requestApiServer();
+            accessExecuteSql();
         } catch (IOException e) {
             e.printStackTrace();
         }

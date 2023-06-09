@@ -79,7 +79,7 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue';
 import { Modal } from 'ant-design-vue';
-import { defineComponent, h } from 'vue';
+import { h } from 'vue';
 
 export default {
   data() {
@@ -120,8 +120,8 @@ export default {
       },
 
       testFormState: {
-        name: "service1",
-        testData: `{"input": [["abc", 123]]}`,
+        name: "",
+        testData: "",
       }
     };
   },
@@ -177,10 +177,8 @@ export default {
       )
       .then(response => {
         message.success(`Success to request feature service ${this.testFormState.name}`);
-        console.log(response.data.data);
 
         if (response.data.code == 0) {
-          console.log(response.data.data)
           Modal.success({
             title: 'Request result',
             content: h('div', {}, [

@@ -1,21 +1,23 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
+import com._4paradigm.openmldb.jdbc.SQLResultSet;
+import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 @Repository
 public class OpenmldbDbService {
 
     private final Statement openmldbStatement;
 
+    private final SqlClusterExecutor openmldbSqlExecutor;
+
     @Autowired
-    public OpenmldbDbService(Statement openmldbStatement) {
+    public OpenmldbDbService(Statement openmldbStatement, SqlClusterExecutor openmldbSqlExecutor) {
         this.openmldbStatement = openmldbStatement;
+        this.openmldbSqlExecutor = openmldbSqlExecutor;
     }
 
     public void initDbAndTables() throws SQLException {
@@ -38,22 +40,19 @@ public class OpenmldbDbService {
         openmldbStatement.execute(sql);
     }
 
-    public boolean executeSql(String sql) {
-        try {
-            return openmldbStatement.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public boolean validateSql(String sql) {
+
+
+        //SqlClusterExecutor.validateSQLInRequest();
+        return true;
+
     }
 
-    public ResultSet querySql(String sql) {
-        try {
-            openmldbStatement.execute(sql);
-            ResultSet result = openmldbStatement.getResultSet();
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public SQLResultSet executeSql(String sql) throws SQLException {
+        openmldbStatement.execute(sql);
+        if (sql.toLowerCase().startsWith("select")) {
+            return (SQLResultSet) openmldbStatement.getResultSet();
+        } else {
             return null;
         }
     }

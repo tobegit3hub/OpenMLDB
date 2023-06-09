@@ -233,15 +233,13 @@ public class FeaturePlatformClient {
         return true;
     }
 
-    public boolean executeSql(String sql) throws IOException {
+    public HttpResponse executeSql(String sql) throws IOException {
         String endpoint = this.apiEndpoint + "sql/execute";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
         postRequest.setEntity(new StringEntity(String.format("{\"sql\":\"%s\"}", sql)));
         HttpResponse postResponse = httpClient.execute(postRequest);
-        printResponse(postResponse);
-        // TODO: Check response status code
-        return true;
+        return postResponse;
     }
 
     public HttpResponse requestFeatureService(String featureService, String requestData) throws IOException {

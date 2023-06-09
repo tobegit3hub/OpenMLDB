@@ -1,5 +1,9 @@
 package com._4paradigm.openmldb.featureplatform.utils;
 
+import com._4paradigm.openmldb.DataType;
+import com._4paradigm.openmldb.jdbc.SQLResultSet;
+
+import java.sql.SQLException;
 import java.sql.Types;
 
 public class TypeUtil {
@@ -82,4 +86,31 @@ public class TypeUtil {
                 return "Unknown";
         }
     }
+
+    public static String getResultSetStringColumn(SQLResultSet resultSet, int i, DataType type) throws SQLException {
+        if (type.equals(DataType.kTypeBool)) {
+            return String.valueOf(resultSet.getBoolean(i));
+        } else if (type.equals(DataType.kTypeInt16)) {
+            return String.valueOf(resultSet.getShort(i));
+        } else if (type.equals(DataType.kTypeInt32)) {
+            return String.valueOf(resultSet.getInt(i));
+        } else if (type.equals(DataType.kTypeInt64)) {
+            return String.valueOf(resultSet.getLong(i));
+        } else if (type.equals(DataType.kTypeFloat)) {
+            return String.valueOf(resultSet.getFloat(i));
+        } else if (type.equals(DataType.kTypeDouble)) {
+            return String.valueOf(resultSet.getDouble(i));
+        } else if (type.equals(DataType.kTypeString)) {
+            return String.valueOf(resultSet.getString(i));
+        } else if (type.equals(DataType.kTypeDate)) {
+            return String.valueOf(resultSet.getDate(i));
+        } else if (type.equals(DataType.kTypeTimestamp)) {
+            return String.valueOf(resultSet.getTimestamp(i));
+        } else if (type.equals(DataType.kTypeUnknow)) {
+            throw new SQLException("Not support type for " + type);
+        } else {
+            throw new SQLException("Not support type for " + type);
+        }
+    }
+
 }
