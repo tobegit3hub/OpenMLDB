@@ -60,7 +60,7 @@ export default {
         this.initData();
       })
       .catch(error => {
-        message.error(error);
+        message.error(error.message);
       });
     },
   },

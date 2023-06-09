@@ -26,7 +26,7 @@ public class MultiTableMultiFeatureViewExample {
             client.createFeatureService("featureservice1", "featureview1, featureview2");
 
             // Test feature service
-            client.testFeatureService("http://127.0.0.1:9080", "featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
 
             // Cleanup resources
             client.deleteFeatureService("featureservice1");

@@ -1,9 +1,14 @@
 package com._4paradigm.openmldb.featureplatform.controller;
 
+import com._4paradigm.openmldb.featureplatform.dao.DataRequest;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.List;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.FeatureServiceService;
@@ -46,6 +51,15 @@ public class FeatureServiceController {
         } else {
             // TODO: Handle for different error code
             return new ResponseEntity<>("Success to delete", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/{name}/request", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> requestFeatureService(@PathVariable String name, @RequestBody String dataRequest) {
+        try {
+            return featureServiceService.requestFeatureService(name, dataRequest);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

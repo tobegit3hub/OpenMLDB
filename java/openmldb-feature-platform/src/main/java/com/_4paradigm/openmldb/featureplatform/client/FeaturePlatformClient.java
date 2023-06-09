@@ -9,6 +9,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -27,7 +28,7 @@ public class FeaturePlatformClient {
         this.apiEndpoint = String.format("http://%s:%d/api/", host, port);
     }
 
-    private static void printResponse(HttpResponse response) throws IOException {
+    public static void printResponse(HttpResponse response) throws IOException {
         int responseCode = response.getStatusLine().getStatusCode();
         HttpEntity entity = response.getEntity();
         String responseBody = EntityUtils.toString(entity);
@@ -243,7 +244,16 @@ public class FeaturePlatformClient {
         return true;
     }
 
-    public HttpResponse requestFeatureService(String apiServerEndpoint, String featureService, String requestData) throws IOException {
+    public HttpResponse requestFeatureService(String featureService, String requestData) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + featureService + "/request";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(requestData, ContentType.APPLICATION_JSON));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        return postResponse;
+    }
+
+    public HttpResponse requestApiServer(String apiServerEndpoint, String featureService, String requestData) throws IOException {
         String endpoint = String.format("%s/dbs/SYSTEM_FEATURE_PLATFORM/deployments/FEATURE_PLATFORM_%s", apiServerEndpoint, featureService);
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
@@ -252,8 +262,4 @@ public class FeaturePlatformClient {
         return postResponse;
     }
 
-    public void testFeatureService(String apiServerEndpoint, String featureService, String requestData) throws IOException {
-        HttpResponse response = requestFeatureService(apiServerEndpoint, featureService, requestData);
-        printResponse(response);
-    }
 }

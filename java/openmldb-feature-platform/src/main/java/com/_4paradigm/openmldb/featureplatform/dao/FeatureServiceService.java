@@ -3,15 +3,30 @@ package com._4paradigm.openmldb.featureplatform.dao;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class FeatureServiceService {
+
+    @Autowired
+    private Environment env;
 
     private final Connection openmldbConnection;
     private final SqlClusterExecutor openmldbSqlExecutor;
@@ -160,5 +175,24 @@ public class FeatureServiceService {
         }
 
         return false;
+    }
+
+    public ResponseEntity<String> requestFeatureService(String name, String requestData) throws IOException {
+        String apiServerEndpoint = env.getProperty("openmldb.apiserver");
+        if (apiServerEndpoint == null || apiServerEndpoint.equals("")) {
+            throw new IOException("Need to config openmldb.apiserver in application.yaml");
+        }
+
+        HttpClient httpClient = HttpClients.createDefault();
+        String endpoint = String.format("http://%s/dbs/SYSTEM_FEATURE_PLATFORM/deployments/FEATURE_PLATFORM_%s", apiServerEndpoint, name);
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(requestData));
+        HttpResponse response = httpClient.execute(postRequest);
+
+        int statusCode = response.getStatusLine().getStatusCode();
+        HttpEntity responseEntity = response.getEntity();
+        String responseBody = EntityUtils.toString(responseEntity);
+        return new ResponseEntity<String>(responseBody, HttpStatus.valueOf(statusCode));
     }
 }

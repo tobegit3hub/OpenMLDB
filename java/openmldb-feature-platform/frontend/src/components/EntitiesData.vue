@@ -60,7 +60,7 @@ import { message } from 'ant-design-vue';
             this.entities = response.data;
           })
           .catch(error => {
-            console.log(error);
+            console.log(error.message);
           })
           .finally(() => {
             this.loading = false;

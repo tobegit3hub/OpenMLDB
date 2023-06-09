@@ -55,7 +55,7 @@ export default {
           this.features = response.data;
         })
         .catch(error => {
-          message.error(error);
+          message.error(error.message);
         })
         .finally(() => {
           this.loading = false;

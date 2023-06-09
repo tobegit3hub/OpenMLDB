@@ -110,7 +110,7 @@ export default {
           this.featureViews = response.data;
         })
         .catch(error => {
-          message.error(error);
+          message.error(error.message);
         })
         .finally(() => {
           this.loading = false;
@@ -128,7 +128,7 @@ export default {
         this.initData();
       })
       .catch(error => {
-        message.error(error);
+        message.error(error.message);
       });
     },
 
@@ -139,7 +139,7 @@ export default {
         this.initData();
       })
       .catch(error => {
-        message.error(error);
+        message.error(error.message);
       });
     },
 

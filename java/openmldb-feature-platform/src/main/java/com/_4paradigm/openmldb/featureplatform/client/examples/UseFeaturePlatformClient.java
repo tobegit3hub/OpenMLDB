@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
 import com._4paradigm.openmldb.featureplatform.dao.model.*;
+import org.apache.http.HttpResponse;
 
 public class UseFeaturePlatformClient {
 
@@ -56,6 +57,7 @@ public class UseFeaturePlatformClient {
     }
 
     public static void useFeatureServices() throws IOException {
+        /*
         // List all feature services
         List<FeatureService> featureServices = client.getFeatureServices();
         System.out.println(featureServices);
@@ -69,7 +71,17 @@ public class UseFeaturePlatformClient {
 
         // Delete a feature view
         client.deleteFeatureService("feature_service_1");
+*/
+        HttpResponse response = client.requestFeatureService("service1", "{\"input\": [[\"abc\", 22]]}");
+        client.printResponse(response);
     }
+
+
+    public static void requestApiServer() throws IOException {
+        HttpResponse response = client.requestApiServer("http://127.0.0.1:9080", "service1", "{\"input\": [[\"abc\", 22]]}");
+        client.printResponse(response);
+    }
+
 
     public static void validateSql() throws IOException {
         String sql = "SELECT 100";
@@ -98,17 +110,18 @@ public class UseFeaturePlatformClient {
     }
 
     public static void main(String[] args) {
-
         try {
             //useEntity();
-            useFeatures();
+            //useFeatures();
             //useFeatureViews();
             //validateSql();
             //executeSql();
             //useOtherApis();
+            //useFeatureServices();
+            requestApiServer();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 }
