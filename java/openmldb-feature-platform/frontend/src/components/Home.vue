@@ -27,6 +27,9 @@
       <a-menu-item key="7">
         <router-link to='/sql'>SQL</router-link>
       </a-menu-item>
+      <a-menu-item key="8">
+        <router-link to='/tutorial'>Tutorial</router-link>
+      </a-menu-item>
     </a-menu>
   </a-layout-header>
 </a-layout>

@@ -57,7 +57,9 @@
       <a-form-item
         label="Feature service"
         :rules="[{ required: true, message: 'Please input feature service name!' }]">
-        <a-input v-model:value="testFormState.name" />
+        <a-select id="itemSelect" v-model:value="testFormState.name">
+          <option v-for="featureViewItem in featureServices" :value="featureViewItem.name">{{ featureViewItem.name }}</option>
+        </a-select>
       </a-form-item>
 
       <a-form-item
