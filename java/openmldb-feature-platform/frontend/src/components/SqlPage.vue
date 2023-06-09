@@ -11,7 +11,7 @@
         <p>eg. SELECT * FROM SYSTEM_FEATURE_PLATFORM.feature_services</p>
       </a-typography-paragraph>
     </a-typography>
-    <!-- Create form -->
+    <!-- Execute SQL form -->
     <a-form
       :model="formState"
       name="basic"
@@ -30,6 +30,29 @@
     </a-form>
   </div>
 
+  <br />
+  <div>
+    <h1>Validate SQL</h1>
+    <p>Validate DQL SQLs for online request mode.</p>
+    <p>eg. SELECT * from entities</p>
+    <!-- Validate SQL form -->
+    <a-form
+      :model="validateFormState"
+      name="basic"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 16 }"
+      @submit="handleValidateFormSubmit">
+      <a-form-item
+        label="SQL"
+        :rules="[{ required: true, message: 'Please input SQL!' }]">
+        <a-input v-model:value="validateFormState.sql" />
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button type="primary" html-type="submit">Submit</a-button>
+      </a-form-item>
+    </a-form>
+  </div>
 </div>
 </template>
   
@@ -44,6 +67,10 @@ export default {
     return {
       formState: {
         sql: '',
+      },
+
+      validateFormState: {
+        sql: '',
       }
     };
   },
@@ -57,17 +84,34 @@ export default {
       })
       .then(response => {
         message.success(`Success to execute SQL: ${this.formState.sql}`);
+        console.log(response.data);
 
         Modal.success({
           title: 'Execute result',
           content: h('div', {}, [
-            h('p', JSON.stringify(response.data)),
+            h('pre', JSON.stringify(response.data)),
           ]),
           onOk() {},
         });
       })
       .catch(error => {
         console.log(error);
+        if ("response" in error && "data" in error.response) {
+          message.error(error.response.data);
+        } else {
+          message.error(error.message);
+        }
+      });
+    },
+
+    handleValidateFormSubmit() {
+      axios.post(`/api/sql/validate`, {
+        "sql": this.validateFormState.sql,
+      })
+      .then(response => {
+        message.success(`Success to validate SQL: ${this.validateFormState.sql}`);
+      })
+      .catch(error => {
         if ("response" in error && "data" in error.response) {
           message.error(error.response.data);
         } else {

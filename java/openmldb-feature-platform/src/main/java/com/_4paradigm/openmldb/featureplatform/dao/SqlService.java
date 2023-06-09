@@ -1,21 +1,25 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
+import com._4paradigm.openmldb.featureplatform.utils.OpenmldbTableUtil;
 import com._4paradigm.openmldb.jdbc.SQLResultSet;
+import com._4paradigm.openmldb.sdk.Schema;
 import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
 
 @Repository
-public class OpenmldbDbService {
+public class SqlService {
 
     private final Statement openmldbStatement;
 
     private final SqlClusterExecutor openmldbSqlExecutor;
 
     @Autowired
-    public OpenmldbDbService(Statement openmldbStatement, SqlClusterExecutor openmldbSqlExecutor) {
+    public SqlService(Statement openmldbStatement, SqlClusterExecutor openmldbSqlExecutor) {
         this.openmldbStatement = openmldbStatement;
         this.openmldbSqlExecutor = openmldbSqlExecutor;
     }
@@ -40,14 +44,6 @@ public class OpenmldbDbService {
         openmldbStatement.execute(sql);
     }
 
-    public boolean validateSql(String sql) {
-
-
-        //SqlClusterExecutor.validateSQLInRequest();
-        return true;
-
-    }
-
     public SQLResultSet executeSql(String sql) throws SQLException {
         openmldbStatement.execute(sql);
         if (sql.toLowerCase().startsWith("select")) {
@@ -55,6 +51,12 @@ public class OpenmldbDbService {
         } else {
             return null;
         }
+    }
+
+    public List<String> validateSql(String sql) throws SQLException {
+        Map<String, Map<String, Schema>> schemaMaps = OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor);
+        List<String> result = SqlClusterExecutor.validateSQLInRequest(sql, schemaMaps);
+        return result;
     }
 
 }

@@ -3,6 +3,7 @@ package com._4paradigm.openmldb.featureplatform.dao;
 import com._4paradigm.openmldb.featureplatform.dao.model.Feature;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
+import com._4paradigm.openmldb.featureplatform.utils.OpenmldbTableUtil;
 import com._4paradigm.openmldb.featureplatform.utils.TypeUtil;
 import com._4paradigm.openmldb.sdk.Column;
 import com._4paradigm.openmldb.sdk.Schema;
@@ -89,23 +90,7 @@ public class FeatureViewService {
         try {
             // TODO: Get feature names by compiling SQL
 
-            Map<String, Map<String, Schema>> schemaMaps = new HashMap<>();
-
-            List<String> databases = openmldbSqlExecutor.showDatabases();
-            for (String database: databases) {
-                List<String> tables = openmldbSqlExecutor.getTableNames(database);
-                Map<String, Schema> dbSchemaMap = new HashMap<>();
-
-                for (String table: tables) {
-                    try {
-                        Schema schema = openmldbSqlExecutor.getTableSchema(database, table);
-                        dbSchemaMap.put(table, schema);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                schemaMaps.put(database, dbSchemaMap);
-            }
+            Map<String, Map<String, Schema>> schemaMaps = OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor);
 
             String sql = featureView.getSql();
 

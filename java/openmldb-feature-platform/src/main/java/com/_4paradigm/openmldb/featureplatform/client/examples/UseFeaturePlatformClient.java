@@ -85,8 +85,17 @@ public class UseFeaturePlatformClient {
 
     public static void validateSql() throws IOException {
         String sql = "SELECT 100";
-        boolean result = client.validateSql(sql);
-        System.out.println(result);
+        // TODO: Fail and need to upgrade the internal validate logic
+        HttpResponse response = client.validateSql(sql);
+        client.printResponse(response);
+
+        String sql2 = "SELECT * from SYSTEM_FEATURE_PLATFORM.entities";
+        HttpResponse response2 = client.validateSql(sql2);
+        client.printResponse(response2);
+
+        String sql3 = "SELECT col from db1.t100";
+        HttpResponse response3 = client.validateSql(sql3);
+        client.printResponse(response3);
     }
 
     public static void accessExecuteSql() throws IOException {
@@ -118,7 +127,8 @@ public class UseFeaturePlatformClient {
             //useOtherApis();
             //useFeatureServices();
             //requestApiServer();
-            accessExecuteSql();
+            //accessExecuteSql();
+            validateSql();
         } catch (IOException e) {
             e.printStackTrace();
         }
