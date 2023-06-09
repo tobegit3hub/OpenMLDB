@@ -1,0 +1,67 @@
+<template>
+
+<div>
+  <br/>
+  <h1>Features</h1>
+  <!-- Data table -->
+  <a-table :columns="columns" :data-source="features" :loading="loading">
+  </a-table>
+
+</div>
+</template>
+  
+<script>
+import axios from 'axios'
+import { message } from 'ant-design-vue';
+
+export default {
+  data() {
+    return {
+      features: [],
+
+      loading: false,
+      
+      columns: [{
+        title: 'Feature View',
+        dataIndex: 'featureViewName',
+        key: 'featureViewName',
+      },
+      {
+        title: 'Feature Name',
+        dataIndex: 'featureName',
+        key: 'featureName',
+      },
+      {
+        title: 'Type',
+        dataIndex: 'type',
+        key: 'type',
+      }],
+
+      formState: {
+        sql: '',
+      }
+    };
+  },
+
+  mounted() {
+    this.initData();
+  },
+
+  methods: {
+    initData() {
+      this.loading = true;
+      axios.get(`/api/features`)
+        .then(response => {
+          this.features = response.data;
+        })
+        .catch(error => {
+          message.error(error);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
+
+  },
+};
+</script>

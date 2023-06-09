@@ -1,23 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomePage from '../components/HomePage.vue'
-import TableList from '../components/TableList.vue'
+import TablesPage from '../components/TablesPage.vue'
 import EntitiesPage from '../components/EntitiesPage.vue'
-import FeatureList from '../components/FeatureList.vue'
-import FeatureViewList from '../components/FeatureViewList.vue'
-import FeatureServiceList from '../components/FeatureServiceList.vue'
-
-
+import FeaturesPage from '../components/FeaturesPage.vue'
+import FeatureViewsPage from '../components/FeatureViewsPage.vue'
+import FeatureServicesPage from '../components/FeatureServicesPage.vue'
 
 const router = createRouter({
   history: createWebHistory("/"),
   routes: [
     { path: '/', component: HomePage },
-    { path: '/tables', component: TableList},
+    { path: '/tables', component: TablesPage},
     { path: '/entities', component: EntitiesPage},
-    { path: '/features', component: FeatureList},
-    { path: '/featureviews', component: FeatureViewList},
-    { path: '/featureservices', component: FeatureServiceList},
+    { path: '/features', component: FeaturesPage},
+    { path: '/featureviews', component: FeatureViewsPage},
+    { path: '/featureservices', component: FeatureServicesPage},
     { path: '/404', redirect: "/" },
     { path: '/:pathMatch(.*)*', redirect: "/404" }
   ]

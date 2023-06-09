@@ -102,9 +102,21 @@ public class FeatureServiceService {
             List<String> sqlList = new ArrayList<>();
             String[] featureViewNames = featureService.getFeatureViewNames().split(",");
             FeatureViewService featureViewService = new FeatureViewService(openmldbConnection, openmldbSqlExecutor);
-            for (String featureViewName: featureViewNames) {
-                FeatureView featureView = featureViewService.getFeatureViewByName(featureViewName.trim());
-                sqlList.add(featureView.getSql());
+            for (String splitFeatureViewName: featureViewNames) {
+                String featureViewName = splitFeatureViewName.trim();
+                if (!featureViewName.equals("")) {
+                    FeatureView featureView = featureViewService.getFeatureViewByName(featureViewName);
+                    if (featureView == null) {
+                        System.out.println("Can not get feature view by name: " + featureViewName);
+                        return false;
+                    }
+                    sqlList.add(featureView.getSql());
+                }
+            }
+
+            if (sqlList.size()==0) {
+                System.out.println("Can not get sql from feature views: " + String.join(",", featureViewNames));
+                return false;
             }
 
             String mergedSql = mergeSqlList(openmldbSqlExecutor, sqlList);

@@ -2,9 +2,9 @@
 
 <div>
   <br/>
-  <h1>Entities</h1>
+  <h1>Feature Views</h1>
   <!-- Data table -->
-  <a-table :columns="columns" :data-source="entities" :loading="loading">
+  <a-table :columns="columns" :data-source="featureViews" :loading="loading">
     <!-- The delete column-->
     <template v-slot:custom="scope">
       <a-popconfirm
@@ -17,7 +17,7 @@
 
   <br />
   <div>
-    <h1>Create Entity</h1>
+    <h1>Create Feature View</h1>
     <!-- Create form -->
     <a-form
       :model="formState"
@@ -32,11 +32,17 @@
       </a-form-item>
 
       <a-form-item
-        label="Primary keys"
-        :rules="[{ required: true, message: 'Please input primary keys!' }]">
-        <a-input v-model:value="formState.primaryKeys" />
+        label="Entity names"
+        :rules="[{ required: true, message: 'Please input entity names!' }]">
+        <a-input v-model:value="formState.entityNames" />
       </a-form-item>
 
+      <a-form-item
+        label="SQL"
+        :rules="[{ required: true, message: 'Please input SQL!' }]">
+        <a-input v-model:value="formState.sql" />
+      </a-form-item>
+      
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
         <a-button type="primary" html-type="submit">Submit</a-button>
       </a-form-item>
@@ -53,7 +59,7 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
-      entities: [],
+      featureViews: [],
 
       loading: false,
       
@@ -63,9 +69,19 @@ export default {
         key: 'name',
       },
       {
-        title: 'Primary Keys',
-        dataIndex: 'primaryKeys',
-        key: 'primaryKeys',
+        title: 'Entities',
+        dataIndex: 'entityNames',
+        key: 'entityNames',
+      },
+      {
+        title: 'SQL',
+        dataIndex: 'sql',
+        key: 'sql',
+      },
+      {
+        title: 'Features',
+        dataIndex: 'featureNames',
+        key: 'featureNames',
       },
       {
         title: 'Actions',
@@ -75,7 +91,8 @@ export default {
 
       formState: {
         name: '',
-        primaryKeys: '',
+        entityNames: '',
+        sql: ''
       }
     };
   },
@@ -88,9 +105,9 @@ export default {
   methods: {
     initData() {
       this.loading = true;
-      axios.get(`/api/entities`)
+      axios.get(`/api/featureviews`)
         .then(response => {
-          this.entities = response.data;
+          this.featureViews = response.data;
         })
         .catch(error => {
           message.error(error);
@@ -101,12 +118,13 @@ export default {
     },
 
     handleSubmit() {
-      axios.post(`/api/entities`, {
+      axios.post(`/api/featureviews`, {
         "name": this.formState.name,
-        "primaryKeys": this.formState.primaryKeys
+        "entityNames": this.formState.entityNames,
+        "sql": this.formState.sql
       })
       .then(response => {
-        message.success(`Success to add entity ${this.formState.name}`);
+        message.success(`Success to add feature view ${this.formState.name}`);
         this.initData();
       })
       .catch(error => {
@@ -115,9 +133,9 @@ export default {
     },
 
     handleDelete(name) {
-      axios.delete(`/api/entities/${name}`)
+      axios.delete(`/api/featureviews/${name}`)
       .then(response => {
-        message.success(`Success to delete entity: ${name}`);
+        message.success(`Success to delete feature view: ${name}`);
         this.initData();
       })
       .catch(error => {
