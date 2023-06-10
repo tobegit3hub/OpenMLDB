@@ -28,7 +28,7 @@ public class FeatureViewService {
     }
 
     public List<FeatureView> getFeatureViews() {
-        String sql = "SELECT name, entity_names, sql FROM SYSTEM_FEATURE_PLATFORM.feature_views";
+        String sql = "SELECT name, entity_names, sql, feature_names FROM SYSTEM_FEATURE_PLATFORM.feature_views";
 
         ArrayList<FeatureView> featureViews = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class FeatureViewService {
             ResultSet result = openmldbStatement.getResultSet();
 
             while (result.next()) {
-                FeatureView featureView = new FeatureView(result.getString(1), result.getString(2), result.getString(3));
+                FeatureView featureView = new FeatureView(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
                 featureViews.add(featureView);
             }
         } catch (SQLException e) {
@@ -97,6 +97,8 @@ public class FeatureViewService {
             // TODO: Validate SQL before creating
 
             // TODO(huangwei)：Need to support SQL which contains database name
+            StringBuilder featureNamesBuilder = new StringBuilder();
+
             try {
                 List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, schemaMaps).getColumnList();
                 for (Column outputSchemaColumn: outputSchemaColumns) {
@@ -104,9 +106,15 @@ public class FeatureViewService {
                     int intType = outputSchemaColumn.getSqlType();
                     String stringType = TypeUtil.javaSqlTypeToString(intType);
 
-                    FeaturesService featuresService = new FeaturesService(openmldbConnection);
+                    FeaturesService featuresService = new FeaturesService(openmldbConnection, openmldbSqlExecutor);
                     Feature feature = new Feature(featureView.getName(), name, stringType);
                     featuresService.addFeature(feature);
+
+                    if (featureNamesBuilder.length() == 0) {
+                        featureNamesBuilder.append(name);
+                    } else {
+                        featureNamesBuilder.append(", " + name);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -114,7 +122,8 @@ public class FeatureViewService {
             }
 
             // TODO: It would be better to use JDBC prepared statement from connection
-            String insertSql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_names, sql) values ('%s', '%s', '%s')", featureView.getName(), featureView.getEntityNames(), featureView.getSql());
+            String featureNames = featureNamesBuilder.toString();
+            String insertSql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_names, sql, feature_names) values ('%s', '%s', '%s', '%s')", featureView.getName(), featureView.getEntityNames(), featureView.getSql(), featureNames);
 
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(insertSql);
@@ -131,7 +140,7 @@ public class FeatureViewService {
     public boolean deleteFeatureView(String name) {
         try {
             // Delete the features
-            FeaturesService featuresService = new FeaturesService(openmldbConnection);
+            FeaturesService featuresService = new FeaturesService(openmldbConnection, openmldbSqlExecutor);
             List<Feature> features = featuresService.getFeaturesByFeatureView(name);
             for (Feature feature: features) {
                  featuresService.deleteFeature(feature);

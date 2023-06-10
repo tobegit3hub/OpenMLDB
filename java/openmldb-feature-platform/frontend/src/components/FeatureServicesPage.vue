@@ -32,9 +32,9 @@
       </a-form-item>
 
       <a-form-item
-        label="Feature views names"
-        :rules="[{ required: true, message: 'Please input feature views names!' }]">
-        <a-input v-model:value="formState.featureViewNames" />
+        label="Feature list"
+        :rules="[{ required: true, message: 'Please input feature list!' }]">
+        <a-input v-model:value="formState.featureList" />
       </a-form-item>
       
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
@@ -96,9 +96,9 @@ export default {
         key: 'name',
       },
       {
-        title: 'Feature Views',
-        dataIndex: 'featureViewNames',
-        key: 'featureViewNames',
+        title: 'Feature List',
+        dataIndex: 'featureList',
+        key: 'featureList',
       },
       {
         title: 'SQL',
@@ -118,7 +118,7 @@ export default {
 
       formState: {
         name: '',
-        featureViewNames: '',
+        featureList: '',
       },
 
       testFormState: {
@@ -151,7 +151,7 @@ export default {
     handleSubmit() {
       axios.post(`/api/featureservices`, {
         "name": this.formState.name,
-        "featureViewNames": this.formState.featureViewNames
+        "featureList": this.formState.featureList
       })
       .then(response => {
         message.success(`Success to add feature service ${this.formState.name}`);

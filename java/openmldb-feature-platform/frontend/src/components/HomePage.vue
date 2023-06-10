@@ -11,24 +11,24 @@
     <br /><br />
     <a-row>
     <a-col :span="11">
-      <h2><router-link to='/entities'>Entities</router-link></h2>
+      <h2><router-link to='/entities'>Entities ({{ entityCount }})</router-link></h2>
       <a-table :columns="entityColumns" :data-source="entities" />
     </a-col>
     
     <a-col :span="1"></a-col>
     <a-col :span="12">
-      <h2><router-link to='/features'>Features</router-link></h2>
+      <h2><router-link to='/features'>Features ({{ featureCount }})</router-link></h2>
       <a-table :columns="featureColumns" :data-source="features" />
     </a-col>
 
     <a-col :span="11">
-      <h2><router-link to='/featureviews'>Feature Views</router-link></h2>
+      <h2><router-link to='/featureviews'>Feature Views ({{ featureViewCount }})</router-link></h2>
       <a-table :columns="featureViewColumns" :data-source="featureviews" />
     </a-col>
 
     <a-col :span="1"></a-col>
     <a-col :span="12">
-      <h2><router-link to='/featureservices'>Feature Services</router-link></h2>
+      <h2><router-link to='/featureservices'>Feature Services ({{ featureServiceCount }})</router-link></h2>
       <a-table :columns="featureServiceColumns" :data-source="featureservices" />
     </a-col>
   </a-row>
@@ -46,6 +46,11 @@ import axios from 'axios'
         features: [],
         featureviews: [],
         featureservices: [],
+        
+        entityCount: 0,
+        featureCount: 0,
+        featureViewCount: 0,
+        featureServiceCount: 0,
 
         entityColumns: [{
           title: 'Name',
@@ -102,9 +107,9 @@ import axios from 'axios'
           key: 'name',
         },
         {
-          title: 'Feature Views',
-          dataIndex: 'featureViewNames',
-          key: 'featureViewNames',
+          title: 'Feature List',
+          dataIndex: 'featureList',
+          key: 'featureList',
         },
         {
           title: 'SQL',
@@ -128,6 +133,7 @@ import axios from 'axios'
         axios.get(`/api/entities`)
           .then(response => {
             this.entities = response.data;
+            this.entityCount = this.entities.length;
           })
           .catch(error => {
             console.log(error.message);
@@ -136,6 +142,7 @@ import axios from 'axios'
         axios.get(`/api/features`)
           .then(response => {
             this.features = response.data;
+            this.featureCount = this.features.length;
           })
           .catch(error => {
             console.log(error.message);
@@ -144,6 +151,7 @@ import axios from 'axios'
         axios.get(`/api/featureviews`)
           .then(response => {
             this.featureviews = response.data;
+            this.featureViewCount = this.featureviews.length;
           })
           .catch(error => {
             console.log(error.message);
@@ -152,6 +160,7 @@ import axios from 'axios'
         axios.get(`/api/featureservices`)
           .then(response => {
             this.featureservices = response.data;
+            this.featureServiceCount = this.featureservices.length;
           })
           .catch(error => {
             console.log(error.message);

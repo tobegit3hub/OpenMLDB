@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class FeatureServiceService {
     }
 
     public List<FeatureService> getFeatureServices() {
-        String sql = "SELECT name, feature_view_names FROM SYSTEM_FEATURE_PLATFORM.feature_services";
+        String sql = "SELECT name, feature_list, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services";
 
         ArrayList<FeatureService> featureServices = new ArrayList<>();
 
@@ -48,7 +47,7 @@ public class FeatureServiceService {
             ResultSet result = openmldbStatement.getResultSet();
 
             while (result.next()) {
-                FeatureService featureService = new FeatureService(result.getString(1), result.getString(2));
+                FeatureService featureService = new FeatureService(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
                 featureServices.add(featureService);
             }
         } catch (SQLException e) {
@@ -60,15 +59,7 @@ public class FeatureServiceService {
 
     public FeatureService getFeatureServiceByName(String name) {
         try {
-            // TODO: Set database before
-            /*
-            String sql = "SELECT name, feature_view_names FROM SYSTEM_FEATURE_PLATFORM.feature_services WHERE name=?";
-            PreparedStatement openmldbStatement = openmldbConnection.prepareStatement(sql);
-            openmldbStatement.setString(1, name);
-            ResultSet result = openmldbStatement.executeQuery();
-            */
-
-            String sql = String.format("SELECT name, feature_view_names, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services WHERE name='%s'", name);
+            String sql = String.format("SELECT name, feature_list, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services WHERE name='%s'", name);
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);
             ResultSet result = openmldbStatement.getResultSet();
@@ -108,21 +99,22 @@ public class FeatureServiceService {
         try {
             Statement openmldbStatement = openmldbConnection.createStatement();
 
-            // Get name and feature_view_names
+            // Get name and feature_list
             FeatureService newFeatureService = new FeatureService();
             newFeatureService.setName(featureService.getName());
-            newFeatureService.setFeatureViewNames(featureService.getFeatureViewNames());
+            newFeatureService.setFeatureList(featureService.getFeatureList());
 
             // Merge SQL from FeatureViews
             List<String> sqlList = new ArrayList<>();
-            String[] featureViewNames = featureService.getFeatureViewNames().split(",");
+            String[] featureList = featureService.getFeatureList().split(",");
             FeatureViewService featureViewService = new FeatureViewService(openmldbConnection, openmldbSqlExecutor);
-            for (String splitFeatureViewName: featureViewNames) {
-                String featureViewName = splitFeatureViewName.trim();
-                if (!featureViewName.equals("")) {
-                    FeatureView featureView = featureViewService.getFeatureViewByName(featureViewName);
+            for (String splitFeatureList: featureList) {
+                String featureListItem = splitFeatureList.trim();
+                if (!featureListItem.equals("")) {
+                    // TODO: Support get item by feature name instead of all features from feature view
+                    FeatureView featureView = featureViewService.getFeatureViewByName(featureListItem);
                     if (featureView == null) {
-                        System.out.println("Can not get feature view by name: " + featureViewName);
+                        System.out.println("Can not get feature view by name: " + featureListItem);
                         return false;
                     }
                     sqlList.add(featureView.getSql());
@@ -130,7 +122,7 @@ public class FeatureServiceService {
             }
 
             if (sqlList.size()==0) {
-                System.out.println("Can not get sql from feature views: " + String.join(",", featureViewNames));
+                System.out.println("Can not get sql from feature views: " + String.join(",", featureList));
                 return false;
             }
 
@@ -142,7 +134,7 @@ public class FeatureServiceService {
             openmldbStatement.execute(deploymentSql);
 
             // TODO: It would be better to use JDBC prepared statement from connection
-            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_services (name, feature_view_names, sql, deployment) values ('%s', '%s', '%s', '%s')", featureService.getName(), featureService.getFeatureViewNames(), mergedSql, deploymentName);
+            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_services (name, feature_list, sql, deployment) values ('%s', '%s', '%s', '%s')", featureService.getName(), featureService.getFeatureList(), mergedSql, deploymentName);
             openmldbStatement.execute(sql);
 
             openmldbStatement.close();

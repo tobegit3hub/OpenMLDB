@@ -1,6 +1,8 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
 import com._4paradigm.openmldb.featureplatform.dao.model.Feature;
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
+import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,9 +18,12 @@ public class FeaturesService {
 
     private final Connection openmldbConnection;
 
+    private final SqlClusterExecutor openmldbSqlExecutor;
+
     @Autowired
-    public FeaturesService(Connection openmldbConnection) {
+    public FeaturesService(Connection openmldbConnection, SqlClusterExecutor openmldbSqlExecutor) {
         this.openmldbConnection = openmldbConnection;
+        this.openmldbSqlExecutor = openmldbSqlExecutor;
     }
 
     public List<Feature> getFeatures() {
@@ -91,6 +96,24 @@ public class FeaturesService {
         }
 
         return features;
+    }
+
+    public List<Feature> getFeaturesByFeatureService(String featureServiceName) {
+        List<Feature> outputFeatures = new ArrayList<>();
+
+        FeatureServiceService featureServiceService = new FeatureServiceService(openmldbConnection, openmldbSqlExecutor);
+
+        FeatureService featureService = featureServiceService.getFeatureServiceByName(featureServiceName);
+        String featureList = featureService.getFeatureList();
+
+        for (String featureListItem : featureList.split(",")) {
+            // TODO: Only support for feautre view name now
+            String featureViewName = featureListItem.trim();
+            List<Feature> features = getFeaturesByFeatureView(featureViewName);
+            outputFeatures.addAll(features);
+        }
+
+        return outputFeatures;
     }
 
     public boolean addFeature(Feature feature) {

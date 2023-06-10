@@ -40,7 +40,7 @@ public class SqlService {
         sql = "CREATE TABLE IF NOT EXISTS feature_views (name string, entity_names string, sql string, feature_names string)";
         openmldbStatement.execute(sql);
 
-        sql = "CREATE TABLE IF NOT EXISTS feature_services (name string, feature_view_names string, sql string, deployment string)";
+        sql = "CREATE TABLE IF NOT EXISTS feature_services (name string, feature_list string, sql string, deployment string)";
         openmldbStatement.execute(sql);
     }
 

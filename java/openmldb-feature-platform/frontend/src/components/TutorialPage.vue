@@ -5,7 +5,7 @@
   <h1>Tutorial</h1>
   <p>These show the basic cases of using OpenMLDB Feature Platform for feature extration.</p>
 
-  <a-collapse v-model:activeKey="activeKey">
+  <a-collapse v-model:activeKey="activeKey" accordion>
     <a-collapse-panel key="1" header="Single Table And Single Feature View">
       <pre>
 // Create test db and tables      

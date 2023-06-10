@@ -19,8 +19,12 @@ public class FeatureController {
     }
 
     @GetMapping
-    public List<Feature> getFeatures() {
-        return featureService.getFeatures();
+    public List<Feature> getFeatures(@RequestParam(value = "featureServiceName", required = false) String featureServiceName) {
+        if (featureServiceName == null) {
+            return featureService.getFeatures();
+        } else {
+            return featureService.getFeaturesByFeatureService(featureServiceName);
+        }
     }
 
     @GetMapping("/{feature_view_name}")

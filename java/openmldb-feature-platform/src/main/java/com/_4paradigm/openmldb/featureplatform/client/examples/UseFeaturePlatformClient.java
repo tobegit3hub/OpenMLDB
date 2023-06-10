@@ -26,18 +26,23 @@ public class UseFeaturePlatformClient {
         client.deleteEntity("entity1");
     }
 
-    public static void useFeatures() throws IOException {
+    public static void accessFeatures() throws IOException {
         // List all features
         List<Feature> features = client.getFeatures();
         System.out.println(features);
+
+        // Get a feature
+        Feature feature = client.getFeature("featureview1", "feature1");
+        System.out.println(feature);
+
 
         // List all features of feature view
         List<Feature> features2 = client.getFeaturesFromFeatureView("featureview1");
         System.out.println(features2);
 
-        // Get a feature
-        Feature feature = client.getFeature("featureview1", "feature1");
-        System.out.println(feature);
+        // List all features of feature service
+        List<Feature> features3 = client.getFeaturesFromFeatureService("s3");
+        System.out.println(features3);
     }
 
     public static void useFeatureViews() throws IOException {
@@ -128,7 +133,8 @@ public class UseFeaturePlatformClient {
             //useFeatureServices();
             //requestApiServer();
             //accessExecuteSql();
-            validateSql();
+            //validateSql();
+            accessFeatures();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -133,6 +133,16 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<Feature>>() {});
     }
 
+    public List<Feature> getFeaturesFromFeatureService(String featureServiceName) throws IOException {
+        String endpoint = this.apiEndpoint + "features?featureServiceName=" + featureServiceName;
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<Feature>>() {});
+    }
+
     public Feature getFeature(String featureViewName, String featureName) throws IOException {
         String endpoint = this.apiEndpoint + "features/" + featureViewName + "/" + featureName;
         HttpGet request = new HttpGet(endpoint);
@@ -182,11 +192,11 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<FeatureService>>() {});
     }
 
-    public boolean createFeatureService(String name, String feature_view_names) throws IOException {
+    public boolean createFeatureService(String name, String featureList) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"featureViewNames\":\"%s\"}", name, feature_view_names)));
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"featureList\":\"%s\"}", name, featureList)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
         // TODO: Check response status code
