@@ -1,6 +1,7 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureServiceDeploymentRequest;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.apache.http.HttpEntity;
@@ -95,7 +96,7 @@ public class FeatureServiceService {
         return mergeSql;
     }
 
-    public boolean addFeatureService(FeatureService featureService) {
+    public FeatureService createFeatureService(FeatureService featureService) {
         try {
             Statement openmldbStatement = openmldbConnection.createStatement();
 
@@ -115,7 +116,7 @@ public class FeatureServiceService {
                     FeatureView featureView = featureViewService.getFeatureViewByName(featureListItem);
                     if (featureView == null) {
                         System.out.println("Can not get feature view by name: " + featureListItem);
-                        return false;
+                        return null;
                     }
                     sqlList.add(featureView.getSql());
                 }
@@ -123,27 +124,108 @@ public class FeatureServiceService {
 
             if (sqlList.size()==0) {
                 System.out.println("Can not get sql from feature views: " + String.join(",", featureList));
-                return false;
+                return null;
             }
 
             String mergedSql = mergeSqlList(openmldbSqlExecutor, sqlList);
-
             String deploymentName = "FEATURE_PLATFORM_" + featureService.getName();
-            String deploymentSql = String.format("DEPLOY %s %s", deploymentName, mergedSql);
-            System.out.println("Try to create deployment with SQL: " + deploymentSql);
-            openmldbStatement.execute(deploymentSql);
+
+            // If deployment is provided
+            if (!featureService.getDeployment().isEmpty()) {
+                deploymentName = featureService.getDeployment();
+            } else {
+                // Deploy with SQL
+                String deploymentSql = String.format("DEPLOY %s %s", deploymentName, mergedSql);
+                System.out.println("Try to create deployment with SQL: " + deploymentSql);
+                openmldbStatement.execute(deploymentSql);
+            }
 
             // TODO: It would be better to use JDBC prepared statement from connection
             String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_services (name, feature_list, sql, deployment) values ('%s', '%s', '%s', '%s')", featureService.getName(), featureService.getFeatureList(), mergedSql, deploymentName);
             openmldbStatement.execute(sql);
 
             openmldbStatement.close();
-            return true;
+            return featureService;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return null;
+    }
+
+    public FeatureService createFeatureServiceFromDeployment(FeatureServiceDeploymentRequest request) {
+        try {
+            String featureServiceName = request.getName();
+            String db = request.getDb();
+            String deploymentName = request.getDeploymentName();
+
+            Statement openmldbStatement = openmldbConnection.createStatement();
+            // TODO: Support user's db
+            //String sql = String.format("USE %s", db);
+            //openmldbStatement.execute(sql);
+
+            String sql = String.format("SHOW DEPLOYMENT %s", deploymentName);
+            openmldbStatement.execute(sql);
+
+            ResultSet result = openmldbStatement.getResultSet();
+
+            while (result.next()) {
+                /*
+                 ......
+                 --------------------------
+                 SQL
+                 --------------------------
+                 DEPLOY demo_deploy SELECT
+                   col
+                 FROM
+                   t1
+                 ;
+                 --------------------------
+                 .......
+                 */
+                String resultsetString = result.getString(1);
+                String internalSqlString = resultsetString.split("SQL")[1].trim();
+                int sqlStartIndex = -1;
+                int sqlEndIndex = -1;
+                boolean getStartIndex = false;
+                for (int i=0; i< internalSqlString.length(); ++i) {
+                    if (internalSqlString.charAt(i) != '-') {
+                        if (getStartIndex == false) {
+                            sqlStartIndex = i;
+                            getStartIndex = true;
+                        }
+                    }
+                    if (getStartIndex && internalSqlString.charAt(i) == '-') {
+                        sqlEndIndex = i - 1;
+                        break;
+                    }
+                }
+
+                if (sqlStartIndex <= 0 || sqlEndIndex <= 0) {
+                    System.out.println("Fail to parse from SQL result: " + resultsetString);
+                }
+
+                // Remove the DEPLOY keyword
+                String deploymentSql = internalSqlString.substring(sqlStartIndex, sqlEndIndex).trim();
+                String selectSql = deploymentSql.substring(deploymentSql.indexOf(" ", deploymentSql.indexOf(" ") + 1)).trim().replaceAll("[\r\n]+", " ");
+
+                // Create feature view
+                // TODO: Handle the duplicated name
+                String featureViewName = featureServiceName;
+                FeatureViewService featureViewService = new FeatureViewService(openmldbConnection, openmldbSqlExecutor);
+                featureViewService.addFeatureView(new FeatureView(featureViewName, "", selectSql));
+
+                // Create feature service
+                String featureList = featureViewName;
+                FeatureService featureService = new FeatureService(featureServiceName, featureList, selectSql, deploymentName);
+                return createFeatureService(featureService);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Fail to create feature service from deployment, get exception: " + e.getMessage());
+        }
+
+        return null;
     }
 
     public boolean deleteFeatureService(String name) {
@@ -175,8 +257,12 @@ public class FeatureServiceService {
             throw new IOException("Need to config openmldb.apiserver in application.yaml");
         }
 
+        // TODO: Get the db from feature service
+        FeatureServiceService featureServiceService = new FeatureServiceService(openmldbConnection, openmldbSqlExecutor);
+        String deployment = featureServiceService.getFeatureServiceByName(name).getDeployment();
+
         HttpClient httpClient = HttpClients.createDefault();
-        String endpoint = String.format("http://%s/dbs/SYSTEM_FEATURE_PLATFORM/deployments/FEATURE_PLATFORM_%s", apiServerEndpoint, name);
+        String endpoint = String.format("http://%s/dbs/SYSTEM_FEATURE_PLATFORM/deployments/%s", apiServerEndpoint, deployment);
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
         postRequest.setEntity(new StringEntity(requestData));

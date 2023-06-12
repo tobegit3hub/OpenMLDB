@@ -45,6 +45,40 @@
 
   <br />
   <div>
+    <h1>Create From Deployment</h1>
+    <!-- Create form deployment -->
+    <a-form
+      :model="createFromDeploymentFormState"
+      name="basic"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 16 }"
+      @submit="handleCreateFromDeploymentSubmit">
+      <a-form-item
+        label="Name"
+        :rules="[{ required: true, message: 'Please input name!' }]">
+        <a-input v-model:value="createFromDeploymentFormState.name" />
+      </a-form-item>
+
+      <a-form-item
+        label="Database"
+        :rules="[{ required: true, message: 'Please input database!' }]">
+        <a-input v-model:value="createFromDeploymentFormState.db" />
+      </a-form-item>
+      
+      <a-form-item
+        label="Deployment"
+        :rules="[{ required: true, message: 'Please input deployment!' }]">
+        <a-input v-model:value="createFromDeploymentFormState.deploymentName" />
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button type="primary" html-type="submit">Submit</a-button>
+      </a-form-item>
+    </a-form>
+  </div>
+
+  <br />
+  <div>
     <h1>Test Feature Service</h1>
     <p>Follow the <a target="_blank" href="https://openmldb.ai/docs/zh/main/quickstart/sdk/rest_api.html#id3">docs of OpenMLDB APIServer</a> to prepare test data. eg. {"input": [["abc", 123]]}</p>
     <!-- Test form -->
@@ -121,6 +155,12 @@ export default {
         featureList: '',
       },
 
+      createFromDeploymentFormState: {
+        name: '',
+        db: '',
+        deploymentName: ''
+      },
+
       testFormState: {
         name: "",
         testData: "",
@@ -152,6 +192,21 @@ export default {
       axios.post(`/api/featureservices`, {
         "name": this.formState.name,
         "featureList": this.formState.featureList
+      })
+      .then(response => {
+        message.success(`Success to add feature service ${this.formState.name}`);
+        this.initData();
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+    },
+
+    handleCreateFromDeploymentSubmit() {
+      axios.post(`/api/featureservices/deployments`, {
+        "name": this.createFromDeploymentFormState.name,
+        "db": this.createFromDeploymentFormState.featureList,
+        "deploymentName": this.createFromDeploymentFormState.deploymentName
       })
       .then(response => {
         message.success(`Success to add feature service ${this.formState.name}`);
@@ -196,6 +251,7 @@ export default {
         message.error(error.message);
       });
     },
+
   },
 };
 </script>

@@ -61,7 +61,7 @@ public class UseFeaturePlatformClient {
         client.deleteFeatureView("featureview1");
     }
 
-    public static void useFeatureServices() throws IOException {
+    public static void accessFeatureServices() throws IOException {
         /*
         // List all feature services
         List<FeatureService> featureServices = client.getFeatureServices();
@@ -76,11 +76,12 @@ public class UseFeaturePlatformClient {
 
         // Delete a feature view
         client.deleteFeatureService("feature_service_1");
-*/
+
         HttpResponse response = client.requestFeatureService("service1", "{\"input\": [[\"abc\", 22]]}");
         client.printResponse(response);
+        */
+        client.createFeatureServiceFromDeployment("deploy8", "db1", "demo_deploy8");
     }
-
 
     public static void requestApiServer() throws IOException {
         HttpResponse response = client.requestApiServer("http://127.0.0.1:9080", "service1", "{\"input\": [[\"abc\", 22]]}");
@@ -130,11 +131,11 @@ public class UseFeaturePlatformClient {
             //validateSql();
             //executeSql();
             //useOtherApis();
-            //useFeatureServices();
+            accessFeatureServices();
             //requestApiServer();
             //accessExecuteSql();
             //validateSql();
-            accessFeatures();
+            //accessFeatures();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -203,6 +203,16 @@ public class FeaturePlatformClient {
         return true;
     }
 
+    public boolean createFeatureServiceFromDeployment(String name, String db, String deploymentName) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/deployments";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"db\":\"%s\", \"deploymentName\":\"%s\"}", name, db, deploymentName)));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        printResponse(postResponse);
+        return true;
+    }
+
     public FeatureService getFeatureService(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name;
         HttpGet request = new HttpGet(endpoint);

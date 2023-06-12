@@ -1,5 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.controller;
 
+import com._4paradigm.openmldb.featureplatform.dao.model.FeatureServiceDeploymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,12 +34,8 @@ public class FeatureServiceController {
     }
 
     @PostMapping
-    public FeatureService addFeatureService(@RequestBody FeatureService featureService) {
-        if(featureServiceService.addFeatureService(featureService)) {
-            return featureService;
-        } else {
-            return null;
-        }
+    public FeatureService createFeatureService(@RequestBody FeatureService featureService) {
+        return featureServiceService.createFeatureService(featureService);
     }
 
     @DeleteMapping("/{name}")
@@ -58,6 +55,11 @@ public class FeatureServiceController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping(value = "/deployments")
+    public FeatureService createFeatureServiceFromDeployment(@RequestBody FeatureServiceDeploymentRequest request) {
+        return featureServiceService.createFeatureServiceFromDeployment(request);
     }
 
 }

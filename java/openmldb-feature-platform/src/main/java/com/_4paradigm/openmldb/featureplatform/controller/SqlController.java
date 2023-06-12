@@ -1,7 +1,7 @@
 package com._4paradigm.openmldb.featureplatform.controller;
 
 import com._4paradigm.openmldb.featureplatform.dao.SqlService;
-import com._4paradigm.openmldb.featureplatform.dao.SqlRequest;
+import com._4paradigm.openmldb.featureplatform.dao.model.SqlRequest;
 import com._4paradigm.openmldb.featureplatform.utils.ResultSetUtil;
 import com._4paradigm.openmldb.jdbc.SQLResultSet;
 import org.springframework.beans.factory.annotation.Autowired;

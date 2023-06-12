@@ -1,4 +1,4 @@
-package com._4paradigm.openmldb.featureplatform.dao;
+package com._4paradigm.openmldb.featureplatform.dao.model;
 
 import lombok.Data;
 

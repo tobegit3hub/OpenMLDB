@@ -125,6 +125,7 @@ public class FeatureViewService {
             String featureNames = featureNamesBuilder.toString();
             String insertSql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_views (name, entity_names, sql, feature_names) values ('%s', '%s', '%s', '%s')", featureView.getName(), featureView.getEntityNames(), featureView.getSql(), featureNames);
 
+            System.out.println("Try to insert with SQL: " + insertSql);
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(insertSql);
             openmldbStatement.close();
