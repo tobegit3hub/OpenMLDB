@@ -38,6 +38,12 @@
       </a-form-item>
 
       <a-form-item
+        label="Database"
+        :rules="[{ required: true, message: 'Please input database!' }]">
+        <a-input v-model:value="formState.db" />
+      </a-form-item>
+
+      <a-form-item
         label="SQL"
         :rules="[{ required: true, message: 'Please input SQL!' }]">
         <a-input v-model:value="formState.sql" />
@@ -74,6 +80,11 @@ export default {
         key: 'entityNames',
       },
       {
+        title: 'Database',
+        dataIndex: 'db',
+        key: 'db',
+      },
+      {
         title: 'SQL',
         dataIndex: 'sql',
         key: 'sql',
@@ -92,6 +103,7 @@ export default {
       formState: {
         name: '',
         entityNames: '',
+        db: '',
         sql: ''
       }
     };
@@ -121,6 +133,7 @@ export default {
       axios.post(`/api/featureviews`, {
         "name": this.formState.name,
         "entityNames": this.formState.entityNames,
+        "db": this.formState.db,
         "sql": this.formState.sql
       })
       .then(response => {

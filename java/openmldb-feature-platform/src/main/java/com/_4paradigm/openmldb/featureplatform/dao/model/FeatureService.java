@@ -6,6 +6,7 @@ import lombok.Data;
 public class FeatureService {
     private String name;
     private String featureList;
+    private String db;
     private String sql;
     private String deployment;
 
@@ -13,14 +14,16 @@ public class FeatureService {
 
     }
 
-    public FeatureService(String name, String featureList) {
+    public FeatureService(String name, String featureList, String db) {
         this.name = name;
         this.featureList = featureList;
+        this.db = db;
     }
 
-    public FeatureService(String name, String featureList, String sql, String deployment) {
+    public FeatureService(String name, String featureList, String db, String sql, String deployment) {
         this.name = name;
         this.featureList = featureList;
+        this.db = db;
         this.sql = sql;
         this.deployment = deployment;
     }

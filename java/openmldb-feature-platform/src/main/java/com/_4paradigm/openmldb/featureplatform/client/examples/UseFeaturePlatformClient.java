@@ -51,7 +51,7 @@ public class UseFeaturePlatformClient {
         System.out.println(featureViews);
 
         // Create a feature view
-        client.createFeatureView("featureview1", "", "SELECT name, age + 10 AS new_age FROM user");
+        client.createFeatureView("featureview1", "", "", "SELECT name, age + 10 AS new_age FROM user");
 
         // Get a feature view
         FeatureView featureView = client.getFeatureView("featureview1");

@@ -36,7 +36,13 @@
         :rules="[{ required: true, message: 'Please input feature list!' }]">
         <a-input v-model:value="formState.featureList" />
       </a-form-item>
-      
+     
+      <a-form-item
+        label="Database"
+        :rules="[{ required: true, message: 'Please input database!' }]">
+        <a-input v-model:value="formState.db" />
+      </a-form-item>
+
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
         <a-button type="primary" html-type="submit">Submit</a-button>
       </a-form-item>
@@ -135,6 +141,11 @@ export default {
         key: 'featureList',
       },
       {
+        title: 'Database',
+        dataIndex: 'db',
+        key: 'db',
+      },
+      {
         title: 'SQL',
         dataIndex: 'sql',
         key: 'sql',
@@ -153,6 +164,7 @@ export default {
       formState: {
         name: '',
         featureList: '',
+        db: '',
       },
 
       createFromDeploymentFormState: {
@@ -191,7 +203,8 @@ export default {
     handleSubmit() {
       axios.post(`/api/featureservices`, {
         "name": this.formState.name,
-        "featureList": this.formState.featureList
+        "featureList": this.formState.featureList,
+        "db": this.formState.db
       })
       .then(response => {
         message.success(`Success to add feature service ${this.formState.name}`);

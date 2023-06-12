@@ -153,15 +153,19 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, Feature.class);
     }
 
-    public boolean createFeatureView(String name, String entityNames, String sql) throws IOException {
+    public boolean createFeatureView(String name, String entityNames, String db, String sql) throws IOException {
         String endpoint = this.apiEndpoint + "featureviews";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"entityNames\":\"%s\", \"sql\":\"%s\"}", name, entityNames, sql)));
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"entityNames\":\"%s\", \"db\":\"%s\", \"sql\":\"%s\"}", name, entityNames, db, sql)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
         // TODO: Check response status code
         return true;
+    }
+
+    public boolean createFeatureView(String name, String entityNames, String sql) throws IOException {
+        return createFeatureView(name, entityNames, "", sql);
     }
 
     public FeatureView getFeatureView(String name) throws IOException {
@@ -192,15 +196,19 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<FeatureService>>() {});
     }
 
-    public boolean createFeatureService(String name, String featureList) throws IOException {
+    public boolean createFeatureService(String name, String featureList, String db) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"featureList\":\"%s\"}", name, featureList)));
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"featureList\":\"%s\", \"db\":\"%s\"}", name, featureList, db)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
         // TODO: Check response status code
         return true;
+    }
+
+    public boolean createFeatureService(String name, String featureList) throws IOException {
+        return createFeatureService(name, featureList, "");
     }
 
     public boolean createFeatureServiceFromDeployment(String name, String db, String deploymentName) throws IOException {

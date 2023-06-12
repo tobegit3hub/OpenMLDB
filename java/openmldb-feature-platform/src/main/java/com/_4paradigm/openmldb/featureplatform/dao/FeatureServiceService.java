@@ -38,7 +38,7 @@ public class FeatureServiceService {
     }
 
     public List<FeatureService> getFeatureServices() {
-        String sql = "SELECT name, feature_list, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services";
+        String sql = "SELECT name, feature_list, db, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services";
 
         ArrayList<FeatureService> featureServices = new ArrayList<>();
 
@@ -48,7 +48,7 @@ public class FeatureServiceService {
             ResultSet result = openmldbStatement.getResultSet();
 
             while (result.next()) {
-                FeatureService featureService = new FeatureService(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
+                FeatureService featureService = new FeatureService(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5));
                 featureServices.add(featureService);
             }
         } catch (SQLException e) {
@@ -60,7 +60,7 @@ public class FeatureServiceService {
 
     public FeatureService getFeatureServiceByName(String name) {
         try {
-            String sql = String.format("SELECT name, feature_list, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services WHERE name='%s'", name);
+            String sql = String.format("SELECT name, feature_list, db, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services WHERE name='%s'", name);
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);
             ResultSet result = openmldbStatement.getResultSet();
@@ -73,7 +73,7 @@ public class FeatureServiceService {
                 return null;
             } else {
                 while (result.next()) {
-                    FeatureService featureService = new FeatureService(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
+                    FeatureService featureService = new FeatureService(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5));
                     return featureService;
                 }
             }
@@ -213,11 +213,11 @@ public class FeatureServiceService {
                 // TODO: Handle the duplicated name
                 String featureViewName = featureServiceName;
                 FeatureViewService featureViewService = new FeatureViewService(openmldbConnection, openmldbSqlExecutor);
-                featureViewService.addFeatureView(new FeatureView(featureViewName, "", selectSql));
+                featureViewService.addFeatureView(new FeatureView(featureViewName, "", db, selectSql));
 
                 // Create feature service
                 String featureList = featureViewName;
-                FeatureService featureService = new FeatureService(featureServiceName, featureList, selectSql, deploymentName);
+                FeatureService featureService = new FeatureService(featureServiceName, featureList, db, selectSql, deploymentName);
                 return createFeatureService(featureService);
             }
 
@@ -259,10 +259,12 @@ public class FeatureServiceService {
 
         // TODO: Get the db from feature service
         FeatureServiceService featureServiceService = new FeatureServiceService(openmldbConnection, openmldbSqlExecutor);
-        String deployment = featureServiceService.getFeatureServiceByName(name).getDeployment();
+        FeatureService featureService = featureServiceService.getFeatureServiceByName(name);
+        String db = featureService.getDb();
+        String deployment = featureService.getDeployment();
 
         HttpClient httpClient = HttpClients.createDefault();
-        String endpoint = String.format("http://%s/dbs/SYSTEM_FEATURE_PLATFORM/deployments/%s", apiServerEndpoint, deployment);
+        String endpoint = String.format("http://%s/dbs/%d/deployments/%s", apiServerEndpoint, db, deployment);
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
         postRequest.setEntity(new StringEntity(requestData));

@@ -6,6 +6,7 @@ import lombok.Data;
 public class FeatureView {
     private String name;
     private String entityNames;
+    private String db;
     private String sql;
     private String featureNames;
 
@@ -13,15 +14,17 @@ public class FeatureView {
 
     }
 
-    public FeatureView(String name, String entityNames, String sql) {
+    public FeatureView(String name, String entityNames, String db, String sql) {
         this.name = name;
         this.entityNames = entityNames;
+        this.db = db;
         this.sql = sql;
     }
 
-    public FeatureView(String name, String entityNames, String sql, String featureNames) {
+    public FeatureView(String name, String entityNames, String db, String sql, String featureNames) {
         this.name = name;
         this.entityNames = entityNames;
+        this.db = db;
         this.sql = sql;
         this.featureNames = featureNames;
     }
