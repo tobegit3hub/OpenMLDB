@@ -3,6 +3,8 @@ package com._4paradigm.openmldb.featureplatform.dao;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureServiceDeploymentRequest;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
+import com._4paradigm.openmldb.featureplatform.utils.OpenmldbTableUtil;
+import com._4paradigm.openmldb.sdk.Schema;
 import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -20,7 +22,9 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class FeatureServiceService {
@@ -86,13 +90,11 @@ public class FeatureServiceService {
         return null;
     }
 
-    public String mergeSqlList(SqlClusterExecutor openmldbSqlExecutor, List<String> sqlList) {
-        // TODO: Call mergeSQL to merge the SQLs from FeatureViews
-        String mergeSql = sqlList.get(0);
+    public String mergeSqlList(SqlClusterExecutor openmldbSqlExecutor, List<String> sqlList, String db, List<String> joinKeys, Map<String, Map<String, Schema >> tableSchema) throws SQLException {
+        // Call mergeSQL to merge the SQLs from FeatureViews
+        //String mergeSql = sqlList.get(0);
+        String mergeSql = SqlClusterExecutor.mergeSQL(sqlList, db, joinKeys, tableSchema);
         System.out.println("Try to merge SQLs: " + sqlList + ", get merged SQL: " + mergeSql);
-
-        // TODO: Call mergeSQL when it is ready
-        // SqlClusterExecutor.mergeSQL();
         return mergeSql;
     }
 
@@ -105,12 +107,16 @@ public class FeatureServiceService {
             newFeatureService.setName(featureService.getName());
             newFeatureService.setFeatureList(featureService.getFeatureList());
 
-            String db = "";
+            //
+
+
+
 
             // Merge SQL from FeatureViews
             List<String> sqlList = new ArrayList<>();
             String[] featureList = featureService.getFeatureList().split(",");
             FeatureViewService featureViewService = new FeatureViewService(openmldbConnection, openmldbSqlExecutor);
+            FeatureView latestFeatureView = null;
             for (String splitFeatureList: featureList) {
                 String featureListItem = splitFeatureList.trim();
                 if (!featureListItem.equals("")) {
@@ -122,10 +128,11 @@ public class FeatureServiceService {
                     }
                     sqlList.add(featureView.getSql());
                     // TODO: Maks sure all the features use the same db
-                    db = featureView.getDb();
+                    latestFeatureView = featureView;
                 }
             }
 
+            String db = latestFeatureView.getDb();
             newFeatureService.setDb(db);
 
             if (sqlList.size()==0) {
@@ -133,7 +140,9 @@ public class FeatureServiceService {
                 return null;
             }
 
-            String mergedSql = mergeSqlList(openmldbSqlExecutor, sqlList);
+            List<String> joinKeys = Arrays.asList(latestFeatureView.getEntityNames().split(","));
+
+            String mergedSql = mergeSqlList(openmldbSqlExecutor, sqlList, db, joinKeys, OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor));
             String deploymentName = "FEATURE_PLATFORM_" + featureService.getName();
 
             // If deployment is provided
