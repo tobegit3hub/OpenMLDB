@@ -105,6 +105,8 @@ public class FeatureServiceService {
             newFeatureService.setName(featureService.getName());
             newFeatureService.setFeatureList(featureService.getFeatureList());
 
+            String db = "";
+
             // Merge SQL from FeatureViews
             List<String> sqlList = new ArrayList<>();
             String[] featureList = featureService.getFeatureList().split(",");
@@ -119,8 +121,12 @@ public class FeatureServiceService {
                         return null;
                     }
                     sqlList.add(featureView.getSql());
+                    // TODO: Maks sure all the features use the same db
+                    db = featureView.getDb();
                 }
             }
+
+            newFeatureService.setDb(db);
 
             if (sqlList.size()==0) {
                 System.out.println("Can not get sql from feature views: " + String.join(",", featureList));
@@ -131,7 +137,7 @@ public class FeatureServiceService {
             String deploymentName = "FEATURE_PLATFORM_" + featureService.getName();
 
             // If deployment is provided
-            if (!featureService.getDeployment().isEmpty()) {
+            if (featureService.getDeployment() != null && !featureService.getDeployment().isEmpty()) {
                 deploymentName = featureService.getDeployment();
             } else {
                 // Deploy with SQL
@@ -140,12 +146,15 @@ public class FeatureServiceService {
                 openmldbStatement.execute(deploymentSql);
             }
 
+            newFeatureService.setSql(mergedSql);
+            newFeatureService.setDeployment(deploymentName);
+
             // TODO: It would be better to use JDBC prepared statement from connection
-            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_services (name, feature_list, sql, deployment) values ('%s', '%s', '%s', '%s')", featureService.getName(), featureService.getFeatureList(), mergedSql, deploymentName);
+            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.feature_services (name, feature_list, db, sql, deployment) values ('%s', '%s', '%s', '%s', '%s')", featureService.getName(), featureService.getFeatureList(), db, mergedSql, deploymentName);
             openmldbStatement.execute(sql);
 
             openmldbStatement.close();
-            return featureService;
+            return newFeatureService;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -264,7 +273,7 @@ public class FeatureServiceService {
         String deployment = featureService.getDeployment();
 
         HttpClient httpClient = HttpClients.createDefault();
-        String endpoint = String.format("http://%s/dbs/%d/deployments/%s", apiServerEndpoint, db, deployment);
+        String endpoint = String.format("http://%s/dbs/%s/deployments/%s", apiServerEndpoint, db, deployment);
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
         postRequest.setEntity(new StringEntity(requestData));

@@ -196,19 +196,15 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<FeatureService>>() {});
     }
 
-    public boolean createFeatureService(String name, String featureList, String db) throws IOException {
+    public boolean createFeatureService(String name, String featureList) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"featureList\":\"%s\", \"db\":\"%s\"}", name, featureList, db)));
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"featureList\":\"%s\"}", name, featureList)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
         // TODO: Check response status code
         return true;
-    }
-
-    public boolean createFeatureService(String name, String featureList) throws IOException {
-        return createFeatureService(name, featureList, "");
     }
 
     public boolean createFeatureServiceFromDeployment(String name, String db, String deploymentName) throws IOException {

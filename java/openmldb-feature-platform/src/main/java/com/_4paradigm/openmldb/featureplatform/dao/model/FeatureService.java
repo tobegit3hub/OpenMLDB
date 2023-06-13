@@ -14,10 +14,9 @@ public class FeatureService {
 
     }
 
-    public FeatureService(String name, String featureList, String db) {
+    public FeatureService(String name, String featureList) {
         this.name = name;
         this.featureList = featureList;
-        this.db = db;
     }
 
     public FeatureService(String name, String featureList, String db, String sql, String deployment) {
