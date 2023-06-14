@@ -18,7 +18,7 @@ public class EntityService {
     }
 
     public List<Entity> getEntities() {
-        String sql = "SELECT name, primary_keys FROM entities";
+        String sql = "SELECT name, primary_keys FROM SYSTEM_FEATURE_PLATFORM.entities";
 
         ArrayList<Entity> entities = new ArrayList<>();
 

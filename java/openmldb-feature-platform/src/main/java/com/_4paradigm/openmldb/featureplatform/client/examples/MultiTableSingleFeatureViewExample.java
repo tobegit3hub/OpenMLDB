@@ -16,7 +16,7 @@ public class MultiTableSingleFeatureViewExample {
             client.executeSql("CREATE TABLE IF NOT EXISTS test_db.trade (user_name string, amount float)");
 
             // Create feature view
-            client.createFeatureView("featureview1", "", "SELECT name, age, amount FROM test_db.user LAST JOIN test_db.trade ON test_db.user.name = test_db.trade.user_name");
+            client.createFeatureView("featureview1", "", "test_db", "SELECT name, age, amount FROM test_db.user LAST JOIN test_db.trade ON test_db.user.name = test_db.trade.user_name");
 
             // Create feature service
             client.createFeatureService("featureservice1", "featureview1");

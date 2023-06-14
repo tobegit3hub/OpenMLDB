@@ -95,6 +95,11 @@ export default {
         key: 'featureNames',
       },
       {
+        title: 'Description',
+        dataIndex: 'description',
+        key: 'description',
+      },
+      {
         title: 'Actions',
         key: 'actions',
         slots: { customRender: 'custom' },

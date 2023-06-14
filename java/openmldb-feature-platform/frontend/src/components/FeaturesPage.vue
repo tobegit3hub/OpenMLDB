@@ -35,6 +35,11 @@ export default {
         title: 'Type',
         dataIndex: 'type',
         key: 'type',
+      },
+      {
+        title: 'Description',
+        dataIndex: 'description',
+        key: 'description',
       }],
 
       formState: {

@@ -27,7 +27,7 @@ public class FeaturesService {
     }
 
     public List<Feature> getFeatures() {
-        String sql = "SELECT feature_view_name, feature_name, type FROM SYSTEM_FEATURE_PLATFORM.features";
+        String sql = "SELECT feature_view_name, feature_name, type, description FROM SYSTEM_FEATURE_PLATFORM.features";
 
         ArrayList<Feature> features = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class FeaturesService {
             ResultSet result = openmldbStatement.getResultSet();
 
             while (result.next()) {
-                Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3));
+                Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
                 features.add(feature);
             }
         } catch (SQLException e) {
@@ -49,7 +49,7 @@ public class FeaturesService {
 
     public Feature getFeatureByName(String featureViewName, String featureName) {
         try {
-            String sql = String.format("SELECT feature_view_name, feature_name, type FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE feature_view_name='%s' AND feature_name='%s'", featureViewName, featureName);
+            String sql = String.format("SELECT feature_view_name, feature_name, type, description FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE feature_view_name='%s' AND feature_name='%s'", featureViewName, featureName);
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);
             ResultSet result = openmldbStatement.getResultSet();
@@ -62,7 +62,7 @@ public class FeaturesService {
                 return null;
             } else {
                 while (result.next()) {
-                    Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3));
+                    Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3), result.getString(3));
                     System.out.print("Get feature: " + feature);
                     return feature;
                 }
@@ -78,7 +78,7 @@ public class FeaturesService {
     }
 
     public List<Feature> getFeaturesByFeatureView(String featureViewName) {
-        String sql = String.format("SELECT feature_view_name, feature_name, type FROM SYSTEM_FEATURE_PLATFORM.features WHERE feature_view_name='%s'", featureViewName);
+        String sql = String.format("SELECT feature_view_name, feature_name, type, description FROM SYSTEM_FEATURE_PLATFORM.features WHERE feature_view_name='%s'", featureViewName);
 
         ArrayList<Feature> features = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public class FeaturesService {
             ResultSet result = openmldbStatement.getResultSet();
 
             while (result.next()) {
-                Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3));
+                Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3), result.getString(3));
                 features.add(feature);
             }
         } catch (SQLException e) {
@@ -119,7 +119,7 @@ public class FeaturesService {
     public boolean addFeature(Feature feature) {
         try {
             // TODO: It would be better to use JDBC prepared statement from connection
-            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.features (feature_view_name, feature_name, type) values ('%s', '%s', '%s')", feature.getFeatureViewName(), feature.getFeatureName(), feature.getType());
+            String sql = String.format("INSERT INTO SYSTEM_FEATURE_PLATFORM.features (feature_view_name, feature_name, type, description) values ('%s', '%s', '%s', '%s')", feature.getFeatureViewName(), feature.getFeatureName(), feature.getType(), feature.getDescription());
 
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);

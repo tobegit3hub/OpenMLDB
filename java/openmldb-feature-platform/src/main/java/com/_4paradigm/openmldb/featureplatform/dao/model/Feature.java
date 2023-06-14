@@ -7,6 +7,7 @@ public class Feature {
     private String featureViewName;
     private String featureName;
     private String type;
+    private String description;
 
     public Feature() {
 
@@ -16,6 +17,13 @@ public class Feature {
         this.featureViewName = featureViewName;
         this.featureName = featureName;
         this.type = type;
+        this.description = "";
     }
 
+    public Feature(String featureViewName, String featureName, String type, String description) {
+        this.featureViewName = featureViewName;
+        this.featureName = featureName;
+        this.type = type;
+        this.description = description;
+    }
 }

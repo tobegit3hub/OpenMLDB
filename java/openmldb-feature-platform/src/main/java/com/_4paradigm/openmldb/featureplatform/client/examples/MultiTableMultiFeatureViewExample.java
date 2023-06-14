@@ -19,8 +19,8 @@ public class MultiTableMultiFeatureViewExample {
             client.createEntity("name", "name");
 
             // Create feature view
-            client.createFeatureView("featureview1", "name", "SELECT age + 10 AS new_age FROM test_db.user");
-            client.createFeatureView("featureview2", "name", "SELECT name, age, amount FROM test_db.user LAST JOIN test_db.trade ON test_db.user.name = test_db.trade.user_name");
+            client.createFeatureView("featureview1", "name", "test_db", "SELECT age + 10 AS new_age FROM test_db.user");
+            client.createFeatureView("featureview2", "name", "test_db", "SELECT name, age, amount FROM test_db.user LAST JOIN test_db.trade ON test_db.user.name = test_db.trade.user_name");
 
             // Create feature service
             client.createFeatureService("featureservice1", "featureview1, featureview2");

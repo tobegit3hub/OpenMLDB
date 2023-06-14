@@ -9,6 +9,7 @@ public class FeatureView {
     private String db;
     private String sql;
     private String featureNames;
+    private String description;
 
     public FeatureView() {
 
@@ -27,5 +28,15 @@ public class FeatureView {
         this.db = db;
         this.sql = sql;
         this.featureNames = featureNames;
+        this.description = "";
+    }
+
+    public FeatureView(String name, String entityNames, String db, String sql, String featureNames, String description) {
+        this.name = name;
+        this.entityNames = entityNames;
+        this.db = db;
+        this.sql = sql;
+        this.featureNames = featureNames;
+        this.description = description;
     }
 }

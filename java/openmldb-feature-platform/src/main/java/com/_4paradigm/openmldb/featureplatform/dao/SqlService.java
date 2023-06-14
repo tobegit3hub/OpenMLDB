@@ -31,22 +31,26 @@ public class SqlService {
         sql = "USE SYSTEM_FEATURE_PLATFORM";
         openmldbStatement.execute(sql);
 
-        sql = "CREATE TABLE IF NOT EXISTS entities (name string, primary_keys string)";
+        sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.entities (name string, primary_keys string)";
         openmldbStatement.execute(sql);
 
-        sql = "CREATE TABLE IF NOT EXISTS features (feature_view_name String, feature_name string, type string)";
+        sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.features (feature_view_name String, feature_name string, type string, description string)";
         openmldbStatement.execute(sql);
 
-        sql = "CREATE TABLE IF NOT EXISTS feature_views (name string, entity_names string, db string, sql string, feature_names string)";
+        sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.feature_views (name string, entity_names string, db string, description string, sql string, feature_names string)";
         openmldbStatement.execute(sql);
 
-        sql = "CREATE TABLE IF NOT EXISTS feature_services (name string, feature_list string, db string, sql string, deployment string)";
+        sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.feature_services (name string, feature_list string, db string, sql string, deployment string)";
         openmldbStatement.execute(sql);
     }
 
+    private boolean isDql(String sqlString) {
+        String sql = sqlString.toLowerCase();
+        return sql.startsWith("select") || sql.startsWith("show");
+    }
     public SQLResultSet executeSql(String sql) throws SQLException {
         openmldbStatement.execute(sql);
-        if (sql.toLowerCase().startsWith("select")) {
+        if (isDql(sql)) {
             return (SQLResultSet) openmldbStatement.getResultSet();
         } else {
             return null;

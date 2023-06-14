@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
@@ -20,11 +21,11 @@ public class FeaturePlatformClient {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private HttpClient httpClient;
+    private CloseableHttpClient httpClient;
     private String apiEndpoint;
 
     public FeaturePlatformClient(String host, int port) {
-        this.httpClient = HttpClients.createDefault();
+        this.httpClient = HttpClients.custom().setMaxConnPerRoute(10).setMaxConnTotal(10).build();
         this.apiEndpoint = String.format("http://%s:%d/api/", host, port);
     }
 
@@ -164,10 +165,6 @@ public class FeaturePlatformClient {
         return true;
     }
 
-    public boolean createFeatureView(String name, String entityNames, String sql) throws IOException {
-        return createFeatureView(name, entityNames, "", sql);
-    }
-
     public FeatureView getFeatureView(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureviews/" + name;
         HttpGet request = new HttpGet(endpoint);
@@ -269,6 +266,10 @@ public class FeaturePlatformClient {
         postRequest.setEntity(new StringEntity(requestData));
         HttpResponse postResponse = httpClient.execute(postRequest);
         return postResponse;
+    }
+
+    public void close() throws IOException {
+        this.httpClient.close();
     }
 
 }

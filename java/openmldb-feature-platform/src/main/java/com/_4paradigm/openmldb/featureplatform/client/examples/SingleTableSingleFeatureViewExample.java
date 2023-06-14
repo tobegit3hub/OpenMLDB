@@ -1,6 +1,7 @@
 package com._4paradigm.openmldb.featureplatform.client.examples;
 
 import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
+import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 
@@ -13,16 +14,17 @@ public class SingleTableSingleFeatureViewExample {
             // Create test db and tables
             client.executeSql("CREATE DATABASE IF NOT EXISTS test_db");
             client.executeSql("CREATE TABLE IF NOT EXISTS test_db.user (name string, age int)");
-
+/*
             // Create feature view
-            client.createFeatureView("featureview1", "", "SELECT name, age + 10 AS new_age FROM test_db.user");
+            client.createFeatureView("featureview1", "", "test_db", "SELECT name, age + 10 AS new_age FROM user");
 
             // Create feature service
             client.createFeatureService("featureservice1", "featureview1");
 
             // Test feature service
-            client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
-
+            HttpResponse response = client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            client.printResponse(response);
+*/
             // Cleanup resources
             client.deleteFeatureService("featureservice1");
             client.deleteFeatureView("featureview1");
