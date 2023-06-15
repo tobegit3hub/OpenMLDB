@@ -88,7 +88,7 @@ public class FeaturesService {
             ResultSet result = openmldbStatement.getResultSet();
 
             while (result.next()) {
-                Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3), result.getString(3));
+                Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
                 features.add(feature);
             }
         } catch (SQLException e) {

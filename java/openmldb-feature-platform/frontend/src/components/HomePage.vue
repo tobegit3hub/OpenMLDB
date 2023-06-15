@@ -86,11 +86,6 @@ import axios from 'axios'
           key: 'name',
         },
         {
-          title: 'Entities',
-          dataIndex: 'entityNames',
-          key: 'entityNames',
-        },
-        {
           title: 'SQL',
           dataIndex: 'sql',
           key: 'sql',
@@ -114,12 +109,7 @@ import axios from 'axios'
         {
           title: 'SQL',
           dataIndex: 'sql',
-          key: 'sql',
-        },
-        {
-          title: 'Deployment',
-          dataIndex: 'deployment',
-          key: 'deployment',
+          key: 'sql'
         }],
 
       };

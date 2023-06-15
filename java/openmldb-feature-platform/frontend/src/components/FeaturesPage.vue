@@ -5,6 +5,9 @@
   <h1>Features</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="features" :loading="loading">
+    <template #featureView="{ text, record }">
+        <router-link :to="`/featureviews/${record.featureViewName}`">{{ text }}</router-link>
+      </template>
     <template #name="{ text, record }">
       <router-link :to="`/features/${record.featureViewName}/${record.featureName}`">{{ text }}</router-link>
     </template>
@@ -28,6 +31,7 @@ export default {
         title: 'Feature View',
         dataIndex: 'featureViewName',
         key: 'featureViewName',
+        slots: { customRender: 'featureView' }
       },
       {
         title: 'Feature Name',
