@@ -5,6 +5,9 @@
   <h1>Features</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="features" :loading="loading">
+    <template #name="{ text, record }">
+      <router-link :to="`/features/${record.featureViewName}/${record.featureName}`">{{ text }}</router-link>
+    </template>
   </a-table>
 
 </div>
@@ -30,6 +33,7 @@ export default {
         title: 'Feature Name',
         dataIndex: 'featureName',
         key: 'featureName',
+        slots: { customRender: 'name' }
       },
       {
         title: 'Type',

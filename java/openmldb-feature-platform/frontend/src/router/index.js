@@ -8,16 +8,26 @@ import FeatureViewsPage from '../components/FeatureViewsPage.vue'
 import FeatureServicesPage from '../components/FeatureServicesPage.vue'
 import SqlPage from '../components/SqlPage.vue'
 import TutorialPage from '../components/TutorialPage.vue'
+import TableDetail from '../components/TableDetail.vue'
+import EntityDetail from '../components/EntityDetail.vue'
+import FeatureDetail from '../components/FeatureDetail.vue'
+import FeatureViewDetail from '../components/FeatureViewDetail.vue'
+import FeatureServiceDetail from '../components/FeatureServiceDetail.vue'
 
 const router = createRouter({
   history: createWebHistory("/"),
   routes: [
     { path: '/', component: HomePage },
-    { path: '/tables', component: TablesPage},
+    { path: '/tables', component: TablesPage },
+    { path: '/tables/:db/:name', component: TableDetail, props: true },
     { path: '/entities', component: EntitiesPage},
+    { path: '/entities/:name', component: EntityDetail, props: true },
     { path: '/features', component: FeaturesPage},
+    { path: '/features/:featureViewName/:featureName', component: FeatureDetail, props: true },
     { path: '/featureviews', component: FeatureViewsPage},
+    { path: '/featureviews/:name', component: FeatureViewDetail, props: true },
     { path: '/featureservices', component: FeatureServicesPage},
+    { path: '/featureservices/:name', component: FeatureServiceDetail, props: true },
     { path: '/sql', component: SqlPage},
     { path: '/tutorial', component: TutorialPage},
     { path: '/404', redirect: "/" },

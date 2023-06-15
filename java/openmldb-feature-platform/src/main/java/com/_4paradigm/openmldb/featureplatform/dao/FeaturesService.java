@@ -49,7 +49,7 @@ public class FeaturesService {
 
     public Feature getFeatureByName(String featureViewName, String featureName) {
         try {
-            String sql = String.format("SELECT feature_view_name, feature_name, type, description FROM SYSTEM_FEATURE_PLATFORM.feature_views WHERE feature_view_name='%s' AND feature_name='%s'", featureViewName, featureName);
+            String sql = String.format("SELECT feature_view_name, feature_name, type, description FROM SYSTEM_FEATURE_PLATFORM.features WHERE feature_view_name='%s' AND feature_name='%s'", featureViewName, featureName);
             Statement openmldbStatement = openmldbConnection.createStatement();
             openmldbStatement.execute(sql);
             ResultSet result = openmldbStatement.getResultSet();
@@ -62,7 +62,7 @@ public class FeaturesService {
                 return null;
             } else {
                 while (result.next()) {
-                    Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3), result.getString(3));
+                    Feature feature = new Feature(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
                     System.out.print("Get feature: " + feature);
                     return feature;
                 }

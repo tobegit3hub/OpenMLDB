@@ -5,6 +5,9 @@
   <h1>Tables</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="tables" :loading="loading">
+    <template #table="{ text, record }">
+      <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
+    </template>
   </a-table>
 
   <br />
@@ -54,12 +57,13 @@ export default {
       columns: [{
         title: 'Database',
         dataIndex: 'db',
-        key: 'db',
+        key: 'db'
       },
       {
         title: 'Table',
         dataIndex: 'table',
         key: 'table',
+        slots: { customRender: 'table' }
       },
       {
         title: 'Schema',

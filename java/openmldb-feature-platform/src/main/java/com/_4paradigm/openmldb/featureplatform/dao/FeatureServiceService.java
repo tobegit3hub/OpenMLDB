@@ -1,5 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
+import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureServiceDeploymentRequest;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
@@ -70,10 +71,10 @@ public class FeatureServiceService {
             ResultSet result = openmldbStatement.getResultSet();
 
             if (result.getFetchSize() == 0) {
-                System.out.print("Can not get FeatureService with the name: " + name);
+                System.out.println("Can not get FeatureService with the name: " + name);
                 return null;
             } else if (result.getFetchSize() > 1) {
-                System.out.print("Get more FeatureService with the same name");
+                System.out.println("Get more FeatureService with the same name");
                 return null;
             } else {
                 while (result.next()) {
@@ -94,6 +95,10 @@ public class FeatureServiceService {
         if (sqlList.size() == 1) {
             return sqlList.get(0);
         } else {
+
+            System.out.println("--------------------- tobe");
+            System.out.println("Use the db: " + db);
+
             String mergeSql = SqlClusterExecutor.mergeSQL(sqlList, db, joinKeys, tableSchema);
             System.out.println("Try to merge SQLs: " + sqlList + ", get merged SQL: " + mergeSql);
             return mergeSql;
@@ -137,7 +142,17 @@ public class FeatureServiceService {
                 return null;
             }
 
-            List<String> joinKeys = Arrays.asList(latestFeatureView.getEntityNames().split(","));
+            EntityService entityService = new EntityService(openmldbConnection);
+            List<String> joinKeys = new ArrayList<>();
+            for (String rawEntityName: latestFeatureView.getEntityNames().split(",")) {
+                if (rawEntityName != null && !rawEntityName.trim().equals("")) {
+                    String entityName = rawEntityName.trim();
+                    Entity entity = entityService.getEntityByName(entityName);
+                    for (String rawPrimaryKey: entity.getPrimaryKeys().split(",")) {
+                        joinKeys.add(rawPrimaryKey.trim());
+                    }
+                }
+            }
 
             String mergedSql = mergeSqlList(openmldbSqlExecutor, sqlList, db, joinKeys, OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor));
             String deploymentName = "FEATURE_PLATFORM_" + featureService.getName();
@@ -146,10 +161,13 @@ public class FeatureServiceService {
             if (featureService.getDeployment() != null && !featureService.getDeployment().isEmpty()) {
                 deploymentName = featureService.getDeployment();
             } else {
-                openmldbStatement.execute("USE " + db);
+                if (!db.equals("")) {
+                    openmldbStatement.execute("USE " + db);
+                }
 
                 // Deploy with SQL
-                String deploymentSql = String.format("DEPLOY %s %s", deploymentName, mergedSql);
+                // TODO: Skip index check for compatibility of old OpenMLDB cluster
+                String deploymentSql = String.format("DEPLOY %s OPTIONS (SKIP_INDEX_CHECK=\"TRUE\") %s", deploymentName, mergedSql);
                 System.out.println("Try to create deployment with SQL: " + deploymentSql);
                 openmldbStatement.execute(deploymentSql);
             }
@@ -177,8 +195,9 @@ public class FeatureServiceService {
             String deploymentName = request.getDeploymentName();
 
             Statement openmldbStatement = openmldbConnection.createStatement();
-            // TODO: Support user's db
-            openmldbStatement.execute("USE " + db);
+            if (!db.equals("")) {
+                openmldbStatement.execute("USE " + db);
+            }
 
             String sql = String.format("SHOW DEPLOYMENT %s", deploymentName);
             openmldbStatement.execute(sql);
@@ -250,7 +269,9 @@ public class FeatureServiceService {
 
             // Delete the deployment
             FeatureService featureService = getFeatureServiceByName(name);
-            openmldbStatement.execute("USE " + featureService.getDb());
+            if (!featureService.getDb().equals("")) {
+                openmldbStatement.execute("USE " + featureService.getDb());
+            }
             String dropDeploymentSql = String.format("DROP DEPLOYMENT %s", featureService.getDeployment());
             System.out.println("Try to drop deployment with sql: " + dropDeploymentSql);
             openmldbStatement.execute(dropDeploymentSql);

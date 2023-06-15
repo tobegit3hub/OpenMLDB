@@ -5,6 +5,9 @@
   <h1>Entities</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="entities" :loading="loading">
+    <template #name="{ text, record }">
+      <router-link :to="`/entities/${record.name}`">{{ text }}</router-link>
+    </template>
     <!-- The delete column-->
     <template v-slot:custom="scope">
       <a-popconfirm
@@ -61,6 +64,7 @@ export default {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
+        slots: { customRender: 'name' }
       },
       {
         title: 'Primary Keys',

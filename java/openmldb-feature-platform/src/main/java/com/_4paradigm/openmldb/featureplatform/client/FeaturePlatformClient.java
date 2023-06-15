@@ -3,6 +3,7 @@ package com._4paradigm.openmldb.featureplatform.client;
 import com._4paradigm.openmldb.featureplatform.dao.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.util.StringEscapeUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -155,10 +156,11 @@ public class FeaturePlatformClient {
     }
 
     public boolean createFeatureView(String name, String entityNames, String db, String sql) throws IOException {
+        String escapedSql = StringEscapeUtils.escapeJson(sql);
         String endpoint = this.apiEndpoint + "featureviews";
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
-        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"entityNames\":\"%s\", \"db\":\"%s\", \"sql\":\"%s\"}", name, entityNames, db, sql)));
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"entityNames\":\"%s\", \"db\":\"%s\", \"sql\":\"%s\"}", name, entityNames, db, escapedSql)));
         HttpResponse postResponse = httpClient.execute(postRequest);
         printResponse(postResponse);
         // TODO: Check response status code

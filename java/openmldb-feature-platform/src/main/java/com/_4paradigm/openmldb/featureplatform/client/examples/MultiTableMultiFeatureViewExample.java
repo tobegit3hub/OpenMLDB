@@ -1,6 +1,7 @@
 package com._4paradigm.openmldb.featureplatform.client.examples;
 
 import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
+import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 
@@ -26,7 +27,8 @@ public class MultiTableMultiFeatureViewExample {
             client.createFeatureService("featureservice1", "featureview1, featureview2");
 
             // Test feature service
-            client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            HttpResponse response = client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            client.printResponse(response);
 
             // Cleanup resources
             client.deleteFeatureService("featureservice1");

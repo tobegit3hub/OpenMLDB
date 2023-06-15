@@ -88,19 +88,16 @@ public class FeatureViewService {
 
     public boolean addFeatureView(FeatureView featureView) {
         try {
-            // TODO: Get feature names by compiling SQL
-
             Map<String, Map<String, Schema>> schemaMaps = OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor);
 
             String sql = featureView.getSql();
 
             // TODO: Validate SQL before creating
 
-            // TODO(huangwei)：Need to support SQL which contains database name
             StringBuilder featureNamesBuilder = new StringBuilder();
 
             try {
-                List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, schemaMaps).getColumnList();
+                List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, featureView.getDb(), schemaMaps).getColumnList();
                 for (Column outputSchemaColumn: outputSchemaColumns) {
                     String name = outputSchemaColumn.getColumnName();
                     int intType = outputSchemaColumn.getSqlType();

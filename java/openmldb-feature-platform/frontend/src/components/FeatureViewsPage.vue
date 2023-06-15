@@ -5,6 +5,9 @@
   <h1>Feature Views</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="featureViews" :loading="loading">
+    <template #name="{ text, record }">
+      <router-link :to="`/featureviews/${record.name}`">{{ text }}</router-link>
+    </template>
     <!-- The delete column-->
     <template v-slot:custom="scope">
       <a-popconfirm
@@ -73,6 +76,7 @@ export default {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
+        slots: { customRender: 'name' }
       },
       {
         title: 'Entities',
