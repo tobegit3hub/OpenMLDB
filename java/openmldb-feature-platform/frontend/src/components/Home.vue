@@ -32,9 +32,21 @@
       </a-menu-item>
     </a-menu>
   </a-layout-header>
+
+  <a-layout-content style="padding: 0 50px">
+      <router-view></router-view>
+   </a-layout-content>
+
+   <a-layout-footer style="text-align: center">
+    <div>
+      <a href="https://github.com/4paradigm/OpenMLDB" target="_blank">OpenMLDB</a> © 2021-2023
+    </div>
+  </a-layout-footer>
+
 </a-layout>
 
-<router-view></router-view>
+
+
 
 </template>
 
