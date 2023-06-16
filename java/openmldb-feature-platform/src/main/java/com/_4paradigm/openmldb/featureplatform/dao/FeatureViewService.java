@@ -97,7 +97,9 @@ public class FeatureViewService {
             StringBuilder featureNamesBuilder = new StringBuilder();
 
             try {
+                // TODO: Use for package with openmldb-0.8
                 List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, featureView.getDb(), schemaMaps).getColumnList();
+                //List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, schemaMaps).getColumnList();
                 for (Column outputSchemaColumn: outputSchemaColumns) {
                     String name = outputSchemaColumn.getColumnName();
                     int intType = outputSchemaColumn.getSqlType();
