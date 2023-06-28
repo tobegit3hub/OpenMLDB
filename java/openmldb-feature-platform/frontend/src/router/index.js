@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomePage from '../components/HomePage.vue'
+import OverviewPage from '../components/OverviewPage.vue'
 import TablesPage from '../components/TablesPage.vue'
 import EntitiesPage from '../components/EntitiesPage.vue'
 import FeaturesPage from '../components/FeaturesPage.vue'
@@ -18,7 +18,7 @@ import FeatureServiceDetail from '../components/FeatureServiceDetail.vue'
 const router = createRouter({
   history: createWebHistory("/"),
   routes: [
-    { path: '/', component: HomePage },
+    { path: '/', component: OverviewPage },
     { path: '/tables', component: TablesPage },
     { path: '/tables/:db/:name', component: TableDetail, props: true },
     { path: '/databases/:db', component: DatabaseDetail, props: true  },

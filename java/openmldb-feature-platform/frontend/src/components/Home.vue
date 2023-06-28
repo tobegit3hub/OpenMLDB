@@ -4,10 +4,10 @@
 <template>
 
 <a-layout class="layout">
-  <a-layout-header>
-    <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
+  <a-layout-sider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
+    <a-menu theme="dark" mode="inline" class="navi-menu">
       <a-menu-item key="1">
-        <router-link to='/'>Home</router-link>
+        <router-link to='/'>Overview</router-link>
       </a-menu-item>
       <a-menu-item key="2">
         <router-link to='/tables'>Tables</router-link>
@@ -31,24 +31,33 @@
         <router-link to='/tutorial'>Tutorial</router-link>
       </a-menu-item>
     </a-menu>
-  </a-layout-header>
+  </a-layout-sider>
 
-  <a-layout-content style="padding: 0 50px">
-      <router-view></router-view>
-   </a-layout-content>
+  <a-layout :style="{ marginLeft: '200px' }" style="padding: 20px 50px">
+    <a-layout-content>
+        <router-view></router-view>
+    </a-layout-content>
 
-   <a-layout-footer style="text-align: center">
-    <div>
-      <a href="https://github.com/4paradigm/OpenMLDB" target="_blank">OpenMLDB</a> © 2021-2023
-    </div>
-  </a-layout-footer>
+    
+    <a-layout-footer style="text-align: center">
+      <br />
+      <div>
+        <a href="https://github.com/4paradigm/OpenMLDB" target="_blank">OpenMLDB</a> © 2021-2023
+      </div>
+    </a-layout-footer>
+  </a-layout>
 
 </a-layout>
 
 
 
 
+
 </template>
 
-<style scoped>
+<style>
+.navi-menu .ant-menu-item {
+  font-size: 16px;
+  margin: 10px 10px;
+}
 </style>
