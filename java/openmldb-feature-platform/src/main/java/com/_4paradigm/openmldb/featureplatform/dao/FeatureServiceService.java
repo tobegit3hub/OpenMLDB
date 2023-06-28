@@ -351,4 +351,15 @@ public class FeatureServiceService {
         demoBuilder.append("]]}");
         return demoBuilder.toString();
     }
+
+    public List<String> getDependentTables(String name) throws SQLException {
+        FeatureService featureService = getFeatureServiceByName(name);
+        List<Pair<String, String>> tables = SqlClusterExecutor.getDependentTables(featureService.getSql(), featureService.getDb(), OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor));
+
+        List<String> fullNameTables = new ArrayList<>();
+        for (Pair<String, String> tableItem: tables) {
+            fullNameTables.add(tableItem.getKey() + "." + tableItem.getValue());
+        }
+        return fullNameTables;
+    }
 }

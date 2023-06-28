@@ -6,8 +6,8 @@
     <a-descriptions layout="vertical" bordered>
       <a-descriptions-item label="Name"> {{ data.name }}</a-descriptions-item>
       <a-descriptions-item label="Feature list">{{ data.featureList }}</a-descriptions-item>
-      <a-descriptions-item label="Database">{{ data.db }}</a-descriptions-item>
-      <a-descriptions-item label="Sql">{{ data.sql }}</a-descriptions-item>
+      <a-descriptions-item label="Database"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
+      <a-descriptions-item label="SQL">{{ data.sql }}</a-descriptions-item>
       <a-descriptions-item label="Deployment">{{ data.deployment }}</a-descriptions-item>
     </a-descriptions>
   

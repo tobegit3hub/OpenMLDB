@@ -1,5 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.client;
 
+import com._4paradigm.openmldb.common.Pair;
 import com._4paradigm.openmldb.featureplatform.dao.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -135,6 +136,16 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<FeatureView>>() {});
     }
 
+    public List<String> getFeatureViewDependentTables(String name) throws IOException {
+        String endpoint = this.apiEndpoint + "featureviews/" + name + "/tables";
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
+    }
+
     public List<Feature> getFeatures() throws IOException {
         String endpoint = this.apiEndpoint + "features";
         HttpGet request = new HttpGet(endpoint);
@@ -244,6 +255,16 @@ public class FeaturePlatformClient {
         HttpEntity entity = response.getEntity();
         String responseBody = EntityUtils.toString(entity);
         return objectMapper.readValue(responseBody, FeatureService.class);
+    }
+
+    public List<String> getFeatureServiceDependentTables(String name) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/tables";
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
     }
 
     public boolean deleteFeatureService(String name) throws IOException {

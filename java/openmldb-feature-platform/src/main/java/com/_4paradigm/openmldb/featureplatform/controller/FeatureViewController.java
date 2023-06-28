@@ -1,11 +1,14 @@
 package com._4paradigm.openmldb.featureplatform.controller;
 
+import com._4paradigm.openmldb.common.Pair;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import com._4paradigm.openmldb.featureplatform.dao.FeatureViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLException;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -49,4 +52,12 @@ public class FeatureViewController {
         }
     }
 
+    @GetMapping("/{name}/tables")
+    public List<String> getFeatureViewDependentTables(@PathVariable String name) {
+        try {
+            return featureViewService.getDependentTables(name);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
 }

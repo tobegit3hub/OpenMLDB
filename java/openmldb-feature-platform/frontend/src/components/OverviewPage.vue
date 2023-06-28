@@ -96,6 +96,24 @@ export default {
           slots: { customRender: 'table' }
         }],
 
+        featureColumns: [{
+          title: 'Feature View',
+          dataIndex: 'featureViewName',
+          key: 'featureViewName',
+          slots: { customRender: 'featureView' }
+        },
+        {
+          title: 'Feature Name',
+          dataIndex: 'featureName',
+          key: 'featureName',
+          slots: { customRender: 'name' }
+        },
+        {
+          title: 'Type',
+          dataIndex: 'type',
+          key: 'type',
+        }],
+
         featureViewColumns: [{
           title: 'Name',
           dataIndex: 'name',
@@ -123,9 +141,9 @@ export default {
           key: 'featureList',
         },
         {
-          title: 'SQL',
-          dataIndex: 'sql',
-          key: 'sql'
+          title: 'Deployment',
+          dataIndex: 'deployment',
+          key: 'deployment'
         }],
 
         currentStep: 0,

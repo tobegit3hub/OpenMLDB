@@ -74,4 +74,12 @@ public class FeatureServiceController {
         }
     }
 
+    @GetMapping("/{name}/tables")
+    public List<String> getFeatureServiceDependentTables(@PathVariable String name) {
+        try {
+            return featureServiceService.getDependentTables(name);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
 }

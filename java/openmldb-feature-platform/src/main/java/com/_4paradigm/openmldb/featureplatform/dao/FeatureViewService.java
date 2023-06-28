@@ -1,5 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
+import com._4paradigm.openmldb.common.Pair;
 import com._4paradigm.openmldb.featureplatform.dao.model.Feature;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
@@ -160,5 +161,16 @@ public class FeatureViewService {
         }
 
         return false;
+    }
+
+    public List<String> getDependentTables(String name) throws SQLException {
+        FeatureView featureView = getFeatureViewByName(name);
+        List<Pair<String, String>> tables = SqlClusterExecutor.getDependentTables(featureView.getSql(), featureView.getDb(), OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor));
+
+        List<String> fullNameTables = new ArrayList<>();
+        for (Pair<String, String> tableItem: tables) {
+            fullNameTables.add(tableItem.getKey() + "." + tableItem.getValue());
+        }
+        return fullNameTables;
     }
 }

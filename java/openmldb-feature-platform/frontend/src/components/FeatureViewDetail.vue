@@ -8,7 +8,7 @@
       <a-descriptions-item label="Entities">
         <router-link v-for="entity in entities" :to="`/entities/${entity}`" :key="entity">{{ entity }} </router-link>
       </a-descriptions-item>
-      <a-descriptions-item label="Database">{{ data.db }}</a-descriptions-item>
+      <a-descriptions-item label="Database"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
       <a-descriptions-item label="SQL">{{ data.sql }}</a-descriptions-item>
       <a-descriptions-item label="Features">
         <router-link v-for="feature in features" :to="`/features/${feature.featureViewName}/${feature.featureName}`" :key="feature.featureName">{{ feature.featureName }}, </router-link>
