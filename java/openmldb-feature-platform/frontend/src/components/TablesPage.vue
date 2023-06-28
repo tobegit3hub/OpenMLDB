@@ -2,9 +2,20 @@
 
 <div>
   <br/>
+  <h1>Databases</h1>
+  <!-- Databases table -->
+  <a-table :columns="databaseColumns" :data-source="databases">
+    <template #database="{ text, record }">
+      <router-link :to="`/databases/${record}`">{{ text }}</router-link>
+    </template>
+  </a-table>
+
   <h1>Tables</h1>
-  <!-- Data table -->
-  <a-table :columns="columns" :data-source="tables" :loading="loading">
+  <!-- Tables table -->
+  <a-table :columns="columns" :data-source="tables">
+    <template #database="{ text, record }">
+      <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
+    </template>    
     <template #table="{ text, record }">
       <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
     </template>
@@ -50,14 +61,20 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
-      tables: [],
+      databases: [],
 
-      loading: false,
+      databaseColumns: [{
+        title: 'Database',
+        slots: { customRender: 'database' }
+      }],
+
+      tables: [],
       
       columns: [{
         title: 'Database',
         dataIndex: 'db',
-        key: 'db'
+        key: 'db',
+        slots: { customRender: 'database' }
       },
       {
         title: 'Table',
@@ -83,7 +100,15 @@ export default {
 
   methods: {
     initData() {
-      this.loading = true;
+      axios.get(`/api/databases`)
+        .then(response => {
+          this.databases = response.data;
+        })
+        .catch(error => {
+          message.error(error.message);
+        })
+        .finally(() => {});
+
       axios.get(`/api/tables`)
         .then(response => {
           this.tables = response.data;
@@ -91,9 +116,7 @@ export default {
         .catch(error => {
           message.error(error.message);
         })
-        .finally(() => {
-          this.loading = false;
-        });
+        .finally(() => {});
     },
 
     handleSubmit() {

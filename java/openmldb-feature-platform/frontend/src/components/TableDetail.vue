@@ -4,7 +4,9 @@
   <br/>
   <h1>Table: {{ data.table }} </h1>
   <a-descriptions layout="vertical" bordered>
-    <a-descriptions-item label="Database"> {{ data.db }}</a-descriptions-item>
+    <a-descriptions-item label="Database"> 
+      <router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link>
+    </a-descriptions-item>
     <a-descriptions-item label="Table">{{ data.table }}</a-descriptions-item>
     <a-descriptions-item label="Schema">{{ data.schema}}</a-descriptions-item>
   </a-descriptions>

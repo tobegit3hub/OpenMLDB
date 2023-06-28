@@ -9,6 +9,7 @@ import FeatureServicesPage from '../components/FeatureServicesPage.vue'
 import SqlPage from '../components/SqlPage.vue'
 import TutorialPage from '../components/TutorialPage.vue'
 import TableDetail from '../components/TableDetail.vue'
+import DatabaseDetail from '../components/DatabaseDetail.vue'
 import EntityDetail from '../components/EntityDetail.vue'
 import FeatureDetail from '../components/FeatureDetail.vue'
 import FeatureViewDetail from '../components/FeatureViewDetail.vue'
@@ -20,6 +21,7 @@ const router = createRouter({
     { path: '/', component: HomePage },
     { path: '/tables', component: TablesPage },
     { path: '/tables/:db/:name', component: TableDetail, props: true },
+    { path: '/databases/:db', component: DatabaseDetail, props: true  },
     { path: '/entities', component: EntitiesPage},
     { path: '/entities/:name', component: EntityDetail, props: true },
     { path: '/features', component: FeaturesPage},

@@ -118,12 +118,20 @@ public class UseFeaturePlatformClient {
         client.printResponse(response2);
     }
 
-    public static void useTables() throws IOException {
+    public static void accessTables() throws IOException {
         List<SimpleTableInfo> tables = client.getTables();
         System.out.println(tables);
 
         SimpleTableInfo table = client.getTable("db1", "t1");
         System.out.println(table);
+    }
+
+    public static void accessDatabases() throws IOException {
+        List<String> databases = client.getDatabases();
+        System.out.println(databases);
+
+        List<SimpleTableInfo> tables = client.getDatabaseTables("SYSTEM_FEATURE_PLATFORM");
+        System.out.println(tables);
     }
 
     public static void main(String[] args) {
@@ -134,11 +142,13 @@ public class UseFeaturePlatformClient {
             //validateSql();
             //executeSql();
             //useOtherApis();
-            accessFeatureServices();
+            //accessFeatureServices();
             //requestApiServer();
             //accessExecuteSql();
             //validateSql();
             //accessFeatures();
+
+            accessDatabases();
         } catch (IOException e) {
             e.printStackTrace();
         }
