@@ -87,6 +87,56 @@ public class TypeUtil {
         }
     }
 
+    public static String javaSqlTypeToDemoData(int sqlType) {
+        switch (sqlType) {
+            case Types.BIT:
+            case Types.TINYINT:
+            case Types.SMALLINT:
+            case Types.INTEGER:
+            case Types.BIGINT:
+                return "1";
+            case Types.FLOAT:
+            case Types.REAL:
+            case Types.DOUBLE:
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                return "1.0";
+            case Types.CHAR:
+            case Types.VARCHAR:
+            case Types.LONGVARCHAR:
+                return "foo";
+            case Types.DATE:
+                return "2021-05-20";
+            case Types.TIME:
+            case Types.TIMESTAMP:
+                return "1635247427000";
+            case Types.NULL:
+                return "NULL";
+            case Types.BOOLEAN:
+                return "true";
+            case Types.BINARY:
+            case Types.VARBINARY:
+            case Types.LONGVARBINARY:
+            case Types.OTHER:
+            case Types.JAVA_OBJECT:
+            case Types.DISTINCT:
+            case Types.STRUCT:
+            case Types.ARRAY:
+            case Types.BLOB:
+            case Types.CLOB:
+            case Types.REF:
+            case Types.DATALINK:
+            case Types.ROWID:
+            case Types.NCHAR:
+            case Types.NVARCHAR:
+            case Types.LONGNVARCHAR:
+            case Types.NCLOB:
+            case Types.SQLXML:
+            default:
+                return "Unknown";
+        }
+    }
+
     public static String getResultSetStringColumn(SQLResultSet resultSet, int i, DataType type) throws SQLException {
         if (type.equals(DataType.kTypeBool)) {
             return String.valueOf(resultSet.getBoolean(i));

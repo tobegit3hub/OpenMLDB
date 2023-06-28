@@ -6,6 +6,7 @@ import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureServiceDeploymentRequest;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureView;
 import com._4paradigm.openmldb.featureplatform.utils.OpenmldbTableUtil;
+import com._4paradigm.openmldb.sdk.Column;
 import com._4paradigm.openmldb.sdk.Schema;
 import com._4paradigm.openmldb.sdk.impl.SqlClusterExecutor;
 import org.apache.http.HttpEntity;
@@ -20,13 +21,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import com._4paradigm.openmldb.featureplatform.utils.TypeUtil;
 
 @Repository
 public class FeatureServiceService {
@@ -329,4 +329,26 @@ public class FeatureServiceService {
         return schema;
     }
 
+    public String getRequestDemo(String serviceName) throws SQLException {
+        Schema schema = getRequestSchema(serviceName);
+
+        // "{\"input\": [[\"abc\", 22]]}"
+        StringBuilder demoBuilder = new StringBuilder();
+        demoBuilder.append("{input: [[");
+
+        for (int i=0; i<schema.getColumnList().size(); ++i) {
+            Column column = schema.getColumnList().get(i);
+            column.getSqlType();
+            String demoValue = TypeUtil.javaSqlTypeToDemoData(column.getSqlType());
+
+            if (i != 0) {
+                demoBuilder.append(", ");
+            }
+
+            demoBuilder.append(demoValue);
+        }
+
+        demoBuilder.append("]]}");
+        return demoBuilder.toString();
+    }
 }
