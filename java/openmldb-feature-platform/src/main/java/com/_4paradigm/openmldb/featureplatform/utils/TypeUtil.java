@@ -104,9 +104,9 @@ public class TypeUtil {
             case Types.CHAR:
             case Types.VARCHAR:
             case Types.LONGVARCHAR:
-                return "foo";
+                return "\"foo\"";
             case Types.DATE:
-                return "2021-05-20";
+                return "\"2021-05-20\"";
             case Types.TIME:
             case Types.TIMESTAMP:
                 return "1635247427000";

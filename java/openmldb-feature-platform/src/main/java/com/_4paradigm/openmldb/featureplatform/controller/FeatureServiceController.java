@@ -74,6 +74,16 @@ public class FeatureServiceController {
         }
     }
 
+    @GetMapping("/{name}/request/demo")
+    public ResponseEntity<String> getRequestDemoData(@PathVariable String name) {
+        try {
+            String demoData = featureServiceService.getRequestDemoData(name);
+            return new ResponseEntity<>(demoData, HttpStatus.OK);
+        } catch (SQLException e) {
+            return new ResponseEntity<>("Success to delete", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/{name}/tables")
     public List<String> getFeatureServiceDependentTables(@PathVariable String name) {
         try {

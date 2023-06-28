@@ -329,12 +329,12 @@ public class FeatureServiceService {
         return schema;
     }
 
-    public String getRequestDemo(String serviceName) throws SQLException {
+    public String getRequestDemoData(String serviceName) throws SQLException {
         Schema schema = getRequestSchema(serviceName);
 
         // "{\"input\": [[\"abc\", 22]]}"
         StringBuilder demoBuilder = new StringBuilder();
-        demoBuilder.append("{input: [[");
+        demoBuilder.append("{\"input\": [[");
 
         for (int i=0; i<schema.getColumnList().size(); ++i) {
             Column column = schema.getColumnList().get(i);

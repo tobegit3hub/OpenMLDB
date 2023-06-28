@@ -2,6 +2,8 @@ package com._4paradigm.openmldb.featureplatform.client.examples;
 
 import java.io.IOException;
 import java.util.List;
+
+import com._4paradigm.openmldb.common.Pair;
 import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
 import com._4paradigm.openmldb.featureplatform.dao.model.*;
 import org.apache.http.HttpResponse;
@@ -45,7 +47,8 @@ public class UseFeaturePlatformClient {
         System.out.println(features3);
     }
 
-    public static void useFeatureViews() throws IOException {
+    public static void accessFeatureViews() throws IOException {
+        /*
         // List all feature views
         List<FeatureView> featureViews = client.getFeatureViews();
         System.out.println(featureViews);
@@ -59,6 +62,9 @@ public class UseFeaturePlatformClient {
 
         // Delete a feature view
         client.deleteFeatureView("featureview1");
+         */
+        List<String> tables = client.getFeatureViewDependentTables("featureview1");
+        System.out.println(tables);
     }
 
     public static void accessFeatureServices() throws IOException {
@@ -79,10 +85,17 @@ public class UseFeaturePlatformClient {
 
         HttpResponse response = client.requestFeatureService("service1", "{\"input\": [[\"abc\", 22]]}");
         client.printResponse(response);
-        */
+
         //client.createFeatureServiceFromDeployment("deploy8", "db1", "demo_deploy8");
 
         HttpResponse response = client.getFeatureServiceRequestSchema("s1");
+        client.printResponse(response);
+
+        List<String> tables = client.getFeatureServiceDependentTables("featureservice1");
+        System.out.println(tables);
+         */
+
+        HttpResponse response = client.getFeatureServiceRequestDemoData("featureservice1");
         client.printResponse(response);
     }
 
@@ -148,7 +161,8 @@ public class UseFeaturePlatformClient {
             //validateSql();
             //accessFeatures();
 
-            accessDatabases();
+            //accessDatabases();
+            accessFeatureServices();
         } catch (IOException e) {
             e.printStackTrace();
         }
