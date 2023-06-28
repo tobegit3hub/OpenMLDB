@@ -1,5 +1,6 @@
 package com._4paradigm.openmldb.featureplatform.dao;
 
+import com._4paradigm.openmldb.common.Pair;
 import com._4paradigm.openmldb.featureplatform.dao.model.Entity;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureService;
 import com._4paradigm.openmldb.featureplatform.dao.model.FeatureServiceDeploymentRequest;
@@ -311,4 +312,21 @@ public class FeatureServiceService {
         String responseBody = EntityUtils.toString(responseEntity);
         return new ResponseEntity<String>(responseBody, HttpStatus.valueOf(statusCode));
     }
+
+    public Schema getRequestSchema(String serviceName) throws SQLException {
+        FeatureService featureService = getFeatureServiceByName(serviceName);
+        String sql = featureService.getSql();
+        String db = featureService.getDb();
+
+        List<Pair<String, String>> tables = SqlClusterExecutor.getDependentTables(sql, db, OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor));
+
+        Pair<String, String> mainTablePair = tables.get(0);
+
+        String mainDb = mainTablePair.getKey();
+        String mainTable = mainTablePair.getValue();
+
+        Schema schema = openmldbSqlExecutor.getTableSchema(mainDb, mainTable);
+        return schema;
+    }
+
 }

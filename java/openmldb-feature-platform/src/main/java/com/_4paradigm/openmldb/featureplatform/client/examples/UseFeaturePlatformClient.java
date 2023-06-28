@@ -80,7 +80,10 @@ public class UseFeaturePlatformClient {
         HttpResponse response = client.requestFeatureService("service1", "{\"input\": [[\"abc\", 22]]}");
         client.printResponse(response);
         */
-        client.createFeatureServiceFromDeployment("deploy8", "db1", "demo_deploy8");
+        //client.createFeatureServiceFromDeployment("deploy8", "db1", "demo_deploy8");
+
+        HttpResponse response = client.getFeatureServiceRequestSchema("s1");
+        client.printResponse(response);
     }
 
     public static void requestApiServer() throws IOException {

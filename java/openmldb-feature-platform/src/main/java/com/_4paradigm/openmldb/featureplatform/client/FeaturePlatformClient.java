@@ -234,6 +234,13 @@ public class FeaturePlatformClient {
         return true;
     }
 
+    public HttpResponse getFeatureServiceRequestSchema(String name) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/request/schema";
+        HttpGet getRequest = new HttpGet(endpoint);
+        HttpResponse getResponse = httpClient.execute(getRequest);
+        return getResponse;
+    }
+
     public HttpResponse executeSql(String sql) throws IOException {
         String endpoint = this.apiEndpoint + "sql/execute";
         HttpPost postRequest = new HttpPost(endpoint);
