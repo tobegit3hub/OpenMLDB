@@ -26,7 +26,17 @@
         <router-link :to="`/features/${record.featureViewName}/${record.featureName}`">{{ text }}</router-link>
       </template>
     </a-table>
-    
+
+    <br/>
+    <h1>Dependent Tables</h1>
+    <a-table :columns="tableColumns" :data-source="tables">
+      <template #db="{ text, record }">
+        <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
+      </template>
+      <template #table="{ text, record }">
+        <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
+      </template>
+    </a-table>
   </div>
   </template>
     
@@ -72,7 +82,22 @@
           dataIndex: 'description',
           key: 'description',
       }];
-  
+
+      const tables = ref([]);
+
+      const tableColumns = [{
+          title: 'Database',
+          dataIndex: 'db',
+          key: 'db',
+          slots: { customRender: 'db' }
+        },
+        {
+          title: 'Table',
+          dataIndex: 'table',
+          key: 'table',
+          slots: { customRender: 'table' }
+        }];
+
       const initData = () => {
         axios.get(`/api/featureviews/${props.name}`)
           .then(response => {
@@ -93,6 +118,16 @@
             message.error(error.message);
           });
 
+        axios.get(`/api/featureviews/${props.name}/tables`)
+          .then(response => {            
+            response.data.forEach(str => {
+              let [db, table] = str.split('.');
+              tables.value.push({"db": db, "table": table});
+            });
+          })
+          .catch(error => {
+            message.error(error.message);
+          });
         }
   
       onMounted(() => {
@@ -103,7 +138,9 @@
         data,
         entities,
         features,
-        columns
+        columns,
+        tables,
+        tableColumns
       }
     }
     

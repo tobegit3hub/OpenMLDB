@@ -8,6 +8,9 @@
     <template #name="{ text, record }">
       <router-link :to="`/featureviews/${record.name}`">{{ text }}</router-link>
     </template>
+    <template #db="{ text, record }">
+      <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
+    </template>  
     <!-- The delete column-->
     <template v-slot:custom="scope">
       <a-popconfirm
@@ -87,6 +90,7 @@ export default {
         title: 'Database',
         dataIndex: 'db',
         key: 'db',
+        slots: { customRender: 'db' }
       },
       {
         title: 'SQL',

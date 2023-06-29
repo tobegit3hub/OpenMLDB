@@ -21,6 +21,25 @@
         <router-link :to="`/features/${record.featureViewName}/${record.featureName}`">{{ text }}</router-link>
       </template>
     </a-table>
+
+    <br/>
+    <h1>Dependent Tables</h1>
+    <a-table :columns="tableColumns" :data-source="tables">
+      <template #db="{ text, record }">
+        <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
+      </template>
+      <template #table="{ text, record }">
+        <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
+      </template>
+    </a-table>
+
+    <br/>
+    <h1>Request Schema</h1>
+    <p>{{ requestSchema }}</p>
+
+    <h1>Request Demo Data</h1>
+    <p>{{ requestDemoData }}</p>
+
   </div>
   </template>
     
@@ -65,6 +84,25 @@
           key: 'description',
       }];
 
+      const tables = ref([]);
+
+      const tableColumns = [{
+          title: 'Database',
+          dataIndex: 'db',
+          key: 'db',
+          slots: { customRender: 'db' }
+        },
+        {
+          title: 'Table',
+          dataIndex: 'table',
+          key: 'table',
+          slots: { customRender: 'table' }
+        }];
+
+          
+      const requestSchema = ref("");
+      const requestDemoData = ref("");
+
       const initData = () => {
         axios.get(`/api/featureservices/${props.name}`)
           .then(response => {
@@ -83,7 +121,35 @@
           .catch(error => {
             message.error(error.message);
           })
-        }
+
+        axios.get(`/api/featureservices/${props.name}/tables`)
+          .then(response => {            
+            response.data.forEach(str => {
+              let [db, table] = str.split('.');
+              tables.value.push({"db": db, "table": table});
+            });
+          })
+          .catch(error => {
+            message.error(error.message);
+          });
+
+        axios.get(`/api/featureservices/${props.name}/request/schema`)
+          .then(response => {
+            requestSchema.value = response.data;
+
+          })
+          .catch(error => {
+            message.error(error.message);
+          });
+
+        axios.get(`/api/featureservices/${props.name}/request/demo`)
+          .then(response => {
+            requestDemoData.value = response.data;
+          })
+          .catch(error => {
+            message.error(error.message);
+          });          
+      }
   
       onMounted(() => {
         initData();
@@ -92,7 +158,11 @@
       return {
         data,
         features,
-        columns
+        columns,
+        tables,
+        tableColumns,
+        requestSchema,
+        requestDemoData
       }
     }
     

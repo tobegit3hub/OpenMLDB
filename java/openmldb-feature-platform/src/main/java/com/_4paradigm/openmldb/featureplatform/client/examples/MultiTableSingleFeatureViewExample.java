@@ -12,27 +12,22 @@ public class MultiTableSingleFeatureViewExample {
 
         try {
             // Create test db and tables
-            client.executeSql("CREATE DATABASE IF NOT EXISTS test_db");
-            client.executeSql("CREATE TABLE IF NOT EXISTS test_db.user (name string, age int)");
-            client.executeSql("CREATE TABLE IF NOT EXISTS test_db.trade (user_name string, amount float)");
+            client.executeSql("CREATE DATABASE IF NOT EXISTS t2v1");
+            client.executeSql("CREATE TABLE IF NOT EXISTS t2v1.user (name string, age int)");
+            client.executeSql("CREATE TABLE IF NOT EXISTS t2v1.trade (user_name string, amount float)");
 
             // Create feature view
-            client.createFeatureView("featureview1", "", "test_db", "SELECT name, age, amount FROM test_db.user LAST JOIN test_db.trade ON test_db.user.name = test_db.trade.user_name");
+            client.createFeatureView("t2v1_v1", "", "t2v1", "SELECT name, age, amount FROM user LAST JOIN trade ON user.name = trade.user_name");
 
             // Create feature service
-            client.createFeatureService("featureservice1", "featureview1");
+            client.createFeatureService("t2v1_s1", "t2v1_v1");
+
+            // Insert test data for trade table
+            // client.executeSql("INSERT INTO t2v1.trade VALUES (\"foo\", 11.1)");
 
             // Test feature service
-            HttpResponse response = client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            HttpResponse response = client.requestFeatureService("t2v1_s1", "{\"input\": [[\"abc\", 22]]}");
             client.printResponse(response);
-
-            // Cleanup resources
-            client.deleteFeatureService("featureservice1");
-            client.deleteFeatureView("featureview1");
-            client.executeSql("DROP TABLE test_db.user");
-            client.executeSql("DROP TABLE test_db.trade");
-            client.executeSql("DROP DATABASE test_db");
-
         } catch (IOException e) {
             e.printStackTrace();
         }

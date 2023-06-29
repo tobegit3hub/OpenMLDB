@@ -12,31 +12,22 @@ public class SingleTableMultiFeatureViewExample {
 
         try {
             // Create test db and tables
-            client.executeSql("CREATE DATABASE IF NOT EXISTS test_db");
-            client.executeSql("CREATE TABLE IF NOT EXISTS test_db.user (name string, age int)");
+            client.executeSql("CREATE DATABASE IF NOT EXISTS t1v2");
+            client.executeSql("CREATE TABLE IF NOT EXISTS t1v2.user (name string, age int)");
 
             // Create entity
-            client.createEntity("name", "name, age");
+            client.createEntity("t1v2_name", "name");
 
             // Create feature view
-            client.createFeatureView("featureview1", "name","test_db", "SELECT name FROM user");
-            client.createFeatureView("featureview2", "name", "test_db", "SELECT age + 10 AS new_age FROM user");
+            client.createFeatureView("t1v2_v1", "t1v2_name","t1v2", "SELECT name FROM user");
+            client.createFeatureView("t1v2_v2", "t1v2_name", "t1v2", "SELECT age + 10 AS new_age FROM user");
 
             // Create feature service
-            client.createFeatureService("featureservice1", "featureview1, featureview2");
+            client.createFeatureService("t1v2_s1", "t1v2_v1, t1v2_v2");
 
             // Test feature service
-            HttpResponse response = client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            HttpResponse response = client.requestFeatureService("t1v2_s1", "{\"input\": [[\"abc\", 22]]}");
             client.printResponse(response);
-
-            // Cleanup resources
-            client.deleteFeatureService("featureservice1");
-            client.deleteFeatureView("featureview1");
-            client.deleteFeatureView("featureview2");
-            client.deleteEntity("name");
-            client.executeSql("DROP TABLE test_db.user");
-            client.executeSql("DROP DATABASE test_db");
-
         } catch (IOException e) {
             e.printStackTrace();
         }

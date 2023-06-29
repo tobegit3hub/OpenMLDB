@@ -78,7 +78,7 @@ public class FeaturePlatformClient {
     }
 
     public List<SimpleTableInfo> getDatabaseTables(String db) throws IOException {
-        String endpoint = this.apiEndpoint + "databases/" + db;
+        String endpoint = this.apiEndpoint + "databases/" + db + "/tables";
         HttpGet request = new HttpGet(endpoint);
         HttpResponse response = httpClient.execute(request);
 
@@ -282,11 +282,11 @@ public class FeaturePlatformClient {
         return getResponse;
     }
 
-    public HttpResponse getFeatureServiceRequestDemoData(String name) throws IOException {
+    public String getFeatureServiceRequestDemoData(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name + "/request/demo";
         HttpGet getRequest = new HttpGet(endpoint);
         HttpResponse getResponse = httpClient.execute(getRequest);
-        return getResponse;
+        return EntityUtils.toString(getResponse.getEntity());
     }
 
     public HttpResponse executeSql(String sql) throws IOException {

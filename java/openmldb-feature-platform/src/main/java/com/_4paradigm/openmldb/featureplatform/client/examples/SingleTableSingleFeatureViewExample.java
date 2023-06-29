@@ -12,24 +12,18 @@ public class SingleTableSingleFeatureViewExample {
 
         try {
             // Create test db and tables
-            client.executeSql("CREATE DATABASE IF NOT EXISTS test_db");
-            client.executeSql("CREATE TABLE IF NOT EXISTS test_db.user (name string, age int)");
+            client.executeSql("CREATE DATABASE IF NOT EXISTS t1v1");
+            client.executeSql("CREATE TABLE IF NOT EXISTS t1v1.user (name string, age int)");
 
             // Create feature view
-            client.createFeatureView("featureview1", "", "test_db", "SELECT name, age + 10 AS new_age FROM user");
+            client.createFeatureView("t1v1_v1", "", "t1v1", "SELECT name, age + 10 AS new_age FROM user");
 
             // Create feature service
-            client.createFeatureService("featureservice1", "featureview1");
+            client.createFeatureService("t1v1_s1", "t1v1_v1");
 
             // Test feature service
-            HttpResponse response = client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            HttpResponse response = client.requestFeatureService("t1v1_s1", "{\"input\": [[\"abc\", 22]]}");
             client.printResponse(response);
-/*
-            // Cleanup resources
-            client.deleteFeatureService("featureservice1");
-            client.deleteFeatureView("featureview1");
-            client.executeSql("DROP TABLE test_db.user");
-            client.executeSql("DROP DATABASE test_db");*/
         } catch (IOException e) {
             e.printStackTrace();
         }

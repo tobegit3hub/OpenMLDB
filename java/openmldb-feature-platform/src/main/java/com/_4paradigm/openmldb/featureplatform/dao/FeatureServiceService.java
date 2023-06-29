@@ -147,8 +147,10 @@ public class FeatureServiceService {
                 if (rawEntityName != null && !rawEntityName.trim().equals("")) {
                     String entityName = rawEntityName.trim();
                     Entity entity = entityService.getEntityByName(entityName);
-                    for (String rawPrimaryKey: entity.getPrimaryKeys().split(",")) {
-                        joinKeys.add(rawPrimaryKey.trim());
+                    if (entity != null) {
+                        for (String rawPrimaryKey: entity.getPrimaryKeys().split(",")) {
+                            joinKeys.add(rawPrimaryKey.trim());
+                        }
                     }
                 }
             }

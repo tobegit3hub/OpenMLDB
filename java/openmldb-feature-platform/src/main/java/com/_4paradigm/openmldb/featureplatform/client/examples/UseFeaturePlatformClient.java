@@ -48,7 +48,6 @@ public class UseFeaturePlatformClient {
     }
 
     public static void accessFeatureViews() throws IOException {
-        /*
         // List all feature views
         List<FeatureView> featureViews = client.getFeatureViews();
         System.out.println(featureViews);
@@ -62,13 +61,12 @@ public class UseFeaturePlatformClient {
 
         // Delete a feature view
         client.deleteFeatureView("featureview1");
-         */
+
         List<String> tables = client.getFeatureViewDependentTables("featureview1");
         System.out.println(tables);
     }
 
     public static void accessFeatureServices() throws IOException {
-        /*
         // List all feature services
         List<FeatureService> featureServices = client.getFeatureServices();
         System.out.println(featureServices);
@@ -88,15 +86,14 @@ public class UseFeaturePlatformClient {
 
         //client.createFeatureServiceFromDeployment("deploy8", "db1", "demo_deploy8");
 
-        HttpResponse response = client.getFeatureServiceRequestSchema("s1");
+        response = client.getFeatureServiceRequestSchema("s1");
         client.printResponse(response);
 
         List<String> tables = client.getFeatureServiceDependentTables("featureservice1");
         System.out.println(tables);
-         */
 
-        HttpResponse response = client.getFeatureServiceRequestDemoData("featureservice1");
-        client.printResponse(response);
+        String demoData = client.getFeatureServiceRequestDemoData("featureservice1");
+        System.out.println(demoData);
     }
 
     public static void requestApiServer() throws IOException {
@@ -121,7 +118,6 @@ public class UseFeaturePlatformClient {
     }
 
     public static void accessExecuteSql() throws IOException {
-
         String sql = "CREATE DATABASE db1";
         HttpResponse response = client.executeSql(sql);
         client.printResponse(response);
@@ -149,19 +145,6 @@ public class UseFeaturePlatformClient {
 
     public static void main(String[] args) {
         try {
-            //useEntity();
-            //useFeatures();
-            //useFeatureViews();
-            //validateSql();
-            //executeSql();
-            //useOtherApis();
-            //accessFeatureServices();
-            //requestApiServer();
-            //accessExecuteSql();
-            //validateSql();
-            //accessFeatures();
-
-            //accessDatabases();
             accessFeatureServices();
         } catch (IOException e) {
             e.printStackTrace();

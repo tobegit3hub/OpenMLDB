@@ -12,33 +12,26 @@ public class MultiTableMultiFeatureViewExample {
 
         try {
             // Create test db and tables
-            client.executeSql("CREATE DATABASE IF NOT EXISTS test_db");
-            client.executeSql("CREATE TABLE IF NOT EXISTS test_db.user (name string, age int)");
-            client.executeSql("CREATE TABLE IF NOT EXISTS test_db.trade (user_name string, amount float)");
+            client.executeSql("CREATE DATABASE IF NOT EXISTS t2v2");
+            client.executeSql("CREATE TABLE IF NOT EXISTS t2v2.user (name string, age int)");
+            client.executeSql("CREATE TABLE IF NOT EXISTS t2v2.trade (user_name string, amount float)");
 
             // Create entity
-            client.createEntity("name", "name");
+            client.createEntity("t2v2_name", "name");
 
             // Create feature view
-            client.createFeatureView("featureview1", "name", "test_db", "SELECT age + 10 AS new_age FROM test_db.user");
-            client.createFeatureView("featureview2", "name", "test_db", "SELECT name, age, amount FROM test_db.user LAST JOIN test_db.trade ON test_db.user.name = test_db.trade.user_name");
+            client.createFeatureView("t2v2_v1", "t2v2_name", "t2v2", "SELECT age + 10 AS new_age FROM user");
+            client.createFeatureView("t2v2_v2", "t2v2_name", "t2v2", "SELECT name, age, amount FROM user LAST JOIN trade ON user.name = trade.user_name");
 
             // Create feature service
-            client.createFeatureService("featureservice1", "featureview1, featureview2");
+            client.createFeatureService("t2v2_s1", "t2v2_v1, t2v2_v2");
+
+            // Insert test data for trade table
+            // client.executeSql("INSERT INTO t2v2.trade VALUES (\"foo\", 11.1)");
 
             // Test feature service
-            HttpResponse response = client.requestFeatureService("featureservice1", "{\"input\": [[\"abc\", 22]]}");
+            HttpResponse response = client.requestFeatureService("t2v2_s1", "{\"input\": [[\"foo\", 22]]}");
             client.printResponse(response);
-
-            // Cleanup resources
-            client.deleteFeatureService("featureservice1");
-            client.deleteFeatureView("featureview1");
-            client.deleteFeatureView("featureview2");
-            client.deleteEntity("name");
-            client.executeSql("DROP TABLE test_db.user");
-            client.executeSql("DROP TABLE test_db.trade");
-            client.executeSql("DROP DATABASE test_db");
-
         } catch (IOException e) {
             e.printStackTrace();
         }

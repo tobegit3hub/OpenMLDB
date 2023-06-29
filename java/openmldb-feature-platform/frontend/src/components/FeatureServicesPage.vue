@@ -8,6 +8,9 @@
     <template #name="{ text, record }">
       <router-link :to="`/featureservices/${record.name}`">{{ text }}</router-link>
     </template>
+    <template #db="{ text, record }">
+      <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
+    </template>  
     <!-- The delete column-->
     <template v-slot:custom="scope">
       <a-popconfirm
@@ -83,7 +86,7 @@
   <br />
   <div>
     <h1>Test Feature Service</h1>
-    <p>Follow the <a target="_blank" href="https://openmldb.ai/docs/zh/main/quickstart/sdk/rest_api.html#id3">docs of OpenMLDB APIServer</a> to prepare test data. eg. {"input": [["abc", 123]]}</p>
+    <p>Follow the <a target="_blank" href="https://openmldb.ai/docs/zh/main/quickstart/sdk/rest_api.html#id3">docs of OpenMLDB APIServer</a> to prepare test data. eg. {"input": [["foo", 123]]}</p>
     <!-- Test form -->
     <a-form
       :model="testFormState"
@@ -142,6 +145,7 @@ export default {
         title: 'Database',
         dataIndex: 'db',
         key: 'db',
+        slots: { customRender: 'db' }
       },
       {
         title: 'SQL',

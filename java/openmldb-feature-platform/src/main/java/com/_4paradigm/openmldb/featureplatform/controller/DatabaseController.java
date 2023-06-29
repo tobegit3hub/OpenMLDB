@@ -23,7 +23,7 @@ public class DatabaseController {
         return databaseService.getDatabases();
     }
 
-    @GetMapping("/{db}")
+    @GetMapping("/{db}/tables")
     public List<SimpleTableInfo> getDatabaseTables(@PathVariable String db) {
         return databaseService.getDatabaseTables(db);
     }

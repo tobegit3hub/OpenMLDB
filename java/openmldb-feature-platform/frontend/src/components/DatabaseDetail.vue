@@ -42,7 +42,7 @@ export default {
     }];
 
     const initData = () => {
-      axios.get(`/api/databases/${props.db}`)
+      axios.get(`/api/databases/${props.db}/tables`)
           .then(response => {
             tables.value = response.data;
           })
