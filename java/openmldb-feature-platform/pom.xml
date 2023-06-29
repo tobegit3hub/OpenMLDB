@@ -82,16 +82,13 @@
     <!-- OpenMLDB -->
     <dependency>
       <groupId>com.4paradigm.openmldb</groupId>
-      <artifactId>openmldb-jdbc</artifactId>
-      <version>0.7.0-SNAPSHOT</version>
-      <!-- TODO: Upgrade for mergeSQL API -->
-      <!-- <version>0.8.0</version> -->
+      <artifactId>openmldb-native</artifactId>
+      <version>0.8.1-allinone</version>
     </dependency>
     <dependency>
       <groupId>com.4paradigm.openmldb</groupId>
-      <artifactId>openmldb-native</artifactId>
-      <version>0.7.0-SNAPSHOT</version>
-      <!-- <version>0.8.0-allinone</version> -->
+      <artifactId>openmldb-jdbc</artifactId>
+      <version>0.8.1</version>
     </dependency>
 
   </dependencies>
