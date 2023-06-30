@@ -86,8 +86,8 @@ public class UseFeaturePlatformClient {
 
         //client.createFeatureServiceFromDeployment("deploy8", "db1", "demo_deploy8");
 
-        response = client.getFeatureServiceRequestSchema("s1");
-        client.printResponse(response);
+        String schema = client.getFeatureServiceRequestSchema("s1");
+        client.printResponse(schema);
 
         List<String> tables = client.getFeatureServiceDependentTables("featureservice1");
         System.out.println(tables);
@@ -95,8 +95,8 @@ public class UseFeaturePlatformClient {
         String demoData = client.getFeatureServiceRequestDemoData("featureservice1");
         System.out.println(demoData);
 */
-        HttpResponse response = client.getFeatureServiceOutputSchema("demo_table_deploy");
-        client.printResponse(response);
+        String schema = client.getFeatureServiceOutputSchema("demo_table_deploy");
+        System.out.println(schema);
     }
 
     public static void requestApiServer() throws IOException {

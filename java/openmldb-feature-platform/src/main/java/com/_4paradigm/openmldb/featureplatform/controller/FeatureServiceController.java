@@ -92,4 +92,15 @@ public class FeatureServiceController {
             return null;
         }
     }
+
+    @GetMapping("/{name}/output/schema")
+    public ResponseEntity<String> getOutputSchema(@PathVariable String name) {
+        try {
+            Schema schema = featureServiceService.getOutputSchema(name);
+            return new ResponseEntity<>(schema.toString(), HttpStatus.OK);
+        } catch (SQLException e) {
+            return new ResponseEntity<>("Success to delete", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

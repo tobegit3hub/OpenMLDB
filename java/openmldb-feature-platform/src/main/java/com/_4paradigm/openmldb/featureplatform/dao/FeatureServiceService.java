@@ -364,4 +364,13 @@ public class FeatureServiceService {
         }
         return fullNameTables;
     }
+
+    public Schema getOutputSchema(String serviceName) throws SQLException {
+        FeatureService featureService = getFeatureServiceByName(serviceName);
+        String sql = featureService.getSql();
+        String db = featureService.getDb();
+
+        Schema schema = SqlClusterExecutor.genOutputSchema(sql, db, OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor));
+        return schema;
+    }
 }

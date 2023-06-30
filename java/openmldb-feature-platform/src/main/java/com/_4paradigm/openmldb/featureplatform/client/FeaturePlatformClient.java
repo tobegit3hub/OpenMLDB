@@ -275,18 +275,18 @@ public class FeaturePlatformClient {
         return true;
     }
 
-    public HttpResponse getFeatureServiceRequestSchema(String name) throws IOException {
+    public String getFeatureServiceRequestSchema(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name + "/request/schema";
         HttpGet getRequest = new HttpGet(endpoint);
         HttpResponse getResponse = httpClient.execute(getRequest);
-        return getResponse;
+        return EntityUtils.toString(getResponse.getEntity());
     }
 
-    public HttpResponse getFeatureServiceOutputSchema(String name) throws IOException {
+    public String getFeatureServiceOutputSchema(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name + "/output/schema";
         HttpGet getRequest = new HttpGet(endpoint);
         HttpResponse getResponse = httpClient.execute(getRequest);
-        return getResponse;
+        return EntityUtils.toString(getResponse.getEntity());
     }
 
     public String getFeatureServiceRequestDemoData(String name) throws IOException {
