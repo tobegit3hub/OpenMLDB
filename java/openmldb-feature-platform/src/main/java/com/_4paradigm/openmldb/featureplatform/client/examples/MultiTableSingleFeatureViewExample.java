@@ -2,13 +2,13 @@ package com._4paradigm.openmldb.featureplatform.client.examples;
 
 import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
 import org.apache.http.HttpResponse;
-
+import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
 public class MultiTableSingleFeatureViewExample {
 
     public static void main(String[] args) {
-        FeaturePlatformClient client = new FeaturePlatformClient("127.0.0.1", 8888);
+        FeaturePlatformClient client = new FeaturePlatformClient("172.27.234.77", 8888);
 
         try {
             // Create test db and tables
@@ -27,7 +27,7 @@ public class MultiTableSingleFeatureViewExample {
 
             // Test feature service
             HttpResponse response = client.requestFeatureService("t2v1_s1", "{\"input\": [[\"abc\", 22]]}");
-            client.printResponse(response);
+            System.out.println(EntityUtils.toString(response.getEntity()));
         } catch (IOException e) {
             e.printStackTrace();
         }

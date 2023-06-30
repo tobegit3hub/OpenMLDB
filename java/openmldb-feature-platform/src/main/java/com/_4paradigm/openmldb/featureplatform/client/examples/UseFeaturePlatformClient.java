@@ -66,7 +66,7 @@ public class UseFeaturePlatformClient {
         System.out.println(tables);
     }
 
-    public static void accessFeatureServices() throws IOException {
+    public static void accessFeatureServices() throws IOException {/*
         // List all feature services
         List<FeatureService> featureServices = client.getFeatureServices();
         System.out.println(featureServices);
@@ -94,10 +94,13 @@ public class UseFeaturePlatformClient {
 
         String demoData = client.getFeatureServiceRequestDemoData("featureservice1");
         System.out.println(demoData);
+*/
+        HttpResponse response = client.getFeatureServiceOutputSchema("demo_table_deploy");
+        client.printResponse(response);
     }
 
     public static void requestApiServer() throws IOException {
-        HttpResponse response = client.requestApiServer("http://127.0.0.1:9080", "service1", "{\"input\": [[\"abc\", 22]]}");
+        HttpResponse response = client.requestApiServer("http://127.0.0.1:8090", "t2v1_s1", "{\"input\": [[\"abc\", 22]]}");
         client.printResponse(response);
     }
 

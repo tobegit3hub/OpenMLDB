@@ -282,6 +282,13 @@ public class FeaturePlatformClient {
         return getResponse;
     }
 
+    public HttpResponse getFeatureServiceOutputSchema(String name) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/output/schema";
+        HttpGet getRequest = new HttpGet(endpoint);
+        HttpResponse getResponse = httpClient.execute(getRequest);
+        return getResponse;
+    }
+
     public String getFeatureServiceRequestDemoData(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name + "/request/demo";
         HttpGet getRequest = new HttpGet(endpoint);
@@ -316,8 +323,9 @@ public class FeaturePlatformClient {
         return postResponse;
     }
 
-    public HttpResponse requestApiServer(String apiServerEndpoint, String featureService, String requestData) throws IOException {
-        String endpoint = String.format("%s/dbs/SYSTEM_FEATURE_PLATFORM/deployments/FEATURE_PLATFORM_%s", apiServerEndpoint, featureService);
+    public HttpResponse requestApiServer(String apiServerEndpoint, String featureServiceName, String requestData) throws IOException {
+        FeatureService featureService = getFeatureService(featureServiceName);
+        String endpoint = String.format("%s/dbs/%s/deployments/%s", apiServerEndpoint, featureService.getDb(), featureService.getDeployment());
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");
         postRequest.setEntity(new StringEntity(requestData));

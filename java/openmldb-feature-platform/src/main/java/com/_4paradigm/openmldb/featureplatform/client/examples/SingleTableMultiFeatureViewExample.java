@@ -2,7 +2,7 @@ package com._4paradigm.openmldb.featureplatform.client.examples;
 
 import com._4paradigm.openmldb.featureplatform.client.FeaturePlatformClient;
 import org.apache.http.HttpResponse;
-
+import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 
 public class SingleTableMultiFeatureViewExample {
@@ -27,7 +27,7 @@ public class SingleTableMultiFeatureViewExample {
 
             // Test feature service
             HttpResponse response = client.requestFeatureService("t1v2_s1", "{\"input\": [[\"abc\", 22]]}");
-            client.printResponse(response);
+            System.out.println(EntityUtils.toString(response.getEntity()));
         } catch (IOException e) {
             e.printStackTrace();
         }
