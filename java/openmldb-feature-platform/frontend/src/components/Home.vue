@@ -7,30 +7,48 @@
   <a-layout-sider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
     <a-menu theme="dark" mode="inline" class="navi-menu">
       <a-menu-item key="1">
-        <router-link to='/'>{{ $t('Overview') }}</router-link>
+        <router-link to='/'>{{ $t('Feature Platform') }}</router-link>
       </a-menu-item>
-      <a-menu-item key="2">
-        <router-link to='/tables'>{{ $t('Feature Tables') }}</router-link>
-      </a-menu-item>
-      <a-menu-item key="3">
-        <router-link to='/entities'>{{ $t('Entities') }}</router-link>
-      </a-menu-item>
-      <a-menu-item key="4">
-        <router-link to='/features'>{{ $t('Features') }}</router-link>
-      </a-menu-item>
-      <a-menu-item key="5">
-        <router-link to='/featureviews'>{{ $t('Feature Views') }}</router-link>
-      </a-menu-item>
-      <a-menu-item key="6">
-        <router-link to='/featureservices'>{{ $t('Feature Services') }}</router-link>
-      </a-menu-item>
-      <a-menu-item key="7">
-        <router-link to='/sql'>{{ $t('SQL') }}</router-link>
-      </a-menu-item>
-      <a-menu-item key="8">
-        <router-link to='/tutorial'>{{ $t('Tutorial') }}</router-link>
-      </a-menu-item>
-      <a-sub-menu key="sub4">
+      <a-sub-menu key="data_management">
+        <template #title>{{ $t('Data Management') }}</template>
+        <a-menu-item key="2">
+          <router-link to='/tables'>{{ $t('Feature Tables') }}</router-link>
+        </a-menu-item>
+      </a-sub-menu>
+
+      <a-sub-menu key="feature_management">
+        <template #title>{{ $t('Feature Management') }}</template>
+        <a-menu-item key="3">
+          <router-link to='/entities'>{{ $t('Entities') }}</router-link>
+        </a-menu-item>
+        <a-menu-item key="4">
+          <router-link to='/features'>{{ $t('Features') }}</router-link>
+        </a-menu-item>
+        <a-menu-item key="5">
+          <router-link to='/featureviews'>{{ $t('Feature Views') }}</router-link>
+        </a-menu-item>
+      </a-sub-menu>
+
+      <a-sub-menu key="service_management">
+        <template #title>{{ $t('Service Management') }}</template>
+        <a-menu-item key="6">
+          <router-link to='/featureservices'>{{ $t('Feature Services') }}</router-link>
+        </a-menu-item>
+      </a-sub-menu>
+
+      <!--
+      <a-sub-menu key="others">
+        <template #title>{{ $t('Others') }}</template>
+          <a-menu-item key="7">
+          <router-link to='/sql'>{{ $t('SQL') }}</router-link>
+        </a-menu-item>
+        <a-menu-item key="8">
+          <router-link to='/tutorial'>{{ $t('Tutorial') }}</router-link>
+        </a-menu-item>
+      </a-sub-menu>
+      -->
+
+      <a-sub-menu key="languages">
         <template #title>{{ $t('Languages') }}</template>
         <a-menu-item key="100" @click="changeLocale('en')">English</a-menu-item>
         <a-menu-item key="101" @click="changeLocale('zh')">中文</a-menu-item>
@@ -63,10 +81,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.navi-menu .ant-menu-item {
-  font-size: 16px;
-  margin: 10px 10px;
-}
-</style>

@@ -32,7 +32,12 @@
     "Demo Data": "Demo Data",
     "From": "From",
     "Deployment": "Deployment",
+    "Deploy": "Deploy",
     "Test": "Test",
     "Execute": "Execute",
-    "Validate": "Validate"
+    "Validate": "Validate",
+    "Data Management": "Data Management",
+    "Feature Management": "Feature Management",
+    "Service Management": "Service Management",
+    "Others": "Others"
 }

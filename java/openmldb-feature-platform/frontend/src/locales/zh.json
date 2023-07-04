@@ -1,10 +1,10 @@
 {
-    "Overview": "概述",
+    "Overview": "概况",
     "Feature Tables": "特征表",
     "Tables": "表",
     "Table": "表",
-    "Entities": "实体",
-    "Entity": "实体",
+    "Entities": "特征实体",
+    "Entity": "特征实体",
     "Features": "特征",
     "Feature": "特征",
     "Feature Views": "特征视图",
@@ -31,8 +31,13 @@
     "Schema": "架构",
     "Demo Data": "演示数据",
     "From": "从",
-    "Deployment": "部署",
+    "Deployment": "Deployment",
+    "Deploy": "部署",
     "Test": "测试",
     "Execute": "执行",
-    "Validate": "验证"
+    "Validate": "验证",
+    "Data Management": "数据管理",
+    "Feature Management": "特征管理",
+    "Service Management": "服务管理",
+    "Others": "其他"
 }

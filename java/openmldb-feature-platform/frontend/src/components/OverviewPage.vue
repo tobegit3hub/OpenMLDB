@@ -46,6 +46,12 @@
     <h1>{{ $t('How to use') }} OpenMLDB {{ $t('Feature Platform') }}
  <a target="_blank" href="https://wiki.4paradigm.com/pages/viewpage.action?pageId=136663122">[{{ $t('docs') }}]</a></h1>
 
+      <div>
+        <a-button type="primary"><router-link to='/featureservices'>{{ $t('Create') }} {{ $t('Feature') }}</router-link></a-button>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices'>{{ $t('Deploy') }} {{ $t('Feature Service') }}</router-link></a-button>
+      </div>
+      <br/>
+
     <div>
     <a-steps v-model:current="currentStep">
       <a-step v-for="item in steps" :key="item.title" :title="item.title" />
