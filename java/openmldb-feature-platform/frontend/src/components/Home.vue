@@ -7,29 +7,34 @@
   <a-layout-sider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
     <a-menu theme="dark" mode="inline" class="navi-menu">
       <a-menu-item key="1">
-        <router-link to='/'>Overview</router-link>
+        <router-link to='/'>{{ $t('Overview') }}</router-link>
       </a-menu-item>
       <a-menu-item key="2">
-        <router-link to='/tables'>Tables</router-link>
+        <router-link to='/tables'>{{ $t('FeatureTables') }}</router-link>
       </a-menu-item>
       <a-menu-item key="3">
-        <router-link to='/entities'>Entities</router-link>
+        <router-link to='/entities'>{{ $t('Entities') }}</router-link>
       </a-menu-item>
       <a-menu-item key="4">
-        <router-link to='/features'>Features</router-link>
+        <router-link to='/features'>{{ $t('Features') }}</router-link>
       </a-menu-item>
       <a-menu-item key="5">
-        <router-link to='/featureviews'>Feature Views</router-link>
+        <router-link to='/featureviews'>{{ $t('FeatureViews') }}</router-link>
       </a-menu-item>
       <a-menu-item key="6">
-        <router-link to='/featureservices'>Feature Services</router-link>
+        <router-link to='/featureservices'>{{ $t('FeatureServices') }}</router-link>
       </a-menu-item>
       <a-menu-item key="7">
-        <router-link to='/sql'>SQL</router-link>
+        <router-link to='/sql'>{{ $t('SQL') }}</router-link>
       </a-menu-item>
       <a-menu-item key="8">
-        <router-link to='/tutorial'>Tutorial</router-link>
+        <router-link to='/tutorial'>{{ $t('Tutorial') }}</router-link>
       </a-menu-item>
+      <a-sub-menu key="sub4">
+        <template #title>{{ $t('Languages') }}</template>
+        <a-menu-item key="100" @click="changeLocale('en')">English</a-menu-item>
+        <a-menu-item key="101" @click="changeLocale('zh')">中文</a-menu-item>
+      </a-sub-menu>
     </a-menu>
   </a-layout-sider>
 
@@ -37,7 +42,6 @@
     <a-layout-content>
         <router-view></router-view>
     </a-layout-content>
-
     
     <a-layout-footer style="text-align: center">
       <br />
@@ -48,12 +52,17 @@
   </a-layout>
 
 </a-layout>
-
-
-
-
-
 </template>
+
+<script>
+export default {
+  methods: {
+    changeLocale(locale) {
+      this.$i18n.locale = locale;
+    }
+  }
+}
+</script>
 
 <style>
 .navi-menu .ant-menu-item {
