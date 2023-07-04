@@ -2,7 +2,7 @@
 
 <div>
   <br/>
-  <h1>Tutorial</h1>
+  <h1>{{ $t('Tutorial') }}</h1>
   <p>These show the basic cases of using OpenMLDB Feature Platform for feature extration.</p>
 
   <a-collapse v-model:activeKey="activeKey" accordion>
@@ -115,28 +115,14 @@ System.out.println(EntityUtils.toString(response.getEntity()));
 </template>
   
 <script>
-import axios from 'axios'
 import { message } from 'ant-design-vue';
 import { defineComponent } from 'vue';
-import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons-vue';
 
 export default {
   components() {
     return {
-      LeftCircleOutlined,
-      RightCircleOutlined,
     }
-  },
+  }
 
-  data() {
-    return {
-    };
-  },
-
-  mounted() {
-  },
-
-  methods: {
-  },
 };
 </script>

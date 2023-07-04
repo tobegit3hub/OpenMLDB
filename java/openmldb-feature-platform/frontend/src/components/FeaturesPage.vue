@@ -2,7 +2,7 @@
 
 <div>
   <br/>
-  <h1>Features</h1>
+  <h1>{{ $t('Features') }}</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="features" :loading="loading">
     <template #featureView="{ text, record }">

@@ -2,7 +2,7 @@
 
   <div>
     <br/>
-    <h1>Database: {{ db }}</h1>
+    <h1>{{ $t('Database') }}: {{ db }}</h1>
     <!-- Tables table -->
     <a-table :columns="columns" :data-source="tables">
       <template #table="{ text, record }">

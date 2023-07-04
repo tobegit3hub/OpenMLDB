@@ -2,7 +2,7 @@
 <div>
 
   <br/>
-  <h1>Feature: {{ data.featureName }} </h1>
+  <h1>{{ $t('Feature') }}: {{ data.featureName }} </h1>
   <a-descriptions layout="vertical" bordered>
     <a-descriptions-item label="Feature view name"><router-link :to="`/featureviews/${data.featureViewName}`">{{ data.featureViewName }}</router-link></a-descriptions-item>
     <a-descriptions-item label="Feature name">{{ data.featureName }}</a-descriptions-item>

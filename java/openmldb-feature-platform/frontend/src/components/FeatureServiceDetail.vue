@@ -2,7 +2,7 @@
   <div>
   
     <br/>
-    <h1>Feature Service: {{ data.name }} </h1>
+    <h1>{{ $t('Feature Service') }}: {{ data.name }} </h1>
     <a-descriptions layout="vertical" bordered>
       <a-descriptions-item label="Name"> {{ data.name }}</a-descriptions-item>
       <a-descriptions-item label="Feature list">{{ data.featureList }}</a-descriptions-item>
@@ -12,7 +12,7 @@
     </a-descriptions>
   
     <br/><br/>
-    <h1>Features</h1>
+    <h1>{{ $t('Features') }}</h1>
     <a-table :columns="columns" :data-source="features">
       <template #featureView="{ text, record }">
         <router-link :to="`/featureviews/${record.featureViewName}`">{{ text }}</router-link>
@@ -23,7 +23,7 @@
     </a-table>
 
     <br/>
-    <h1>Dependent Tables</h1>
+    <h1>{{ $t('Dependent') }} {{ $t('Tables') }}</h1>
     <a-table :columns="tableColumns" :data-source="tables">
       <template #db="{ text, record }">
         <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
@@ -34,10 +34,10 @@
     </a-table>
 
     <br/>
-    <h1>Request Schema</h1>
+    <h1>{{ $t('Request') }} {{ $t('Schema') }}</h1>
     <p>{{ requestSchema }}</p>
 
-    <h1>Request Demo Data</h1>
+    <h1>{{ $t('Request') }} {{ $t('Demo Data') }}</h1>
     <p>{{ requestDemoData }}</p>
 
   </div>

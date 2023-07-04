@@ -10,7 +10,7 @@
         <router-link to='/'>{{ $t('Overview') }}</router-link>
       </a-menu-item>
       <a-menu-item key="2">
-        <router-link to='/tables'>{{ $t('FeatureTables') }}</router-link>
+        <router-link to='/tables'>{{ $t('Feature Tables') }}</router-link>
       </a-menu-item>
       <a-menu-item key="3">
         <router-link to='/entities'>{{ $t('Entities') }}</router-link>
@@ -19,10 +19,10 @@
         <router-link to='/features'>{{ $t('Features') }}</router-link>
       </a-menu-item>
       <a-menu-item key="5">
-        <router-link to='/featureviews'>{{ $t('FeatureViews') }}</router-link>
+        <router-link to='/featureviews'>{{ $t('Feature Views') }}</router-link>
       </a-menu-item>
       <a-menu-item key="6">
-        <router-link to='/featureservices'>{{ $t('FeatureServices') }}</router-link>
+        <router-link to='/featureservices'>{{ $t('Feature Services') }}</router-link>
       </a-menu-item>
       <a-menu-item key="7">
         <router-link to='/sql'>{{ $t('SQL') }}</router-link>

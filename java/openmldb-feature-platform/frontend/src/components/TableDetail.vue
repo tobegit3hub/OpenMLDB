@@ -2,7 +2,7 @@
 <div>
 
   <br/>
-  <h1>Table: {{ data.table }} </h1>
+  <h1>{{ $t('Table') }}: {{ data.table }} </h1>
   <a-descriptions layout="vertical" bordered>
     <a-descriptions-item label="Database"> 
       <router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link>

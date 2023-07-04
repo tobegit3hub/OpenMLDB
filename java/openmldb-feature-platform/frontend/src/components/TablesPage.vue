@@ -2,7 +2,7 @@
 
 <div>
   <br/>
-  <h1>Databases</h1>
+  <h1>{{ $t('Databases') }}</h1>
   <!-- Databases table -->
   <a-table :columns="databaseColumns" :data-source="databases">
     <template #database="{ text, record }">
@@ -10,7 +10,7 @@
     </template>
   </a-table>
 
-  <h1>Tables</h1>
+  <h1>{{ $t('Tables') }}</h1>
   <!-- Tables table -->
   <a-table :columns="columns" :data-source="tables">
     <template #database="{ text, record }">
@@ -23,7 +23,7 @@
 
   <br />
   <div>
-    <h1>Update Tables</h1>
+    <h1>{{ $t('Update') }} {{ $t('Tables') }}</h1>
     <a-typography>
       <a-typography-paragraph>
         <p>Use SQL to create or delete the databases or tables.</p>
@@ -46,7 +46,7 @@
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
       </a-form-item>
     </a-form>
   </div>

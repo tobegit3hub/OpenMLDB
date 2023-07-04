@@ -2,7 +2,7 @@
 
 <div>
   <br/>
-  <h1>Feature Services</h1>
+  <h1>{{ $t('Feature Services') }}</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="featureServices" :loading="loading">
     <template #name="{ text, record }">
@@ -16,14 +16,14 @@
       <a-popconfirm
           title="Sure to delete?"
           @confirm="handleDelete(scope.record.name)">
-        <a>Delete</a>
+        <a>{{ $t('Delete') }}</a>
       </a-popconfirm>
     </template>
   </a-table>
 
   <br />
   <div>
-    <h1>Create Feature Service</h1>
+    <h1>{{ $t('Create') }} {{ $t('Feature Service') }}</h1>
     <!-- Create form -->
     <a-form
       :model="formState"
@@ -44,14 +44,14 @@
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
       </a-form-item>
     </a-form>
   </div>
 
   <br />
   <div>
-    <h1>Create From Deployment</h1>
+    <h1>{{ $t('Create') }} {{ $t('From') }} {{ $t('Deployment') }}</h1>
     <!-- Create form deployment -->
     <a-form
       :model="createFromDeploymentFormState"
@@ -78,14 +78,14 @@
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
       </a-form-item>
     </a-form>
   </div>
 
   <br />
   <div>
-    <h1>Test Feature Service</h1>
+    <h1>{{ $t('Test') }} {{ $t('Feature Service') }}</h1>
     <p>Follow the <a target="_blank" href="https://openmldb.ai/docs/zh/main/quickstart/sdk/rest_api.html#id3">docs of OpenMLDB APIServer</a> to prepare test data. eg. {"input": [["foo", 123]]}</p>
     <!-- Test form -->
     <a-form
@@ -109,7 +109,7 @@
       </a-form-item>
       
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('') }}Submit</a-button>
       </a-form-item>
     </a-form>
   </div>

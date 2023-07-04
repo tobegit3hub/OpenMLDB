@@ -2,7 +2,7 @@
   <div>
   
     <br/>
-    <h1>Feature View: {{ data.name }} </h1>
+    <h1>{{ $t('Feature View') }}: {{ data.name }} </h1>
     <a-descriptions layout="vertical" bordered>
       <a-descriptions-item label="Name"> {{ data.name }} </a-descriptions-item>
       <a-descriptions-item label="Entities">
@@ -17,7 +17,7 @@
     </a-descriptions>
   
     <br/><br/>
-    <h1>Features</h1>
+    <h1>{{ $t('Features') }}</h1>
     <a-table :columns="columns" :data-source="features">
       <template #featureView="{ text, record }">
         <router-link :to="`/featureviews/${record.featureViewName}`">{{ text }}</router-link>
@@ -28,7 +28,7 @@
     </a-table>
 
     <br/>
-    <h1>Dependent Tables</h1>
+    <h1>{{ $t('Dependent') }} {{ $t('Tables') }}</h1>
     <a-table :columns="tableColumns" :data-source="tables">
       <template #db="{ text, record }">
         <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>

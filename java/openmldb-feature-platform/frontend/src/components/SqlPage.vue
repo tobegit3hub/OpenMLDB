@@ -3,7 +3,7 @@
 <div>
   <br />
   <div>
-    <h1>Execute SQL</h1>
+    <h1>{{ $t('Execute') }} {{ $t('SQL') }}</h1>
     <a-typography>
       <a-typography-paragraph>
         <p>Execute SQLs in OpenMLDB.</p>
@@ -25,14 +25,14 @@
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
       </a-form-item>
     </a-form>
   </div>
 
   <br />
   <div>
-    <h1>Validate SQL</h1>
+    <h1>{{ $t('Validate') }} {{ $t('SQL') }}</h1>
     <p>Validate DQL SQLs for online request mode.</p>
     <p>eg. SELECT * from entities</p>
     <!-- Validate SQL form -->
@@ -49,7 +49,7 @@
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
       </a-form-item>
     </a-form>
   </div>

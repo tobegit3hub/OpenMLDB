@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  
+
   <div>
     <br />
     <a-image
@@ -11,30 +11,30 @@
       style="display: inline-block; vertical-align: middle;"
     />
     <h1 style="display: inline-block; vertical-align: middle; font-size: 30px;">
-      &nbsp;&nbsp;&nbsp;Feature Platform Overview
+      &nbsp;&nbsp;&nbsp;{{ $t('Feature Platform') }}
     </h1>
 
     <br/><br/>
     <a-row>
     <a-col :span="11">
-      <h2><router-link to='/tables'>Tables ({{ tableCount }})</router-link></h2>
+      <h2><router-link to='/tables'>{{ $t('Feature Tables') }} ({{ tableCount }})</router-link></h2>
       <a-table :pagination="{ pageSize: 3 }" :columns="tableColumns" :data-source="tables" />
     </a-col>
     
     <a-col :span="1"></a-col>
     <a-col :span="12">
-      <h2><router-link to='/features'>Features ({{ featureCount }})</router-link></h2>
+      <h2><router-link to='/features'>{{ $t('Features') }} ({{ featureCount }})</router-link></h2>
       <a-table :pagination="{ pageSize: 3 }" :columns="featureColumns" :data-source="features" />
     </a-col>
 
     <a-col :span="11">
-      <h2><router-link to='/featureviews'>Feature Views ({{ featureViewCount }})</router-link></h2>
+      <h2><router-link to='/featureviews'>{{ $t('Feature Views') }} ({{ featureViewCount }})</router-link></h2>
       <a-table :pagination="{ pageSize: 3 }" :columns="featureViewColumns" :data-source="featureviews" />
     </a-col>
 
     <a-col :span="1"></a-col>
     <a-col :span="12">
-      <h2><router-link to='/featureservices'>Feature Services ({{ featureServiceCount }})</router-link></h2>
+      <h2><router-link to='/featureservices'>{{ $t('Feature Services') }} ({{ featureServiceCount }})</router-link></h2>
       <a-table :pagination="{ pageSize: 3 }" :columns="featureServiceColumns" :data-source="featureservices" />
     </a-col>
   </a-row>
@@ -43,7 +43,8 @@
   <!-- Tutorial Steps-->
   <br/><br/><br/>
   <div>
-    <h1>How to use OpenMLDB Feature Platform <a  target="_blank" href="https://wiki.4paradigm.com/pages/viewpage.action?pageId=136663122">[docs]</a></h1>
+    <h1>{{ $t('How to use') }} OpenMLDB {{ $t('Feature Platform') }}
+ <a target="_blank" href="https://wiki.4paradigm.com/pages/viewpage.action?pageId=136663122">[{{ $t('docs') }}]</a></h1>
 
     <div>
     <a-steps v-model:current="currentStep">
@@ -53,14 +54,14 @@
       {{ steps[currentStep].content }}
     </div>
     <div class="steps-action">
-      <a-button v-if="currentStep < steps.length - 1" type="primary" @click="next">Next</a-button>
+      <a-button v-if="currentStep < steps.length - 1" type="primary" @click="next">{{ $t('Next') }}</a-button>
       <a-button
         v-if="currentStep == steps.length - 1"
         type="primary"
       >
-        Done
+      {{ $t('Done') }}
       </a-button>
-      <a-button v-if="currentStep > 0" style="margin-left: 8px" @click="prev">Previous</a-button>
+      <a-button v-if="currentStep > 0" style="margin-left: 8px" @click="prev">{{ $t('Previous') }}</a-button>
     </div>
   </div>
   </div>

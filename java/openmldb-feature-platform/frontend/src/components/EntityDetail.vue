@@ -2,7 +2,7 @@
 <div>
 
   <br/>
-  <h1>Entity: {{ data.name }} </h1>
+  <h1>{{ $t('Entity') }}: {{ data.name }} </h1>
   <a-descriptions layout="vertical" bordered>
     <a-descriptions-item label="Name"> {{ data.name }}</a-descriptions-item>
     <a-descriptions-item label="Primary Keys">{{ data.primaryKeys }}</a-descriptions-item>

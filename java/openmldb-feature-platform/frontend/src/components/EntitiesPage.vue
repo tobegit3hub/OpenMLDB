@@ -2,7 +2,7 @@
 
 <div>
   <br/>
-  <h1>Entities</h1>
+  <h1>{{ $t('Entities') }}</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="entities" :loading="loading">
     <template #name="{ text, record }">
@@ -13,14 +13,14 @@
       <a-popconfirm
           title="Sure to delete?"
           @confirm="handleDelete(scope.record.name)">
-        <a>Delete</a>
+        <a>{{ $t('Delete') }}</a>
       </a-popconfirm>
     </template>
   </a-table>
 
   <br />
   <div>
-    <h1>Create Entity</h1>
+    <h1>{{ $t('Create') }} {{ $t('Entity') }}</h1>
     <!-- Create form -->
     <a-form
       :model="formState"

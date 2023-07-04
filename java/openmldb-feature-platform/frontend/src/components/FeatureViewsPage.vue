@@ -2,7 +2,7 @@
 
 <div>
   <br/>
-  <h1>Feature Views</h1>
+  <h1>{{ $t('Feature Views') }}</h1>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="featureViews" :loading="loading">
     <template #name="{ text, record }">
@@ -16,14 +16,14 @@
       <a-popconfirm
           title="Sure to delete?"
           @confirm="handleDelete(scope.record.name)">
-        <a>Delete</a>
+        <a>{{ $t('Delete') }}</a>
       </a-popconfirm>
     </template>
   </a-table>
 
   <br />
   <div>
-    <h1>Create Feature View</h1>
+    <h1>{{ $t('Create') }} {{ $t('Feature View') }}</h1>
     <!-- Create form -->
     <a-form
       :model="formState"
@@ -56,7 +56,7 @@
       </a-form-item>
       
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">Submit</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
       </a-form-item>
     </a-form>
   </div>
