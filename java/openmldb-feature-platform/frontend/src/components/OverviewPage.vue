@@ -28,13 +28,20 @@
     </a-col>
 
     <a-col :span="11">
-      <h2><router-link to='/featureviews'>{{ $t('Feature Views') }} ({{ featureViewCount }})</router-link></h2>
+      <h2>
+        <router-link to='/featureviews'>{{ $t('Feature Views') }} ({{ featureViewCount }})</router-link>
+        &nbsp;&nbsp;<a-button type="primary"><router-link to='/features/create'>{{ $t('Create Feature') }}</router-link></a-button>
+      </h2>
+      
       <a-table :pagination="{ pageSize: 3 }" :columns="featureViewColumns" :data-source="featureviews" />
     </a-col>
 
     <a-col :span="1"></a-col>
     <a-col :span="12">
-      <h2><router-link to='/featureservices'>{{ $t('Feature Services') }} ({{ featureServiceCount }})</router-link></h2>
+      <h2>
+        <router-link to='/featureservices'>{{ $t('Feature Services') }} ({{ featureServiceCount }})</router-link>
+        &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/deploy'>{{ $t('Deploy Service') }}</router-link></a-button>
+      </h2>
       <a-table :pagination="{ pageSize: 3 }" :columns="featureServiceColumns" :data-source="featureservices" />
     </a-col>
   </a-row>
@@ -45,13 +52,8 @@
   <div>
     <h1>{{ $t('How to use') }} OpenMLDB {{ $t('Feature Platform') }}
  <a target="_blank" href="https://wiki.4paradigm.com/pages/viewpage.action?pageId=136663122">[{{ $t('docs') }}]</a></h1>
-
-      <div>
-        <a-button type="primary"><router-link to='/featureservices'>{{ $t('Create') }} {{ $t('Feature') }}</router-link></a-button>
-        &nbsp;&nbsp;&nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices'>{{ $t('Deploy') }} {{ $t('Feature Service') }}</router-link></a-button>
-      </div>
-      <br/>
-
+    
+    <br/>
     <div>
     <a-steps v-model:current="currentStep">
       <a-step v-for="item in steps" :key="item.title" :title="item.title" />

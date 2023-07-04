@@ -42,6 +42,16 @@ public class FeatureViewController {
         }
     }
 
+    @PostMapping("/validate")
+    public ResponseEntity<String> validateFeatureView(@RequestBody FeatureView featureView) {
+        try {
+            String featureNames = featureViewService.validateFeatureView(featureView);
+            return new ResponseEntity<>(featureNames, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("Fail to validate, exception: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/{name}")
     public ResponseEntity<String> deleteFeatureView(@PathVariable String name) {
         if (featureViewService.deleteFeatureView(name)) {

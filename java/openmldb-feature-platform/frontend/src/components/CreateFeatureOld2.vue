@@ -137,7 +137,7 @@ export default {
         message.success(`Success to add feature view ${this.formState.name}`);
 
         // Redirect to FeatureView detail page
-        this.$router.push('/featureviews/${this.formState.name}');
+        this.$router.push(`/featureviews/${this.formState.name}`);
       })
       .catch(error => {
         message.error(error.message);

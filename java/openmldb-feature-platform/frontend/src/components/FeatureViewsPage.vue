@@ -21,46 +21,6 @@
     </template>
   </a-table>
 
-  <br />
-  <div>
-    <h1>{{ $t('Create') }} {{ $t('Feature View') }}</h1>
-    <!-- Create form -->
-    <a-form
-      :model="formState"
-      name="basic"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
-      @submit="handleSubmit">
-      <a-form-item
-        label="Name"
-        :rules="[{ required: true, message: 'Please input name!' }]">
-        <a-input v-model:value="formState.name" />
-      </a-form-item>
-
-      <a-form-item
-        label="Entity names"
-        :rules="[{ required: true, message: 'Please input entity names!' }]">
-        <a-input v-model:value="formState.entityNames" />
-      </a-form-item>
-
-      <a-form-item
-        label="Database"
-        :rules="[{ required: true, message: 'Please input database!' }]">
-        <a-input v-model:value="formState.db" />
-      </a-form-item>
-
-      <a-form-item
-        label="SQL"
-        :rules="[{ required: true, message: 'Please input SQL!' }]">
-        <a-input v-model:value="formState.sql" />
-      </a-form-item>
-      
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
-      </a-form-item>
-    </a-form>
-  </div>
-
 </div>
 </template>
   
@@ -113,12 +73,6 @@ export default {
         slots: { customRender: 'custom' },
       }],
 
-      formState: {
-        name: '',
-        entityNames: '',
-        db: '',
-        sql: ''
-      }
     };
   },
 
@@ -140,22 +94,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-
-    handleSubmit() {
-      axios.post(`/api/featureviews`, {
-        "name": this.formState.name,
-        "entityNames": this.formState.entityNames,
-        "db": this.formState.db,
-        "sql": this.formState.sql
-      })
-      .then(response => {
-        message.success(`Success to add feature view ${this.formState.name}`);
-        this.initData();
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
     },
 
     handleDelete(name) {

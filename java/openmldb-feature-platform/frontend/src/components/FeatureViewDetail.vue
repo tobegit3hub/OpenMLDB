@@ -2,7 +2,10 @@
   <div>
   
     <br/>
-    <h1>{{ $t('Feature View') }}: {{ data.name }} </h1>
+    <h1>
+      {{ $t('Feature View') }}: {{ data.name }} 
+      &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/deploy'>{{ $t('Deploy Service') }}</router-link></a-button>
+    </h1>
     <a-descriptions layout="vertical" bordered>
       <a-descriptions-item label="Name"> {{ data.name }} </a-descriptions-item>
       <a-descriptions-item label="Entities">
@@ -38,6 +41,7 @@
       </template>
     </a-table>
   </div>
+
   </template>
     
   <script>

@@ -9,6 +9,8 @@
     "Feature": "Features",
     "Feature Views": "Feature Views",
     "Feature View": "Feature View",
+    "Feature View Name": "Feature View Name",
+    "Feature List": "Feature List",
     "Feature Services": "Feature Services",
     "Feature Service": "Feature Service",
     "SQL": "SQL",
@@ -39,5 +41,8 @@
     "Data Management": "Data Management",
     "Feature Management": "Feature Management",
     "Service Management": "Service Management",
-    "Others": "Others"
+    "Others": "Others",
+    "Create Feature": "Create Feature",
+    "Deploy Service": "Deploy Service",
+    "Test Service": "Test Service"
 }

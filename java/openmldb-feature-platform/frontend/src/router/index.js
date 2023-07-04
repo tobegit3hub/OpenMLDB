@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import OverviewPage from '../components/OverviewPage.vue'
 import TablesPage from '../components/TablesPage.vue'
@@ -14,9 +14,12 @@ import EntityDetail from '../components/EntityDetail.vue'
 import FeatureDetail from '../components/FeatureDetail.vue'
 import FeatureViewDetail from '../components/FeatureViewDetail.vue'
 import FeatureServiceDetail from '../components/FeatureServiceDetail.vue'
+import CreateFeature from '../components/CreateFeature.vue'
+import DeployFeatureService from '../components/DeployFeatureService.vue'
+import TestFeatureService from '../components/TestFeatureService.vue'
 
 const router = createRouter({
-  history: createWebHistory("/"),
+  history: createWebHashHistory("/"),
   routes: [
     { path: '/', component: OverviewPage },
     { path: '/tables', component: TablesPage },
@@ -25,10 +28,13 @@ const router = createRouter({
     { path: '/entities', component: EntitiesPage},
     { path: '/entities/:name', component: EntityDetail, props: true },
     { path: '/features', component: FeaturesPage},
+    { path: '/features/create', component: CreateFeature},
     { path: '/features/:featureViewName/:featureName', component: FeatureDetail, props: true },
     { path: '/featureviews', component: FeatureViewsPage},
     { path: '/featureviews/:name', component: FeatureViewDetail, props: true },
     { path: '/featureservices', component: FeatureServicesPage},
+    { path: '/featureservices/deploy', component: DeployFeatureService},
+    { path: '/featureservices/test', component: TestFeatureService},
     { path: '/featureservices/:name', component: FeatureServiceDetail, props: true },
     { path: '/sql', component: SqlPage},
     { path: '/tutorial', component: TutorialPage},

@@ -5,6 +5,61 @@
   <div>
     <h1>{{ $t('Create Feature') }}</h1>
     <!-- Create form -->
+
+    <div>
+    <a-steps :current="currentStep">
+      <a-step title="Step 1" />
+      <a-step title="Step 2" />
+      <a-step title="Step 3" />
+    </a-steps>
+
+    <div v-if="currentStep === 0">
+      <!-- Step 1 Form Fields -->
+      <a-form-item label="Field 1">
+        <a-input v-model="form.field1" />
+      </a-form-item>
+      <a-form-item label="Field 2">
+        <a-input v-model="form.field2" />
+      </a-form-item>
+
+      <div style="margin-top: 16px;">
+        <a-button type="primary" @click="nextStep">Next</a-button>
+      </div>
+    </div>
+
+    <div v-if="currentStep === 1">
+      <!-- Step 2 Form Fields -->
+      <a-form-item label="Field 3">
+        <a-input v-model="form.field3" />
+      </a-form-item>
+      <a-form-item label="Field 4">
+        <a-input v-model="form.field4" />
+      </a-form-item>
+
+      <div style="margin-top: 16px;">
+        <a-button style="margin-right: 8px;" @click="prevStep">Previous</a-button>
+        <a-button type="primary" @click="nextStep">Next</a-button>
+      </div>
+    </div>
+
+    <div v-if="currentStep === 2">
+      <!-- Step 3 Form Fields -->
+      <a-form-item label="Field 5">
+        <a-input v-model="form.field5" />
+      </a-form-item>
+      <a-form-item label="Field 6">
+        <a-input v-model="form.field6" />
+      </a-form-item>
+
+      <div style="margin-top: 16px;">
+        <a-button style="margin-right: 8px;" @click="prevStep">Previous</a-button>
+        <a-button type="primary" @click="submitForm">Submit</a-button>
+      </div>
+    </div>
+  </div>
+  
+
+
     <a-form
       :model="formState"
       name="basic"
@@ -65,6 +120,16 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
+      currentStep: 0,
+      form: {
+        field1: '',
+        field2: '',
+        field3: '',
+        field4: '',
+        field5: '',
+        field6: ''
+      },
+
       entities: [],
       databases: [],
 
@@ -84,6 +149,7 @@ export default {
   },
 
   methods: {
+
     initData() {
 
       axios.get(`/api/databases`)
@@ -103,6 +169,21 @@ export default {
           message.error(error.message);
         })
         .finally(() => {});        
+    },
+
+    nextStep() {
+      if (this.currentStep < 2) {
+        this.currentStep++;
+      }
+    },
+    prevStep() {
+      if (this.currentStep > 0) {
+        this.currentStep--;
+      }
+    },
+    submitForm() {
+      // Handle form submission
+      console.log(this.form);
     },
 
     validateForm() {
@@ -137,7 +218,7 @@ export default {
         message.success(`Success to add feature view ${this.formState.name}`);
 
         // Redirect to FeatureView detail page
-        this.$router.push('/featureviews/${this.formState.name}');
+        this.$router.push(`/featureviews/${this.formState.name}`);
       })
       .catch(error => {
         message.error(error.message);

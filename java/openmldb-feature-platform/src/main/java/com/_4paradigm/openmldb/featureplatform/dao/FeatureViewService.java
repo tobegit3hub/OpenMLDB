@@ -87,8 +87,54 @@ public class FeatureViewService {
         return null;
     }
 
+    public String validateFeatureView(FeatureView featureView) throws Exception {
+
+        if (featureView.getName() == "") {
+            throw new Exception("The feature view name is empty");
+        }
+
+        if (featureView.getDb() == "") {
+            throw new Exception("The database of feature view is empty");
+        }
+
+        if (featureView.getSql() == "") {
+            throw new Exception("The sql of feature view is empty");
+        }
+
+
+        Map<String, Map<String, Schema>> schemaMaps = OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor);
+
+        String sql = featureView.getSql();
+
+        StringBuilder featureNamesBuilder = new StringBuilder();
+
+        // TODO: Use for package with openmldb-0.8
+        List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, featureView.getDb(), schemaMaps).getColumnList();
+        //List<Column> outputSchemaColumns = SqlClusterExecutor.genOutputSchema(sql, schemaMaps).getColumnList();
+        for (Column outputSchemaColumn: outputSchemaColumns) {
+            String name = outputSchemaColumn.getColumnName();
+            int intType = outputSchemaColumn.getSqlType();
+            String stringType = TypeUtil.javaSqlTypeToString(intType);
+
+            FeaturesService featuresService = new FeaturesService(openmldbConnection, openmldbSqlExecutor);
+            Feature feature = new Feature(featureView.getName(), name, stringType);
+            featuresService.addFeature(feature);
+
+            if (featureNamesBuilder.length() == 0) {
+                featureNamesBuilder.append(name);
+            } else {
+                featureNamesBuilder.append(", " + name);
+            }
+        }
+
+        return featureNamesBuilder.toString();
+    }
+
     public boolean addFeatureView(FeatureView featureView) {
+        // TODO: Throw exception if the feature view is invalid
         try {
+            // validateFeatureView(featureView);
+
             Map<String, Map<String, Schema>> schemaMaps = OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor);
 
             String sql = featureView.getSql();
@@ -131,7 +177,7 @@ public class FeatureViewService {
             openmldbStatement.close();
 
             return true;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

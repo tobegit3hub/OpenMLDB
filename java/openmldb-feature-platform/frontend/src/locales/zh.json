@@ -7,8 +7,10 @@
     "Entity": "特征实体",
     "Features": "特征",
     "Feature": "特征",
-    "Feature Views": "特征视图",
-    "Feature View": "特征视图",
+    "Feature Views": "特征组",
+    "Feature View": "特征组",
+    "Feature View Name": "特征组名",
+    "Feature List": "特征列表",
     "Feature Services": "特征服务",
     "Feature Service": "特征服务",
     "SQL": "SQL",
@@ -39,5 +41,8 @@
     "Data Management": "数据管理",
     "Feature Management": "特征管理",
     "Service Management": "服务管理",
-    "Others": "其他"
+    "Others": "其他",
+    "Create Feature": "创建特征",
+    "Deploy Service": "部署服务",
+    "Test Service": "测试服务"
 }
