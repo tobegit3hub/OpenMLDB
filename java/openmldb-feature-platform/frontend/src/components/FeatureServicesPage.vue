@@ -21,38 +21,12 @@
     </template>
   </a-table>
 
-  <br />
-  <div>
-    <h1>{{ $t('Create') }} {{ $t('Feature Service') }}</h1>
-    <!-- Create form -->
-    <a-form
-      :model="formState"
-      name="basic"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
-      @submit="handleSubmit">
-      <a-form-item
-        label="Name"
-        :rules="[{ required: true, message: 'Please input name!' }]">
-        <a-input v-model:value="formState.name" />
-      </a-form-item>
 
-      <a-form-item
-        label="Feature list"
-        :rules="[{ required: true, message: 'Please input feature list!' }]">
-        <a-input v-model:value="formState.featureList" />
-      </a-form-item>
 
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
-      </a-form-item>
-    </a-form>
-  </div>
-
+  <!-- Support create from deployment in other page
   <br />
   <div>
     <h1>{{ $t('Create') }} {{ $t('From') }} {{ $t('Deployment') }}</h1>
-    <!-- Create form deployment -->
     <a-form
       :model="createFromDeploymentFormState"
       name="basic"
@@ -82,37 +56,7 @@
       </a-form-item>
     </a-form>
   </div>
-
-  <br />
-  <div>
-    <h1>{{ $t('Test') }} {{ $t('Feature Service') }}</h1>
-    <p>Follow the <a target="_blank" href="https://openmldb.ai/docs/zh/main/quickstart/sdk/rest_api.html#id3">docs of OpenMLDB APIServer</a> to prepare test data. eg. {"input": [["foo", 123]]}</p>
-    <!-- Test form -->
-    <a-form
-      :model="testFormState"
-      name="basic"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
-      @submit="handleTestFormSubmit">
-      <a-form-item
-        label="Feature service"
-        :rules="[{ required: true, message: 'Please input feature service name!' }]">
-        <a-select id="itemSelect" v-model:value="testFormState.name">
-          <option v-for="featureViewItem in featureServices" :value="featureViewItem.name">{{ featureViewItem.name }}</option>
-        </a-select>
-      </a-form-item>
-
-      <a-form-item
-        label="Test data"
-        :rules="[{ required: true, message: 'Please input test data!' }]">
-        <a-input v-model:value="testFormState.testData" aria-placeholder="sdfs"/>
-      </a-form-item>
-      
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
-      </a-form-item>
-    </a-form>
-  </div>
+  -->
 
 </div>
 </template>
@@ -163,21 +107,11 @@ export default {
         slots: { customRender: 'custom' },
       }],
 
-      formState: {
-        name: '',
-        featureList: ''
-      },
-
       createFromDeploymentFormState: {
         name: '',
         db: '',
         deploymentName: ''
       },
-
-      testFormState: {
-        name: "",
-        testData: "",
-      }
     };
   },
 
@@ -201,20 +135,6 @@ export default {
         });
     },
 
-    handleSubmit() {
-      axios.post(`/api/featureservices`, {
-        "name": this.formState.name,
-        "featureList": this.formState.featureList
-      })
-      .then(response => {
-        message.success(`Success to add feature service ${this.formState.name}`);
-        this.initData();
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
-    },
-
     handleCreateFromDeploymentSubmit() {
       axios.post(`/api/featureservices/deployments`, {
         "name": this.createFromDeploymentFormState.name,
@@ -235,30 +155,6 @@ export default {
       .then(response => {
         message.success(`Success to delete feature service: ${name}`);
         this.initData();
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
-    },
-
-    handleTestFormSubmit() {
-      axios.post(`/api/featureservices/${this.testFormState.name}/request`,
-        JSON.parse(this.testFormState.testData)
-      )
-      .then(response => {
-        message.success(`Success to request feature service ${this.testFormState.name}`);
-
-        if (response.data.code == 0) {
-          Modal.success({
-            title: 'Request result',
-            content: h('div', {}, [
-              h('p', JSON.stringify(response.data.data)),
-            ]),
-            onOk() {},
-          });
-        } else {
-          message.error(response.data.msg);
-        }
       })
       .catch(error => {
         message.error(error.message);

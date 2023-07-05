@@ -2,7 +2,12 @@
   <div>
   
     <br/>
-    <h1>{{ $t('Feature Service') }}: {{ data.name }} </h1>
+    <h1>
+      {{ $t('Feature Service') }}: {{ data.name }} 
+      &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/test'>{{ $t('Test Service') }}</router-link></a-button>
+    </h1>
+
+    <br/>
     <a-descriptions layout="vertical" bordered>
       <a-descriptions-item label="Name"> {{ data.name }}</a-descriptions-item>
       <a-descriptions-item label="Feature list">{{ data.featureList }}</a-descriptions-item>

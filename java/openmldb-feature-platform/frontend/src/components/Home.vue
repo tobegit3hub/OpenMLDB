@@ -12,7 +12,7 @@
       <a-sub-menu key="data_management">
         <template #title>{{ $t('Data Management') }}</template>
         <a-menu-item key="2">
-          <router-link to='/tables'>{{ $t('Feature Tables') }}</router-link>
+          <router-link to='/tables'>{{ $t('Data Tables') }}</router-link>
         </a-menu-item>
       </a-sub-menu>
 
@@ -22,26 +22,26 @@
           <router-link to='/features/create'>{{ $t('Create Feature') }}</router-link>
         </a-menu-item>
         <a-menu-item key="4">
-          <router-link to='/entities'>{{ $t('Entities') }}</router-link>
+          <router-link to='/entities'>{{ $t('Entity List') }}</router-link>
         </a-menu-item>
         <a-menu-item key="5">
-          <router-link to='/features'>{{ $t('Features') }}</router-link>
+          <router-link to='/features'>{{ $t('Feature List') }}</router-link>
         </a-menu-item>
         <a-menu-item key="6">
-          <router-link to='/featureviews'>{{ $t('Feature Views') }}</router-link>
+          <router-link to='/featureviews'>{{ $t('Feature View List') }}</router-link>
         </a-menu-item>
       </a-sub-menu>
 
       <a-sub-menu key="service_management">
         <template #title>{{ $t('Service Management') }}</template>
         <a-menu-item key="7">
-          <router-link to='/featureservices/deploy'>{{ $t('Deploy Service') }}</router-link>
+          <router-link to='/featureservices/deploy'>{{ $t('Create Service') }}</router-link>
         </a-menu-item>
         <a-menu-item key="8">
-          <router-link to='/featureservices'>{{ $t('Feature Services') }}</router-link>
+          <router-link to='/featureservices/test'>{{ $t('Test Service') }}</router-link>
         </a-menu-item>
         <a-menu-item key="9">
-          <router-link to='/featureservices/test'>{{ $t('Test Service') }}</router-link>
+          <router-link to='/featureservices'>{{ $t('Feature Service List') }}</router-link>
         </a-menu-item>
       </a-sub-menu>
 

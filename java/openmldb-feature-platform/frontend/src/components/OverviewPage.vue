@@ -40,7 +40,7 @@
     <a-col :span="12">
       <h2>
         <router-link to='/featureservices'>{{ $t('Feature Services') }} ({{ featureServiceCount }})</router-link>
-        &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/deploy'>{{ $t('Deploy Service') }}</router-link></a-button>
+        &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/deploy'>{{ $t('Create Service') }}</router-link></a-button>
       </h2>
       <a-table :pagination="{ pageSize: 3 }" :columns="featureServiceColumns" :data-source="featureservices" />
     </a-col>
