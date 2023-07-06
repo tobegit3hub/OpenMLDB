@@ -21,6 +21,15 @@
         </a-select>
       </a-form-item>
 
+      <div v-if="testFormState.name != ''">
+        <br/>
+        <h1>{{ $t('Request') }} {{ $t('Schema') }}</h1>
+        <p>{{ requestSchema }}</p>
+
+        <h1>{{ $t('Request') }} {{ $t('Demo Data') }}</h1>
+        <p>{{ requestDemoData }}</p>
+      </div>
+
       <a-form-item
         label="Test data"
         :rules="[{ required: true, message: 'Please input test data!' }]">
@@ -50,7 +59,9 @@ export default {
       testFormState: {
         name: "",
         testData: "",
-      }
+      },
+
+      demoData: "",
     };
   },
 
@@ -62,6 +73,14 @@ export default {
   methods: {
     initData() {
       this.loading = true;
+
+      console.log("------------------------ tobe");
+      console.log(this.$route.query.featureservice);
+      if (this.$route.query.featureservice != null) {
+        this.testFormState.name = this.$route.query.featureservice;
+      }
+
+
       axios.get(`/api/featureservices`)
         .then(response => {
           this.featureServices = response.data;

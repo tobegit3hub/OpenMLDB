@@ -47,5 +47,7 @@
     "Others": "其他",
     "Create Feature": "创建特征",
     "Create Service": "创建服务",
-    "Test Service": "测试服务"
+    "Test Service": "测试服务",
+    "Develop Feature": "特征开发",
+    "Delete Service": "删除服务"
 }

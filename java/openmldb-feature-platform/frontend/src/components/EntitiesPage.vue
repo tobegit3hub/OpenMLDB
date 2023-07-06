@@ -3,6 +3,8 @@
 <div>
   <br/>
   <h1>{{ $t('Entities') }}</h1>
+
+  <br/>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="entities" :loading="loading">
     <template #name="{ text, record }">

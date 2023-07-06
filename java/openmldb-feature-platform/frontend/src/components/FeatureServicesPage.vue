@@ -2,7 +2,12 @@
 
 <div>
   <br/>
-  <h1>{{ $t('Feature Services') }}</h1>
+  <h1>
+    {{ $t('Feature Services') }}
+    &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/deploy'>{{ $t('Create Service') }}</router-link></a-button>
+  </h1>
+
+  <br/>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="featureServices" :loading="loading">
     <template #name="{ text, record }">
@@ -12,16 +17,16 @@
       <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
     </template>  
     <!-- The delete column-->
-    <template v-slot:custom="scope">
+    <template v-slot:action="scope">
+      <a-button type="primary"><router-link :to="`/featureservices/test?featureservice=${scope.record.name}`">{{ $t('Test Service') }}</router-link></a-button>
+      <br/>
       <a-popconfirm
           title="Sure to delete?"
           @confirm="handleDelete(scope.record.name)">
-        <a>{{ $t('Delete') }}</a>
+        <a-button type="primary" danger>{{ $t('Delete Service') }}</a-button>
       </a-popconfirm>
     </template>
   </a-table>
-
-
 
   <!-- Support create from deployment in other page
   <br />
@@ -104,7 +109,7 @@ export default {
       {
         title: 'Actions',
         key: 'actions',
-        slots: { customRender: 'custom' },
+        slots: { customRender: 'action' },
       }],
 
       createFromDeploymentFormState: {

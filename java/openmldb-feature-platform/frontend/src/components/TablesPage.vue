@@ -10,7 +10,7 @@
     </template>
   </a-table>
 
-  <h1>{{ $t('Tables') }}</h1>
+  <h1>{{ $t('Data Tables') }}</h1>
   <!-- Tables table -->
   <a-table :columns="columns" :data-source="tables">
     <template #database="{ text, record }">

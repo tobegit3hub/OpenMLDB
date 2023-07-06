@@ -4,7 +4,7 @@
     <br/>
     <h1>
       {{ $t('Feature Service') }}: {{ data.name }} 
-      &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/test'>{{ $t('Test Service') }}</router-link></a-button>
+      &nbsp;&nbsp;<a-button type="primary"><router-link :to="`/featureservices/test?featureservice=${data.name}`">{{ $t('Test Service') }}</router-link></a-button>
     </h1>
 
     <br/>
@@ -37,14 +37,6 @@
         <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
       </template>
     </a-table>
-
-    <br/>
-    <h1>{{ $t('Request') }} {{ $t('Schema') }}</h1>
-    <p>{{ requestSchema }}</p>
-
-    <h1>{{ $t('Request') }} {{ $t('Demo Data') }}</h1>
-    <p>{{ requestDemoData }}</p>
-
   </div>
   </template>
     

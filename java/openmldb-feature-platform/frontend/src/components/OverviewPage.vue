@@ -17,14 +17,14 @@
     <br/><br/>
     <a-row>
     <a-col :span="11">
-      <h2><router-link to='/tables'>{{ $t('Feature Tables') }} ({{ tableCount }})</router-link></h2>
-      <a-table :pagination="{ pageSize: 3 }" :columns="tableColumns" :data-source="tables" />
+      <h2><router-link to='/tables'>{{ $t('Data Tables') }} ({{ tableCount }})</router-link></h2>
+      <a-table :pagination="{ pageSize: 2 }" :columns="tableColumns" :data-source="tables" />
     </a-col>
     
     <a-col :span="1"></a-col>
     <a-col :span="12">
       <h2><router-link to='/features'>{{ $t('Features') }} ({{ featureCount }})</router-link></h2>
-      <a-table :pagination="{ pageSize: 3 }" :columns="featureColumns" :data-source="features" />
+      <a-table :pagination="{ pageSize: 2 }" :columns="featureColumns" :data-source="features" />
     </a-col>
 
     <a-col :span="11">
@@ -33,7 +33,7 @@
         &nbsp;&nbsp;<a-button type="primary"><router-link to='/features/create'>{{ $t('Create Feature') }}</router-link></a-button>
       </h2>
       
-      <a-table :pagination="{ pageSize: 3 }" :columns="featureViewColumns" :data-source="featureviews" />
+      <a-table :pagination="{ pageSize: 2 }" :columns="featureViewColumns" :data-source="featureviews" />
     </a-col>
 
     <a-col :span="1"></a-col>
@@ -42,7 +42,7 @@
         <router-link to='/featureservices'>{{ $t('Feature Services') }} ({{ featureServiceCount }})</router-link>
         &nbsp;&nbsp;<a-button type="primary"><router-link to='/featureservices/deploy'>{{ $t('Create Service') }}</router-link></a-button>
       </h2>
-      <a-table :pagination="{ pageSize: 3 }" :columns="featureServiceColumns" :data-source="featureservices" />
+      <a-table :pagination="{ pageSize: 2 }" :columns="featureServiceColumns" :data-source="featureservices" />
     </a-col>
   </a-row>
   </div>

@@ -39,19 +39,18 @@
           <a-textarea v-model:value="formState.sql" rows="5"></a-textarea>
         </a-form-item>
         
+        <p v-if="validatedFeatureNames.length > 0">
+          {{ $t('Feature List') }}:
+          <ul>
+            <li v-for="featureName in validatedFeatureNames" :key="featureName">{{ featureName }}</li>
+          </ul>
+        </p>
+
         <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-          <a-button type="primary" @click="validateForm()">{{ $t('Validate') }}</a-button>
-  
-          &nbsp;&nbsp;&nbsp;<a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
+            <a-button v-if="validatedFeatureNames.length == 0" type="primary" @click="validateForm()">{{ $t('Validate') }} {{ $t('SQL') }}</a-button>
+            <a-button v-else type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
         </a-form-item>
       </a-form>
-  
-      <p v-if="validatedFeatureNames.length > 0">
-        {{ $t('Feature List') }}:
-        <ul>
-          <li v-for="featureName in validatedFeatureNames" :key="featureName">{{ featureName }}</li>
-        </ul>
-      </p>
   
     </div>
   
@@ -70,11 +69,12 @@
   
         validatedFeatureNames: [],
   
+        // TODO: develop with test data
         formState: {
-          name: '',
+          name: 'aa',
           entityNames: '',
-          db: '',
-          sql: ''
+          db: 't1v1',
+          sql: 'SELECT name, age + 10 AS new_age FROM user'
         }
       };
     },
@@ -106,7 +106,6 @@
       },
   
       validateForm() {
-        console.log("Try to validate form");
         axios.post(`/api/featureviews/validate`, {
           "name": this.formState.name,
           "entityNames": this.formState.entityNames,

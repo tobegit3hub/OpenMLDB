@@ -47,5 +47,7 @@
     "Others": "Others",
     "Create Feature": "Create Feature",
     "Create Service": "Create Service",
-    "Test Service": "Test Service"
+    "Test Service": "Test Service",
+    "Develop Feature": "Develop Feature",
+    "Delete Service": "Delete Service"
 }

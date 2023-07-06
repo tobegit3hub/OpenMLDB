@@ -2,7 +2,12 @@
 
 <div>
   <br/>
-  <h1>{{ $t('Features') }}</h1>
+  <h1>
+    {{ $t('Features') }}
+    &nbsp;&nbsp;<a-button type="primary"><router-link to='/features/create'>{{ $t('Create Feature') }}</router-link></a-button>
+  </h1>
+
+  <br/>
   <!-- Data table -->
   <a-table :columns="columns" :data-source="features" :loading="loading">
     <template #featureView="{ text, record }">
