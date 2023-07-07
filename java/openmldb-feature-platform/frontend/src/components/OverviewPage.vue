@@ -54,7 +54,7 @@
 <script>
 import axios from 'axios'
 
-import VueECharts from 'vue-echarts';
+
 
 export default {
     data() {

@@ -88,7 +88,7 @@ export default {
         this.$router.push(`/featureservices/${this.formState.name}`);
       })
       .catch(error => {
-        if (error.response.data) {
+          if (error.response.data) {
             message.error(error.response.data);
           } else {
             message.error(error.message);
