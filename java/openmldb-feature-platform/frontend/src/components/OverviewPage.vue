@@ -47,6 +47,11 @@
       </a-col>
     </a-row>
 
+
+    <div>
+    <div ref="chartContainer" style="width: 100%; height: 600px"></div>
+  </div>
+  
   </div>
 
 </template>
@@ -54,7 +59,7 @@
 <script>
 import axios from 'axios'
 
-
+import * as echarts from 'echarts';
 
 export default {
     data() {
@@ -69,25 +74,90 @@ export default {
         featureViewCount: 0,
         featureServiceCount: 0,
 
+        chartContainer: null,
+
+        chartData: [],
+
       };
     },
 
     mounted() {
       this.initData();
+
+      this.chartContainer = this.$refs.chartContainer;
+      //this.renderChart();
+
+      this.fetchChartData();
     },
 
     methods: {
-      initData() {
-        axios.get(`/api/tables`)
+
+      async fetchChartData() {
+        try {
+          await this.initData();
+          this.renderChart();
+        } catch (error) {
+          console.error(error);
+        }
+      },
+
+
+      renderChart() {
+        const chart = echarts.init(this.chartContainer);
+/*
+        const data = [
+          { name: '数据表', value: this.tableCount },
+          { name: '特征组', value: this.featureViewCount },
+          { name: '特征', value: 18 },
+          { name: '特征服务', value: 15 },
+        ];
+*/
+        const option = {
+          tooltip: {
+            trigger: 'item',
+            formatter: '{b}: {c} ({d}%)',
+          },
+          series: [
+            {
+              name: 'Donut Chart',
+              type: 'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                show: false,
+                position: 'center',
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '20',
+                  fontWeight: 'bold',
+                },
+              },
+              labelLine: {
+                show: false,
+              },
+              data: this.chartData.map((item) => ({ name: item.name, value: item.value })),
+            },
+          ],
+        };
+
+        chart.setOption(option);
+      },
+
+
+      async initData() {
+        await axios.get(`/api/tables`)
           .then(response => {
             this.tables = response.data;
             this.tableCount = this.tables.length;
+
           })
           .catch(error => {
             console.log(error.message);
           });
 
-        axios.get(`/api/features`)
+          await axios.get(`/api/features`)
           .then(response => {
             this.features = response.data;
             this.featureCount = this.features.length;
@@ -96,7 +166,7 @@ export default {
             console.log(error.message);
           });
 
-        axios.get(`/api/featureviews`)
+          await axios.get(`/api/featureviews`)
           .then(response => {
             this.featureviews = response.data;
             this.featureViewCount = this.featureviews.length;
@@ -105,7 +175,7 @@ export default {
             console.log(error.message);
           });
 
-        axios.get(`/api/featureservices`)
+          await axios.get(`/api/featureservices`)
           .then(response => {
             this.featureservices = response.data;
             this.featureServiceCount = this.featureservices.length;
@@ -113,15 +183,18 @@ export default {
           .catch(error => {
             console.log(error.message);
           });
+
+
+        this.chartData = [
+          { name: '数据表', value: this.tableCount },
+          { name: '特征组', value: this.featureViewCount },
+          { name: '特征', value: this.featureCount },
+          { name: '特征服务', value: this.featureServiceCount },
+        ];
       },
 
-      next() {
-        this.currentStep++;
-      },
 
-      prev() {
-        this.currentStep--;
-      },
+
     },
   };
 </script>
