@@ -4,7 +4,7 @@
   <br/>
   <h1>
     {{ $t('Features') }}
-    &nbsp;&nbsp;<a-button type="primary"><router-link to='/features/create'>{{ $t('Create Feature') }}</router-link></a-button>
+    <!-- &nbsp;&nbsp;<a-button type="primary"><router-link to='/features/create'>{{ $t('Create Feature') }}</router-link></a-button> -->
   </h1>
 
   <br/>

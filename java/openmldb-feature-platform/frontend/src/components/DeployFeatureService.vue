@@ -13,15 +13,18 @@
       :wrapper-col="{ span: 16 }"
       @submit="handleSubmit">
       <a-form-item
-        label="Name"
+        :label="$t('Feature Service Name')"
         :rules="[{ required: true, message: 'Please input name!' }]">
         <a-input v-model:value="formState.name" />
       </a-form-item>
 
       <a-form-item
-        label="Feature list"
+        :label="$t('Feature View List')"
         :rules="[{ required: true, message: 'Please input feature list!' }]">
-        <a-input v-model:value="formState.featureList" />
+
+        <a-select mode="multiple" v-model:value="formState.featureList">
+            <option v-for="featureview in featureViews" :value="featureview.name">{{ featureview.name }}</option>
+        </a-select>
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
@@ -42,13 +45,11 @@ import { h } from 'vue';
 export default {
   data() {
     return {
-      featureServices: [],
+      featureViews: [],
 
-      loading: false,
-      
       formState: {
         name: '',
-        featureList: ''
+        featureList: []
       },
 
     };
@@ -56,24 +57,42 @@ export default {
 
   mounted() {
     this.initData();
-
   },
 
   methods: {
     initData() {
+      axios.get(`/api/featureviews`)
+        .then(response => {
+          this.featureViews = response.data;
+        })
+        .catch(error => {
+          message.error(error.message);
+        })
+        .finally(() => {});
+
+      if (this.$route.query.featureview != null) {
+        this.formState.featureList = [this.$route.query.featureview];
+      }
+
     },
 
     handleSubmit() {
       axios.post(`/api/featureservices`, {
         "name": this.formState.name,
-        "featureList": this.formState.featureList
+        "featureList": this.formState.featureList.join(',')
       })
       .then(response => {
         message.success(`Success to add feature service ${this.formState.name}`);
-        this.initData();
+
+        // Redirect to FeatureView detail page
+        this.$router.push(`/featureservices/${this.formState.name}`);
       })
       .catch(error => {
-        message.error(error.message);
+        if (error.response.data) {
+            message.error(error.response.data);
+          } else {
+            message.error(error.message);
+          }
       });
     },
 

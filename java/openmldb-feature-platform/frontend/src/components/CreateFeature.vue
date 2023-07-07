@@ -9,8 +9,7 @@
         :model="formState"
         name="basic"
         :label-col="{ span: 8 }"
-        :wrapper-col="{ span: 16 }"
-        @submit="handleSubmit">
+        :wrapper-col="{ span: 16 }">
         <a-form-item
           :label="$t('Feature View Name')"
           :rules="[{ required: true, message: 'Please input name!' }]">
@@ -48,10 +47,9 @@
 
         <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
             <a-button v-if="validatedFeatureNames.length == 0" type="primary" @click="validateForm()">{{ $t('Validate') }} {{ $t('SQL') }}</a-button>
-            <a-button v-else type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
+            <a-button v-else type="primary" @click="handleSubmit()">{{ $t('Submit') }}</a-button>
         </a-form-item>
       </a-form>
-  
     </div>
   
   </div>
@@ -69,12 +67,11 @@
   
         validatedFeatureNames: [],
   
-        // TODO: develop with test data
         formState: {
-          name: 'aa',
+          name: '',
           entityNames: '',
-          db: 't1v1',
-          sql: 'SELECT name, age + 10 AS new_age FROM user'
+          db: '',
+          sql: ''
         }
       };
     },
@@ -139,7 +136,11 @@
           this.$router.push(`/featureviews/${this.formState.name}`);
         })
         .catch(error => {
-          message.error(error.message);
+          if (error.response.data) {
+            message.error(error.response.data);
+          } else {
+            message.error(error.message);
+          }
         });
       },
   

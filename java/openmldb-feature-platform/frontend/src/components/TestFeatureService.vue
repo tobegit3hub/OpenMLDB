@@ -4,8 +4,7 @@
   
   <br />
   <div>
-    <h1>{{ $t('Test') }} {{ $t('Feature Service') }}</h1>
-    <p>Follow the <a target="_blank" href="https://openmldb.ai/docs/zh/main/quickstart/sdk/rest_api.html#id3">docs of OpenMLDB APIServer</a> to prepare test data. eg. {"input": [["foo", 123]]}</p>
+    <h1>{{ $t('Test Service') }}</h1>
     <!-- Test form -->
     <a-form
       :model="testFormState"
@@ -16,7 +15,7 @@
       <a-form-item
         label="Feature service"
         :rules="[{ required: true, message: 'Please input feature service name!' }]">
-        <a-select id="itemSelect" v-model:value="testFormState.name">
+        <a-select id="itemSelect" v-model:value="testFormState.name" @change="updateSelectedService">
           <option v-for="featureViewItem in featureServices" :value="featureViewItem.name">{{ featureViewItem.name }}</option>
         </a-select>
       </a-form-item>
@@ -28,16 +27,17 @@
 
         <h1>{{ $t('Request') }} {{ $t('Demo Data') }}</h1>
         <p>{{ requestDemoData }}</p>
+        <br/>
       </div>
 
       <a-form-item
         label="Test data"
         :rules="[{ required: true, message: 'Please input test data!' }]">
-        <a-input v-model:value="testFormState.testData" aria-placeholder="sdfs"/>
+        <a-textarea v-model:value="testFormState.testData" rows="5"></a-textarea>
       </a-form-item>
       
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
+        <a-button type="primary" html-type="submit">{{ $t('Test') }}</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -61,25 +61,44 @@ export default {
         testData: "",
       },
 
-      demoData: "",
+      requestSchema: "",
+      requestDemoData: "",
     };
   },
 
   mounted() {
     this.initData();
-
   },
 
   methods: {
-    initData() {
-      this.loading = true;
+    updateSelectedService() {
+      if (this.testFormState.name != "") {
+        axios.get(`/api/featureservices/${this.testFormState.name}/request/schema`)
+          .then(response => {
+            this.requestSchema = response.data;
 
-      console.log("------------------------ tobe");
-      console.log(this.$route.query.featureservice);
-      if (this.$route.query.featureservice != null) {
-        this.testFormState.name = this.$route.query.featureservice;
+          })
+          .catch(error => {
+            message.error(error.message);
+          });
+
+        axios.get(`/api/featureservices/${this.testFormState.name}/request/demo`)
+          .then(response => {
+            this.requestDemoData = response.data;
+          })
+          .catch(error => {
+            message.error(error.message);
+          });   
       }
+    },
 
+    initData() {
+
+      if (this.$route.query.featureservice != null) {
+        // Url provides feature service name
+        this.testFormState.name = this.$route.query.featureservice;
+        this.updateSelectedService();
+      }
 
       axios.get(`/api/featureservices`)
         .then(response => {
@@ -89,7 +108,9 @@ export default {
           message.error(error.message);
         })
         .finally(() => {});
+ 
     },
+
 
     handleDelete(name) {
       axios.delete(`/api/featureservices/${name}`)

@@ -49,5 +49,6 @@
     "Create Service": "Create Service",
     "Test Service": "Test Service",
     "Develop Feature": "Develop Feature",
-    "Delete Service": "Delete Service"
+    "Delete Service": "Delete Service",
+    "Feature Service Name": "Feature Service Name"
 }

@@ -34,6 +34,11 @@
         <a-menu-item key="6">
           <router-link to='/featureservices'>{{ $t('Feature Services') }}</router-link>
         </a-menu-item>
+        <!--
+        <a-menu-item key="7">
+          <router-link to='/featureservices/test'>{{ $t('Test Service') }}</router-link>
+        </a-menu-item>
+        -->
       </a-sub-menu>
 
       <!--

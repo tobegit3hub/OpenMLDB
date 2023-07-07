@@ -97,11 +97,6 @@ export default {
         slots: { customRender: 'db' }
       },
       {
-        title: 'SQL',
-        dataIndex: 'sql',
-        key: 'sql',
-      },
-      {
         title: 'Deployment',
         dataIndex: 'deployment',
         key: 'deployment',

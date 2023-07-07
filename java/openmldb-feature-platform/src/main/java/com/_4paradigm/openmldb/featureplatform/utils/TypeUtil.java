@@ -100,7 +100,7 @@ public class TypeUtil {
             case Types.DOUBLE:
             case Types.NUMERIC:
             case Types.DECIMAL:
-                return "1.0";
+                return "1.01";
             case Types.CHAR:
             case Types.VARCHAR:
             case Types.LONGVARCHAR:
