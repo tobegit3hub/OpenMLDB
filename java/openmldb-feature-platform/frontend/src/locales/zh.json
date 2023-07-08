@@ -47,8 +47,17 @@
     "Others": "其他",
     "Create Feature": "创建特征",
     "Create Service": "创建服务",
+    "Create Entity": "创建特征实体",
     "Test Service": "测试服务",
     "Develop Feature": "特征开发",
     "Delete Service": "删除服务",
-    "Feature Service Name": "特征服务名称"
+    "Feature Service Name": "特征服务名称",
+    "Feature Big Screen": "特征大屏",
+    "Advanced Management": "高级管理",
+    "Step": "步骤",
+    "Import Table": "导入数据表",
+    "Display Tables": "显示数据表",
+    "Test Data": "测试数据",
+    "Entity Name": "特征实体名称",
+    "Primary Keys": "表主键"
 }

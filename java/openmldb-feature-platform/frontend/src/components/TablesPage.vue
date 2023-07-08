@@ -2,6 +2,10 @@
 
 <div>
   <br/>
+  <a-button type="primary"><router-link to='/tables/import'>{{ $t('Import Table') }}</router-link></a-button>
+
+  <br/>
+  <br/>
   <h1>{{ $t('Databases') }}</h1>
   <!-- Databases table -->
   <a-table :columns="databaseColumns" :data-source="databases">
@@ -20,36 +24,6 @@
       <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
     </template>
   </a-table>
-
-  <br />
-  <div>
-    <h1>{{ $t('Update') }} {{ $t('Tables') }}</h1>
-    <a-typography>
-      <a-typography-paragraph>
-        <p>Use SQL to create or delete the databases or tables.</p>
-        <p>eg. CREATE DATABASE IF NOT EXISTS db1</p>
-        <p>eg. CREATE TABLE db1.user (name varchar, age int)</p>
-        <p>eg. DROP TABLE db1.user</p>
-      </a-typography-paragraph>
-    </a-typography>
-    <!-- Create form -->
-    <a-form
-      :model="formState"
-      name="basic"
-      :label-col="{ span: 8 }"
-      :wrapper-col="{ span: 16 }"
-      @submit="handleSubmit">
-      <a-form-item
-        label="SQL"
-        :rules="[{ required: true, message: 'Please input SQL!' }]">
-        <a-input v-model:value="formState.sql" />
-      </a-form-item>
-
-      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
-      </a-form-item>
-    </a-form>
-  </div>
 
 </div>
 </template>
@@ -86,11 +60,8 @@ export default {
         title: 'Schema',
         dataIndex: 'schema',
         key: 'schema',
-      }],
+      }]
 
-      formState: {
-        sql: '',
-      }
     };
   },
 
@@ -119,18 +90,6 @@ export default {
         .finally(() => {});
     },
 
-    handleSubmit() {
-      axios.post(`/api/sql/execute`, {
-        "sql": this.formState.sql,
-      })
-      .then(response => {
-        message.success(`Success to execute SQL: ${this.formState.sql}`);
-        this.initData();
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
-    },
   },
 };
 </script>

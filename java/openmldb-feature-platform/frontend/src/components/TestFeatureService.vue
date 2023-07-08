@@ -13,7 +13,7 @@
       :wrapper-col="{ span: 16 }"
       @submit="handleTestFormSubmit">
       <a-form-item
-        label="Feature service"
+        :label='$t("Feature Service")'
         :rules="[{ required: true, message: 'Please input feature service name!' }]">
         <a-select id="itemSelect" v-model:value="testFormState.name" @change="updateSelectedService">
           <option v-for="featureViewItem in featureServices" :value="featureViewItem.name">{{ featureViewItem.name }}</option>
@@ -31,7 +31,7 @@
       </div>
 
       <a-form-item
-        label="Test data"
+        :label='$t("Test Data")'
         :rules="[{ required: true, message: 'Please input test data!' }]">
         <a-textarea v-model:value="testFormState.testData" rows="5"></a-textarea>
       </a-form-item>

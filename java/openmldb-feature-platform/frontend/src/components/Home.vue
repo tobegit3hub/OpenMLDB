@@ -6,39 +6,41 @@
 <a-layout class="layout">
   <a-layout-sider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
     <a-menu theme="dark" mode="inline" class="navi-menu">
+
       <a-menu-item key="1">
-        <router-link to='/'>{{ $t('Feature Platform') }}</router-link>
+        <router-link to='/'>{{ $t('Feature Big Screen') }}</router-link>
       </a-menu-item>
-      <a-sub-menu key="data_management">
-        <template #title>{{ $t('Data Management') }}</template>
-        <a-menu-item key="2">
+
+      <a-menu-item key="2">
+        <router-link to='/tables/import'>{{ $t('Step') }}1: {{ $t('Import Table') }}</router-link>
+      </a-menu-item>
+
+      <a-menu-item key="3">
+        <router-link to='/features/create'>{{ $t('Step') }}2: {{ $t('Develop Feature') }}</router-link>
+      </a-menu-item>
+
+      <a-menu-item key="4">
+        <router-link to='/featureservices/deploy'>{{ $t('Step') }}3: {{ $t('Create Service') }}</router-link>
+      </a-menu-item>
+
+      <a-menu-item key="5">
+        <router-link to='/featureservices/test'>{{ $t('Step') }}4: {{ $t('Test Service') }}</router-link>
+      </a-menu-item>
+
+      <a-sub-menu key="advanced_management">
+        <template #title>{{ $t('Advanced Management') }}</template>
+        <a-menu-item key="6">
           <router-link to='/tables'>{{ $t('Data Tables') }}</router-link>
         </a-menu-item>
-      </a-sub-menu>
-
-      <a-sub-menu key="feature_management">
-        <a-menu-item key="3">
-          <router-link to='/featureviews'>{{ $t('Develop Feature') }}</router-link>
-        </a-menu-item>
-        <template #title>{{ $t('Feature Management') }}</template>
-        <a-menu-item key="4">
+        <a-menu-item key="7">
           <router-link to='/entities'>{{ $t('Entities') }}</router-link>
         </a-menu-item>
-        <a-menu-item key="5">
+        <a-menu-item key="8">
           <router-link to='/features'>{{ $t('Feature List') }}</router-link>
         </a-menu-item>
-      </a-sub-menu>
-
-      <a-sub-menu key="service_management">
-        <template #title>{{ $t('Service Management') }}</template>
-        <a-menu-item key="6">
+        <a-menu-item key="9">
           <router-link to='/featureservices'>{{ $t('Feature Services') }}</router-link>
         </a-menu-item>
-        <!--
-        <a-menu-item key="7">
-          <router-link to='/featureservices/test'>{{ $t('Test Service') }}</router-link>
-        </a-menu-item>
-        -->
       </a-sub-menu>
 
       <!--

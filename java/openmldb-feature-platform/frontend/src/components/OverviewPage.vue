@@ -186,10 +186,10 @@ export default {
 
 
         this.chartData = [
-          { name: '数据表', value: this.tableCount },
-          { name: '特征组', value: this.featureViewCount },
-          { name: '特征', value: this.featureCount },
-          { name: '特征服务', value: this.featureServiceCount },
+          { name: this.$t('Data Tables'), value: this.tableCount },
+          { name: this.$t('Feature Views'), value: this.featureViewCount },
+          { name: this.$t('Features'), value: this.featureCount },
+          { name: this.$t('Feature Services'), value: this.featureServiceCount },
         ];
       },
 

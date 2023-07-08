@@ -47,8 +47,17 @@
     "Others": "Others",
     "Create Feature": "Create Feature",
     "Create Service": "Create Service",
+    "Create Entity": "Create Entity",
     "Test Service": "Test Service",
     "Develop Feature": "Develop Feature",
     "Delete Service": "Delete Service",
-    "Feature Service Name": "Feature Service Name"
+    "Feature Service Name": "Feature Service Name",
+    "Feature Big Screen": "Feature Big Screen",
+    "Advanced Management": "Advanced Management",
+    "Step": "Step",
+    "Import Table": "Import Table",
+    "Display Tables": "Display Tables",
+    "Test Data": "Test Data",
+    "Entity Name": "Entity Name",
+    "Primary Keys": "Primary Keys"
 }
