@@ -59,7 +59,8 @@
         })
         .then(response => {
           message.success(`Success to add entity ${this.formState.name}`);
-          this.initData();
+
+          this.$router.push(`/entities/${this.formState.name}`);
         })
         .catch(error => {
           message.error(error.message);

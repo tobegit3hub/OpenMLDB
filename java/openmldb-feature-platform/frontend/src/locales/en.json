@@ -59,5 +59,9 @@
     "Display Tables": "Display Tables",
     "Test Data": "Test Data",
     "Entity Name": "Entity Name",
-    "Primary Keys": "Primary Keys"
+    "Primary Keys": "Primary Keys",
+    "Whole Process Wizard": "Whole Process Wizard",
+    "Import Hive Table": "Import Hive Table",
+    "Load Hive Data": "Load Hive Data",
+    "Deep Copy": "Deep Copy"
 }

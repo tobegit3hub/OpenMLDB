@@ -1,15 +1,79 @@
 <template>
 
 <div>
+
+  <br />
+  <div>
+    <h1>{{ $t('Import Hive Table') }}</h1>
+    <a-form
+      :model="createHiveTableFormState"
+      name="basic"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 16 }"
+      @submit="handleSubmit">
+      <a-form-item
+        :label="'Hive ' + $t('Table')"
+        :rules="[{ required: true, message: 'Please input SQL!' }]">
+        <a-input v-model:value="createHiveTableFormState.hivePath" />
+      </a-form-item>
+
+      <a-form-item
+        :label="'OpenMLDB ' + $t('Table')"
+        :rules="[{ required: true, message: 'Please input SQL!' }]">
+        <a-input v-model:value="createHiveTableFormState.openmldbTable" />
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
+      </a-form-item>
+    </a-form>
+  </div>
+
+  <br />
+  <div>
+    <h1>{{ $t('Load Hive Data') }}</h1>
+    <a-form
+      :model="importHiveTableFormState"
+      name="basic"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 16 }"
+      @submit="handleSubmit">
+      <a-form-item
+        :label="'Hive ' + $t('Table')"
+        :rules="[{ required: true, message: 'Please input SQL!' }]">
+        <a-input v-model:value="importHiveTableFormState.hivePath" />
+      </a-form-item>
+
+      <a-form-item
+        :label="'OpenMLDB ' + $t('Table')"
+        :rules="[{ required: true, message: 'Please input SQL!' }]">
+        <a-input v-model:value="importHiveTableFormState.openmldbTable" />
+      </a-form-item>
+
+      <a-form-item 
+        :label="$t('Deep Copy')"
+        :rules="[{ required: true, message: 'Please select is deep copy!' }]">
+        <a-select v-model="importHiveTableFormState.isDeepCopy">
+          <a-select-option :value="true">True</a-select-option>
+          <a-select-option :value="false">False</a-select-option>
+        </a-select>
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
+      </a-form-item>
+    </a-form>
+  </div>
+
   <br />
   <div>
     <h1>{{ $t('Import Table') }}</h1>
     <a-typography>
       <a-typography-paragraph>
         <p>Use SQL to create or delete the databases or tables.</p>
-        <p>eg. CREATE DATABASE IF NOT EXISTS db1</p>
         <p>eg. CREATE TABLE db1.user (name varchar, age int)</p>
-        <p>eg. DROP TABLE db1.user</p>
+        <p>eg. CREATE TABLE db1.t1 LIKE HIVE 'hive://hive_db.t1';</p>
+        <p>eg. LOAD DATA INFILE 'hive://db1.t1' INTO TABLE t1 OPTIONS(deep_copy=false);</p>
       </a-typography-paragraph>
     </a-typography>
     <!-- Create form -->
@@ -97,7 +161,18 @@ export default {
 
       formState: {
         sql: '',
-      }
+      },
+
+      createHiveTableFormState: {
+        hivePath: '',
+        openmldbTable: ''
+      },
+
+      importHiveTableFormState: {
+        hivePath: '',
+        openmldbTable: '',
+        isDeepCopy: false
+      },
     };
   },
 

@@ -116,10 +116,6 @@ public class FeatureViewService {
             int intType = outputSchemaColumn.getSqlType();
             String stringType = TypeUtil.javaSqlTypeToString(intType);
 
-            FeaturesService featuresService = new FeaturesService(openmldbConnection, openmldbSqlExecutor);
-            Feature feature = new Feature(featureView.getName(), name, stringType);
-            featuresService.addFeature(feature);
-
             if (featureNamesBuilder.length() == 0) {
                 featureNamesBuilder.append(name);
             } else {
@@ -133,13 +129,11 @@ public class FeatureViewService {
     public boolean addFeatureView(FeatureView featureView) {
         // TODO: Throw exception if the feature view is invalid
         try {
-            // validateFeatureView(featureView);
+            validateFeatureView(featureView);
 
             Map<String, Map<String, Schema>> schemaMaps = OpenmldbTableUtil.getSystemSchemaMaps(openmldbSqlExecutor);
 
             String sql = featureView.getSql();
-
-            // TODO: Validate SQL before creating
 
             StringBuilder featureNamesBuilder = new StringBuilder();
 

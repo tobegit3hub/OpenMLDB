@@ -11,21 +11,26 @@
         <router-link to='/'>{{ $t('Feature Big Screen') }}</router-link>
       </a-menu-item>
 
-      <a-menu-item key="2">
-        <router-link to='/tables/import'>{{ $t('Step') }}1: {{ $t('Import Table') }}</router-link>
-      </a-menu-item>
 
-      <a-menu-item key="3">
-        <router-link to='/features/create'>{{ $t('Step') }}2: {{ $t('Develop Feature') }}</router-link>
-      </a-menu-item>
+      <a-sub-menu key="whole_process_wizard">
+        <template #title>{{ $t('Whole Process Wizard') }}</template>
 
-      <a-menu-item key="4">
-        <router-link to='/featureservices/deploy'>{{ $t('Step') }}3: {{ $t('Create Service') }}</router-link>
-      </a-menu-item>
+        <a-menu-item key="2">
+          <router-link to='/tables/import'>{{ $t('Step') }}1: {{ $t('Import Table') }}</router-link>
+        </a-menu-item>
 
-      <a-menu-item key="5">
-        <router-link to='/featureservices/test'>{{ $t('Step') }}4: {{ $t('Test Service') }}</router-link>
-      </a-menu-item>
+        <a-menu-item key="3">
+          <router-link to='/features/create'>{{ $t('Step') }}2: {{ $t('Develop Feature') }}</router-link>
+        </a-menu-item>
+
+        <a-menu-item key="4">
+          <router-link to='/featureservices/deploy'>{{ $t('Step') }}3: {{ $t('Create Service') }}</router-link>
+        </a-menu-item>
+
+        <a-menu-item key="5">
+          <router-link to='/featureservices/test'>{{ $t('Step') }}4: {{ $t('Test Service') }}</router-link>
+        </a-menu-item>
+      </a-sub-menu>
 
       <a-sub-menu key="advanced_management">
         <template #title>{{ $t('Advanced Management') }}</template>
@@ -39,6 +44,9 @@
           <router-link to='/features'>{{ $t('Feature List') }}</router-link>
         </a-menu-item>
         <a-menu-item key="9">
+          <router-link to='/featureviews'>{{ $t('Feature View List') }}</router-link>
+        </a-menu-item>
+        <a-menu-item key="10">
           <router-link to='/featureservices'>{{ $t('Feature Services') }}</router-link>
         </a-menu-item>
       </a-sub-menu>

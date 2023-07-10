@@ -59,5 +59,9 @@
     "Display Tables": "显示数据表",
     "Test Data": "测试数据",
     "Entity Name": "特征实体名称",
-    "Primary Keys": "表主键"
+    "Primary Keys": "表主键",
+    "Whole Process Wizard": "全流程向导",
+    "Import Hive Table": "导入Hive表",
+    "Load Hive Data": "加载Hive数据",
+    "Deep Copy": "硬拷贝"
 }
