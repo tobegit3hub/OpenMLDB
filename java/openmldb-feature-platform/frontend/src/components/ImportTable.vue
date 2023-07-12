@@ -6,21 +6,21 @@
   <div>
     <h1>{{ $t('Import Hive Table') }}</h1>
     <a-form
-      :model="createHiveTableFormState"
+      :model="importHiveTableFormState"
       name="basic"
       :label-col="{ span: 8 }"
       :wrapper-col="{ span: 16 }"
-      @submit="handleSubmit">
+      @submit="handleImportHiveTable">
       <a-form-item
-        :label="'Hive ' + $t('Table')"
+        :label="'Hive ' + $t('Table Name')"
         :rules="[{ required: true, message: 'Please input SQL!' }]">
-        <a-input v-model:value="createHiveTableFormState.hivePath" />
+        <a-input v-model:value="importHiveTableFormState.hivePath" />
       </a-form-item>
 
       <a-form-item
-        :label="'OpenMLDB ' + $t('Table')"
+        :label="'OpenMLDB ' + $t('Table Name')"
         :rules="[{ required: true, message: 'Please input SQL!' }]">
-        <a-input v-model:value="createHiveTableFormState.openmldbTable" />
+        <a-input v-model:value="importHiveTableFormState.openmldbTable" />
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
@@ -33,22 +33,24 @@
   <div>
     <h1>{{ $t('Load Hive Data') }}</h1>
     <a-form
-      :model="importHiveTableFormState"
+      :model="loadHiveDataFormState"
       name="basic"
       :label-col="{ span: 8 }"
       :wrapper-col="{ span: 16 }"
-      @submit="handleSubmit">
+      @submit="handleLoadHiveData">
       <a-form-item
-        :label="'Hive ' + $t('Table')"
-        :rules="[{ required: true, message: 'Please input SQL!' }]">
-        <a-input v-model:value="importHiveTableFormState.hivePath" />
+        :label="'Hive ' + $t('Table Name')"
+        :rules="[{ required: true, message: 'Please input hive table!' }]">
+        <a-input v-model:value="loadHiveDataFormState.hivePath" />
       </a-form-item>
 
       <a-form-item
-        :label="'OpenMLDB ' + $t('Table')"
-        :rules="[{ required: true, message: 'Please input SQL!' }]">
-        <a-input v-model:value="importHiveTableFormState.openmldbTable" />
-      </a-form-item>
+          :label="'OpenMLDB ' + $t('Table Name')"
+          :rules="[{ required: true, message: 'Please input table!' }]">
+          <a-select v-model:value="loadHiveDataFormState.openmldbTable">
+            <option v-for="tableItem in tables" :value="tableItem.db + '.' + tableItem.table">{{ tableItem.db }}.{{ tableItem.table }}</option>
+          </a-select>
+        </a-form-item>
 
       <a-form-item 
         :label="$t('Deep Copy')"
@@ -73,7 +75,7 @@
         <p>Use SQL to create or delete the databases or tables.</p>
         <p>eg. CREATE TABLE db1.user (name varchar, age int)</p>
         <p>eg. CREATE TABLE db1.t1 LIKE HIVE 'hive://hive_db.t1';</p>
-        <p>eg. LOAD DATA INFILE 'hive://db1.t1' INTO TABLE t1 OPTIONS(deep_copy=false);</p>
+        <p>eg. LOAD DATA INFILE 'hive://db1.t1' INTO TABLE db1.t1 OPTIONS(deep_copy=false, mode='append');</p>
       </a-typography-paragraph>
     </a-typography>
     <!-- Create form -->
@@ -163,15 +165,15 @@ export default {
         sql: '',
       },
 
-      createHiveTableFormState: {
+      importHiveTableFormState: {
         hivePath: '',
         openmldbTable: ''
       },
 
-      importHiveTableFormState: {
+      loadHiveDataFormState: {
         hivePath: '',
         openmldbTable: '',
-        isDeepCopy: false
+        isDeepCopy: true
       },
     };
   },
@@ -201,6 +203,7 @@ export default {
         .finally(() => {});
     },
 
+
     handleSubmit() {
       axios.post(`/api/sql/execute`, {
         "sql": this.formState.sql,
@@ -210,7 +213,47 @@ export default {
         this.initData();
       })
       .catch(error => {
-        message.error(error.message);
+        if (error.response.data) {
+            message.error(error.response.data);
+          } else {
+            message.error(error.message);
+          }
+      });
+    },
+
+    handleImportHiveTable() {
+      const sql = "CREATE TABLE " + this.importHiveTableFormState.openmldbTable + " LIKE HIVE 'hive://" + this.importHiveTableFormState.hivePath + "'"
+      axios.post(`/api/sql/execute`, {
+        "sql": sql
+      })
+      .then(response => {
+        message.success(`Success to execute SQL: ${sql}`);
+        this.initData();
+      })
+      .catch(error => {
+        if (error.response.data) {
+            message.error(error.response.data);
+          } else {
+            message.error(error.message);
+          }
+      });
+    },
+
+    handleLoadHiveData() {
+      const sql = "LOAD DATA INFILE 'hive://" + this.loadHiveDataFormState.hivePath + "' INTO TABLE " + this.loadHiveDataFormState.openmldbTable + " OPTIONS(deep_copy=" + this.loadHiveDataFormState.isDeepCopy + ", mode='append')"
+      axios.post(`/api/sql/execute`, {
+        "sql": sql
+      })
+      .then(response => {
+        message.success(`Success to submit SQL: ${sql}`);
+        this.initData();
+      })
+      .catch(error => {
+        if (error.response.data) {
+            message.error(error.response.data);
+          } else {
+            message.error(error.message);
+          }
       });
     },
 
