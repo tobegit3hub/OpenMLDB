@@ -64,5 +64,6 @@
     "Whole Process Wizard": "全流程向导",
     "Import Hive Table": "导入Hive表",
     "Load Hive Data": "加载Hive数据",
-    "Deep Copy": "硬拷贝"
+    "Deep Copy": "硬拷贝",
+    "Preview Data": "预览数据"
 }

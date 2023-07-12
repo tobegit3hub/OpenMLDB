@@ -119,7 +119,6 @@
         <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
       </template>
     </a-table>
-
   </div>
 
 </div>

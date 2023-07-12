@@ -11,6 +11,16 @@
     <a-descriptions-item label="Schema">{{ data.schema}}</a-descriptions-item>
   </a-descriptions>
 
+
+  <br/>
+  <a-button type="primary" @click="click_preview_data()">{{ $t('Preview Data') }}</a-button>
+
+  <div v-if="isPreviewData">
+    <br/>
+    <h3>Preview Data (Limit 10 rows)</h3>
+    <p v-html="tableData"></p>
+  </div>
+
 </div>
 </template>
   
@@ -34,6 +44,10 @@ export default {
   setup(props) {
     const data = ref("");
 
+    const isPreviewData = ref(false);
+
+    const tableData = ref("");
+
     const initData = () => {
       axios.get(`/api/tables/${props.db}/${props.name}`)
         .then(response => {
@@ -47,12 +61,48 @@ export default {
         });
       }
 
+    const click_preview_data = () => {
+
+      if (isPreviewData.value) {
+        isPreviewData.value = false;
+
+        return;
+      }
+
+      const sql = "SELECT * FROM " + props.db + "." + props.name + " LIMIT 10";
+
+      axios.post(`/api/sql/execute`, {
+        "sql": sql
+      })
+      .then(response => {
+        message.success(`Success to execute SQL: ${sql}`);
+        console.log(response.data);
+
+        isPreviewData.value = true;
+
+        tableData.value = response.data.replace(/\n/g, '<br>');
+
+      })
+      .catch(error => {
+        console.log(error);
+        if ("response" in error && "data" in error.response) {
+          message.error(error.response.data);
+        } else {
+          message.error(error.message);
+        }
+      });
+      
+    }
+
     onMounted(() => {
       initData();
     });
 
     return {
-      data
+      data,
+      isPreviewData,
+      click_preview_data,
+      tableData
     }
   }
   
