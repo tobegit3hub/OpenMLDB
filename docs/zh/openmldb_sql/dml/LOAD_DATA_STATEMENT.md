@@ -49,6 +49,7 @@ FilePathPattern
 | quote      | String  | "                 | 输入数据的包围字符串。字符串长度<=1。<br />load_mode=`cluster`默认为双引号`"`。配置包围字符后，被包围字符包围的内容将作为一个整体解析。例如，当配置包围字符串为"#"时， `1, 1.0, #This is a string field, even there is a comma#, normal_string`将为解析为三个filed，第一个是整数1，第二个是浮点1.0，第三个是一个字符串，第四个虽然没有quote，但也是一个字符串。<br /> **local_mode=`local`默认为`\0`，不处理包围字符。**|
 | mode       | String  | "error_if_exists" | 导入模式:<br />`error_if_exists`: 仅离线模式可用，若离线表已有数据则报错。<br />`overwrite`: 仅离线模式可用，数据将覆盖离线表数据。<br />`append`：离线在线均可用，若文件已存在，数据将追加到原文件后面。                                                                                                   |
 | deep_copy  | Boolean | true              | `deep_copy=false`仅支持离线load, 可以指定`INFILE` Path为该表的离线存储地址，从而不需要硬拷贝。                                                                                                                                                                                                              |
+| sql  | String | true              | 使用SQL语句对导入的数据进行预处理，默认导入的数据文件会注册为file表名，可以使用SparkSQL对SELECT语句进行处理后导入                                                                                                                                                                                                      |
 | load_mode  | String  | cluster           | `load_mode='local'`仅支持从csv本地文件导入在线存储, 它通过本地客户端同步插入数据；<br /> `load_mode='cluster'`仅支持集群版, 通过spark插入数据，支持同步或异步模式                                                                                                                                           |
 | thread     | Integer | 1                 | 仅在本地文件导入时生效，即`load_mode='local'`或者单机版，表示本地插入数据的线程数。 最大值为`50`。                                                                                                                                                                                                          |
 
@@ -88,7 +89,13 @@ LOAD DATA INFILE 'data.csv' INTO TABLE t1 OPTIONS(delimiter = ',' );
 从`data.csv`文件读取数据到表`t1`中。并使用`,`作为列分隔符， 字符串"NA"将被替换为NULL。
 
 ```sql
-LOAD DATA INFILE 'data.csv' INTO TABLE t1 OPTIONS(delimiter = ',', null_value='NA');
+LOAD DATA INFILE 'data_path' INTO TABLE t1 OPTIONS(deep_copy=false);
+```
+
+将本地 Parquet 文件目录拷贝到表`t1`中，并使用 SQL 进行预处理。
+
+```sql
+LOAD DATA INFILE 'file:///tmp/t1.parquet' INTO TABLE db1.t1 OPTIONS(format='parquet', deep_copy=true, sql='SELECT name FROM file where name = \"foo\"')
 ```
 
 将`data_path`软拷贝到表`t1`中，作为离线数据。
