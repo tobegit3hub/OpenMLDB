@@ -65,5 +65,12 @@
     "Import Hive Table": "Import Hive Table",
     "Load Hive Data": "Load Hive Data",
     "Deep Copy": "Deep Copy",
-    "Preview Data": "Preview Data"
+    "Preview Data": "Preview Data",
+    "Description": "Description",
+    "Feature Description": "Feature Description",
+    "Add Description": "Add Description",
+    "Name": "Name",
+    "Dependent Tables": "Dependent Tables",
+    "Feature Name": "Feature Name",
+    "Type": "Type"
 }

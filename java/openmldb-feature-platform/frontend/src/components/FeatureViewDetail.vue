@@ -7,16 +7,16 @@
       &nbsp;&nbsp;<a-button type="primary"><router-link :to='`/featureservices/deploy?featureview=${data.name}`'>{{ $t('Create Service') }}</router-link></a-button>
     </h1>
     <a-descriptions layout="vertical" bordered>
-      <a-descriptions-item label="Name"> {{ data.name }} </a-descriptions-item>
-      <a-descriptions-item label="Entities">
+      <a-descriptions-item :label='$t("Name")'> {{ data.name }} </a-descriptions-item>
+      <a-descriptions-item :label='$t("Entities")'>
         <router-link v-for="entity in entities" :to="`/entities/${entity}`" :key="entity">{{ entity }} </router-link>
       </a-descriptions-item>
-      <a-descriptions-item label="Database"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
-      <a-descriptions-item label="SQL">{{ data.sql }}</a-descriptions-item>
-      <a-descriptions-item label="Features">
+      <a-descriptions-item :label='$t("Database")'><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
+      <a-descriptions-item :label='$t("SQL")'>{{ data.sql }}</a-descriptions-item>
+      <a-descriptions-item :label='$t("Features")'>
         <router-link v-for="feature in features" :to="`/features/${feature.featureViewName}/${feature.featureName}`" :key="feature.featureName">{{ feature.featureName }}, </router-link>
       </a-descriptions-item>
-      <a-descriptions-item label="Descriptioin">{{ data.descriptioin }}</a-descriptions-item>
+      <a-descriptions-item :label='$t("Description")'>{{ data.description }}</a-descriptions-item>
     </a-descriptions>
   
     <br/><br/>
@@ -31,7 +31,7 @@
     </a-table>
 
     <br/>
-    <h1>{{ $t('Dependent') }} {{ $t('Tables') }}</h1>
+    <h1>{{ $t('Dependent Tables') }}</h1>
     <a-table :columns="tableColumns" :data-source="tables">
       <template #db="{ text, record }">
         <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
@@ -44,109 +44,100 @@
 
   </template>
     
-  <script>
-  import axios from 'axios'
-  import { message } from 'ant-design-vue';
-  import { onMounted, ref } from 'vue';
-  
-  export default {
-    props: {
-      name: {
-        type: String,
-        required: true
-      }
+<script>
+import axios from 'axios';
+import { message } from 'ant-design-vue';
+
+export default {
+  props: {
+    name: {
+      type: String,
+      required: true,
     },
-  
-    setup(props) {
-      const data = ref("");
-
-      const entities = ref([]);
-
-      const features = ref([]);
-
-      const columns = [{
-          title: 'Feature View',
+  },
+  data() {
+    return {
+      data: "",
+      entities: [],
+      features: [],
+      columns: [
+        {
+          title: this.$t('Feature View'),
           dataIndex: 'featureViewName',
           key: 'featureViewName',
-          slots: { customRender: 'featureView' }
+          slots: { customRender: 'featureView' },
         },
         {
-          title: 'Feature Name',
+          title: this.$t('Feature Name'),
           dataIndex: 'featureName',
           key: 'featureName',
-          slots: { customRender: 'name' }
+          slots: { customRender: 'name' },
         },
         {
-          title: 'Type',
+          title: this.$t('Type'),
           dataIndex: 'type',
           key: 'type',
         },
         {
-          title: 'Description',
+          title: this.$t('Description'),
           dataIndex: 'description',
           key: 'description',
-      }];
-
-      const tables = ref([]);
-
-      const tableColumns = [{
-          title: 'Database',
+        },
+      ],
+      tables: [],
+      tableColumns: [
+        {
+          title: this.$t('Database'),
           dataIndex: 'db',
           key: 'db',
-          slots: { customRender: 'db' }
+          slots: { customRender: 'db' },
         },
         {
-          title: 'Table',
+          title: this.$t('Table'),
           dataIndex: 'table',
           key: 'table',
-          slots: { customRender: 'table' }
-        }];
+          slots: { customRender: 'table' },
+        },
+      ],
+    };
+  },
+  methods: {
+    initData() {
+      axios
+        .get(`/api/featureviews/${this.name}`)
+        .then((response) => {
+          this.data = response.data;
+          this.entities = this.data.entityNames.split(',').map((item) => item.trim());
 
-      const initData = () => {
-        axios.get(`/api/featureviews/${props.name}`)
-          .then(response => {
-            data.value = response.data;
-
-            entities.value = data.value.entityNames.split(',').map(item => item.trim());;
-
-            // Request features from feature view
-            axios.get(`/api/features/${data.value.name}`)
-              .then(response => {
-                features.value = response.data;
-              })
-              .catch(error => {
-                message.error(error.message);
-              });
-          })
-          .catch(error => {
-            message.error(error.message);
-          });
-
-        axios.get(`/api/featureviews/${props.name}/tables`)
-          .then(response => {            
-            response.data.forEach(str => {
-              let [db, table] = str.split('.');
-              tables.value.push({"db": db, "table": table});
+          // Request features from feature view
+          axios
+            .get(`/api/features/${this.data.name}`)
+            .then((response) => {
+              this.features = response.data;
+            })
+            .catch((error) => {
+              message.error(error.message);
             });
-          })
-          .catch(error => {
-            message.error(error.message);
+        })
+        .catch((error) => {
+          message.error(error.message);
+        });
+
+      axios
+        .get(`/api/featureviews/${this.name}/tables`)
+        .then((response) => {
+          response.data.forEach((str) => {
+            let [db, table] = str.split('.');
+            this.tables.push({ db: db, table: table });
           });
-        }
-  
-      onMounted(() => {
-        initData();
-      });
-  
-      return {
-        data,
-        entities,
-        features,
-        columns,
-        tables,
-        tableColumns
-      }
-    }
-    
-  };
-  </script>
+        })
+        .catch((error) => {
+          message.error(error.message);
+        });
+    },
+  },
+  mounted() {
+    this.initData();
+  },
+};
+</script>

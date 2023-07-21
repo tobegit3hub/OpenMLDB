@@ -31,6 +31,11 @@
             <option v-for="entity in entities" :value="entity.name">{{ entity.name }}</option>
           </a-select>
         </a-form-item>
+
+        <a-form-item
+          :label="$t('Description')">
+          <a-input v-model:value="formState.description" />
+        </a-form-item>
   
         <a-form-item
           :label="$t('SQL')"
@@ -38,13 +43,30 @@
           <a-textarea v-model:value="formState.sql" rows="5"></a-textarea>
         </a-form-item>
         
-        <p v-if="validatedFeatureNames.length > 0">
-          {{ $t('Feature List') }}:
-          <ul>
-            <li v-for="featureName in validatedFeatureNames" :key="featureName">{{ featureName }}</li>
-          </ul>
-        </p>
+        <div v-if="validatedFeatureNames.length > 0">
+          <h3>
+            {{ $t('Feature List') }}:
+            <a-button type="primary" @click="displayAddFeatureDescription()">{{ $t('Add Description') }}</a-button>
+          </h3>
 
+          <ul>
+            <li v-for="(featureName, index) in validatedFeatureNames" :key="featureName">
+              <a-row :gutter="16">
+                <a-col :span="6">
+                  {{ $t('Feature') }}{{index + 1}}: {{ featureName }}
+                </a-col>
+                <a-col v-if="isDisplayAddFeatureDescription" :span="2">
+                  {{ $t('Feature Description') }}:
+                </a-col>
+                <a-col v-if="isDisplayAddFeatureDescription" :span="8">
+                  <a-input v-model:value="formState.featureDescriptionMap[featureName]" />
+                </a-col>
+              </a-row>
+            </li>
+          </ul>
+        </div>
+
+        <br/>
         <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
             <a-button v-if="validatedFeatureNames.length == 0" type="primary" @click="validateForm()">{{ $t('Validate') }} {{ $t('SQL') }}</a-button>
             <a-button v-else type="primary" @click="handleSubmit()">{{ $t('Submit') }}</a-button>
@@ -66,12 +88,16 @@
         databases: [],
   
         validatedFeatureNames: [],
+
+        isDisplayAddFeatureDescription: false,
   
         formState: {
-          name: '',
+          name: 't1v1_v1',
           entityNames: '',
-          db: '',
-          sql: ''
+          db: 't1v1',
+          description: '',
+          sql: 'SELECT name, age + 10 AS new_age FROM user',
+          featureDescriptionMap: {}
         }
       };
     },
@@ -123,11 +149,14 @@
       },
   
       handleSubmit() {
+
         axios.post(`/api/featureviews`, {
           "name": this.formState.name,
           "entityNames": this.formState.entityNames,
           "db": this.formState.db,
-          "sql": this.formState.sql
+          "sql": this.formState.sql,
+          "description": this.formState.description,
+          "featureDescriptionMap": this.formState.featureDescriptionMap
         })
         .then(response => {
           message.success(`Success to add feature view ${this.formState.name}`);
@@ -143,6 +172,10 @@
           }
         });
       },
+
+      displayAddFeatureDescription() {
+        this.isDisplayAddFeatureDescription = true;
+      }
   
     },
   };

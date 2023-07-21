@@ -65,5 +65,12 @@
     "Import Hive Table": "导入Hive表",
     "Load Hive Data": "加载Hive数据",
     "Deep Copy": "硬拷贝",
-    "Preview Data": "预览数据"
+    "Preview Data": "预览数据",
+    "Description": "描述",
+    "Feature Description": "特征描述",
+    "Add Description": "添加描述",
+    "Name": "名称",
+    "Dependent Tables": "依赖表",
+    "Feature Name": "特征名",
+    "Type": "类型"
 }

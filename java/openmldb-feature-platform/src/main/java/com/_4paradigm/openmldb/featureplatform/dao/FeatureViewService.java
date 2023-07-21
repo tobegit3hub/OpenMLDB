@@ -147,7 +147,13 @@ public class FeatureViewService {
                     String stringType = TypeUtil.javaSqlTypeToString(intType);
 
                     FeaturesService featuresService = new FeaturesService(openmldbConnection, openmldbSqlExecutor);
-                    Feature feature = new Feature(featureView.getName(), name, stringType);
+
+                    String featureDescription = "";
+                    if (featureView.getFeatureDescriptionMap().containsKey(name)) {
+                        featureDescription = featureView.getFeatureDescriptionMap().get(name);
+                    }
+
+                    Feature feature = new Feature(featureView.getName(), name, stringType, featureDescription);
                     featuresService.addFeature(feature);
 
                     if (featureNamesBuilder.length() == 0) {
