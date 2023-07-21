@@ -9,11 +9,11 @@
 
     <br/>
     <a-descriptions layout="vertical" bordered>
-      <a-descriptions-item label="Name"> {{ data.name }}</a-descriptions-item>
-      <a-descriptions-item label="Feature list">{{ data.featureList }}</a-descriptions-item>
-      <a-descriptions-item label="Database"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
-      <a-descriptions-item label="SQL">{{ data.sql }}</a-descriptions-item>
-      <a-descriptions-item label="Deployment">{{ data.deployment }}</a-descriptions-item>
+      <a-descriptions-item :label="$t('Name')"> {{ data.name }}</a-descriptions-item>
+      <a-descriptions-item :label="$t('Feature List')">{{ data.featureList }}</a-descriptions-item>
+      <a-descriptions-item :label="$t('Database')"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
+      <a-descriptions-item :label="$t('SQL')">{{ data.sql }}</a-descriptions-item>
+      <a-descriptions-item :label="$t('Deployment')">{{ data.deployment }}</a-descriptions-item>
     </a-descriptions>
   
     <br/><br/>
@@ -28,7 +28,7 @@
     </a-table>
 
     <br/>
-    <h1>{{ $t('Dependent') }} {{ $t('Tables') }}</h1>
+    <h1>{{ $t('Dependent Tables') }}</h1>
     <a-table :columns="tableColumns" :data-source="tables">
       <template #db="{ text, record }">
         <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
@@ -40,128 +40,120 @@
   </div>
   </template>
     
-  <script>
-  import axios from 'axios'
-  import { message } from 'ant-design-vue';
-  import { onMounted, ref } from 'vue';
-  
-  export default {
-    props: {
-      name: {
-        type: String,
-        required: true
-      }
-    },
-  
-    setup(props) {
-      const data = ref("");
-  
-      const features = ref([]);
+<script>
+import axios from 'axios'
+import { message } from 'ant-design-vue';
 
-      const columns = [{
-          title: 'Feature View',
+export default {
+  props: {
+    name: {
+      type: String,
+      required: true
+    }
+  },
+
+  data() {
+    return {
+      data: {},
+      features: [],
+
+      columns: [{
+          title: this.$t('Feature View'),
           dataIndex: 'featureViewName',
           key: 'featureViewName',
           slots: { customRender: 'featureView' }
         },
         {
-          title: 'Feature Name',
+          title: this.$t('Feature Name'),
           dataIndex: 'featureName',
           key: 'featureName',
           slots: { customRender: 'name' }
         },
         {
-          title: 'Type',
+          title: this.$t('Type'),
           dataIndex: 'type',
           key: 'type',
         },
         {
-          title: 'Description',
+          title: this.$t('Description'),
           dataIndex: 'description',
           key: 'description',
-      }];
+      }],
 
-      const tables = ref([]);
+      tables: [],
 
-      const tableColumns = [{
-          title: 'Database',
+      tableColumns: [{
+          title: this.$t('Database'),
           dataIndex: 'db',
           key: 'db',
           slots: { customRender: 'db' }
         },
         {
-          title: 'Table',
+          title: this.$t('Table'),
           dataIndex: 'table',
           key: 'table',
           slots: { customRender: 'table' }
-        }];
+        }],
 
           
-      const requestSchema = ref("");
-      const requestDemoData = ref("");
+      requestSchema: "",
+      requestDemoData: ""
+    };
+  },
 
-      const initData = () => {
-        axios.get(`/api/featureservices/${props.name}`)
-          .then(response => {
-            data.value = response.data;
+  methods: {
+    initData() {
+      axios.get(`/api/featureservices/${this.name}`)
+        .then(response => {
+          this.data = response.data;
 
-            // Request features from feature view
-            axios.get(`/api/features?featureServiceName=${data.value.name}`)
-              .then(response => {
-                features.value = response.data;
-              })
-              .catch(error => {
-                message.error(error.message);
-              });
-
-          })
-          .catch(error => {
-            message.error(error.message);
-          })
-
-        axios.get(`/api/featureservices/${props.name}/tables`)
-          .then(response => {            
-            response.data.forEach(str => {
-              let [db, table] = str.split('.');
-              tables.value.push({"db": db, "table": table});
+          // Request features from feature view
+          axios.get(`/api/features?featureServiceName=${this.data.name}`)
+            .then(response => {
+              this.features = response.data;
+            })
+            .catch(error => {
+              message.error(error.message);
             });
-          })
-          .catch(error => {
-            message.error(error.message);
+
+        })
+        .catch(error => {
+          message.error(error.message);
+        })
+
+      axios.get(`/api/featureservices/${this.name}/tables`)
+        .then(response => {            
+          response.data.forEach(str => {
+            let [db, table] = str.split('.');
+            this.tables.push({"db": db, "table": table});
           });
+        })
+        .catch(error => {
+          message.error(error.message);
+        });
 
-        axios.get(`/api/featureservices/${props.name}/request/schema`)
-          .then(response => {
-            requestSchema.value = response.data;
+      axios.get(`/api/featureservices/${this.name}/request/schema`)
+        .then(response => {
+          this.requestSchema = response.data;
 
-          })
-          .catch(error => {
-            message.error(error.message);
-          });
+        })
+        .catch(error => {
+          message.error(error.message);
+        });
 
-        axios.get(`/api/featureservices/${props.name}/request/demo`)
-          .then(response => {
-            requestDemoData.value = response.data;
-          })
-          .catch(error => {
-            message.error(error.message);
-          });          
-      }
-  
-      onMounted(() => {
-        initData();
-      });
-  
-      return {
-        data,
-        features,
-        columns,
-        tables,
-        tableColumns,
-        requestSchema,
-        requestDemoData
-      }
+      axios.get(`/api/featureservices/${this.name}/request/demo`)
+        .then(response => {
+          this.requestDemoData = response.data;
+        })
+        .catch(error => {
+          message.error(error.message);
+        });  
     }
-    
-  };
-  </script>
+  },
+
+  mounted() {
+    this.initData();
+  }
+  
+}
+</script>

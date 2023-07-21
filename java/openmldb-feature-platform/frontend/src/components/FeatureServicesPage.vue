@@ -69,8 +69,6 @@
 <script>
 import axios from 'axios'
 import { message } from 'ant-design-vue';
-import { Modal } from 'ant-design-vue';
-import { h } from 'vue';
 
 export default {
   data() {
@@ -80,29 +78,29 @@ export default {
       loading: false,
       
       columns: [{
-        title: 'Name',
+        title: this.$t('Name'),
         dataIndex: 'name',
         key: 'name',
         slots: { customRender: 'name' }
       },
       {
-        title: 'Feature List',
+        title: this.$t('Feature List'),
         dataIndex: 'featureList',
         key: 'featureList',
       },
       {
-        title: 'Database',
+        title: this.$t('Database'),
         dataIndex: 'db',
         key: 'db',
         slots: { customRender: 'db' }
       },
       {
-        title: 'Deployment',
+        title: this.$t('Deployment'),
         dataIndex: 'deployment',
         key: 'deployment',
       },
       {
-        title: 'Actions',
+        title: this.$t('Actions'),
         key: 'actions',
         slots: { customRender: 'action' },
       }],

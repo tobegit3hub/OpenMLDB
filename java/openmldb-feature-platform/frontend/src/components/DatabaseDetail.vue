@@ -12,55 +12,54 @@
   
   </div>
 </template>
-    
+
 <script>
-import axios from 'axios'
+import axios from 'axios';
 import { message } from 'ant-design-vue';
-import { onMounted, ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 export default {
   props: {
     db: {
       type: String,
-      required: true
-    }
-  },
-
-  setup(props) {
-    const tables = ref([]);
-
-    const columns = [{
-      title: 'Table',
-      dataIndex: 'table',
-      key: 'table',
-      slots: { customRender: 'table' }
+      required: true,
     },
-    {
-      title: 'Schema',
-      dataIndex: 'schema',
-      key: 'schema',
-    }];
-
-    const initData = () => {
-      axios.get(`/api/databases/${props.db}/tables`)
-          .then(response => {
-            tables.value = response.data;
-          })
-          .catch(error => {
-            message.error(error.message);
-          })
-          .finally(() => {});
-      }
-
-    onMounted(() => {
-      initData();
-    });
-
+  },
+  data() {
     return {
-      tables,
-      columns
-    }
-  }
-  
+      tables: [],
+      columns: [
+        {
+          title: this.$t('Table'),
+          dataIndex: 'table',
+          key: 'table',
+          slots: { customRender: 'table' },
+        },
+        {
+          title: this.$t('Schema'),
+          dataIndex: 'schema',
+          key: 'schema',
+        },
+      ],
+    };
+  },
+  methods: {
+    initData() {
+      axios
+        .get(`/api/databases/${this.db}/tables`)
+        .then((response) => {
+          this.tables = response.data;
+        })
+        .catch((error) => {
+          message.error(error.message);
+        })
+        .finally(() => {
+          // You can perform any additional logic here after the request completes.
+        });
+    },
+  },
+  mounted() {
+    this.initData();
+  },
 };
 </script>

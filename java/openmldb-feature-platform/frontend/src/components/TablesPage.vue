@@ -38,26 +38,26 @@ export default {
       databases: [],
 
       databaseColumns: [{
-        title: 'Database',
+        title: this.$t('Database'),
         slots: { customRender: 'database' }
       }],
 
       tables: [],
       
       columns: [{
-        title: 'Database',
+        title: this.$t('Database'),
         dataIndex: 'db',
         key: 'db',
         slots: { customRender: 'database' }
       },
       {
-        title: 'Table',
+        title: this.$t('Table'),
         dataIndex: 'table',
         key: 'table',
         slots: { customRender: 'table' }
       },
       {
-        title: 'Schema',
+        title: this.$t('Schema'),
         dataIndex: 'schema',
         key: 'schema',
       }]

@@ -72,5 +72,8 @@
     "Name": "名称",
     "Dependent Tables": "依赖表",
     "Feature Name": "特征名",
-    "Type": "类型"
+    "Type": "类型",
+    "Actions": "操作",
+    "Limit": "限制",
+    "Rows": "行"
 }

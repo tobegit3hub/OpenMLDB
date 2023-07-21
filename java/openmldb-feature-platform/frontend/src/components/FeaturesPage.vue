@@ -33,24 +33,24 @@ export default {
       loading: false,
       
       columns: [{
-        title: 'Feature View',
+        title: this.$t('Feature View'),
         dataIndex: 'featureViewName',
         key: 'featureViewName',
         slots: { customRender: 'featureView' }
       },
       {
-        title: 'Feature Name',
+        title: this.$t('Feature Name'),
         dataIndex: 'featureName',
         key: 'featureName',
         slots: { customRender: 'name' }
       },
       {
-        title: 'Type',
+        title: this.$t('Type'),
         dataIndex: 'type',
         key: 'type',
       },
       {
-        title: 'Description',
+        title: this.$t('Description'),
         dataIndex: 'description',
         key: 'description',
       }],

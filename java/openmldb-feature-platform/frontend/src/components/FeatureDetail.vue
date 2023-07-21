@@ -1,20 +1,20 @@
 <template>
-<div>
-
-  <br/>
-  <h1>{{ $t('Feature') }}: {{ data.featureName }} </h1>
-  <a-descriptions layout="vertical" bordered>
-    <a-descriptions-item label="Feature view name"><router-link :to="`/featureviews/${data.featureViewName}`">{{ data.featureViewName }}</router-link></a-descriptions-item>
-    <a-descriptions-item label="Feature name">{{ data.featureName }}</a-descriptions-item>
-    <a-descriptions-item label="Type">{{ data.type}}</a-descriptions-item>
-    <a-descriptions-item label="Description">{{ data.description}}</a-descriptions-item>
-  </a-descriptions>
-
-</div>
+  <div>
+    <br/>
+    <h1>{{ $t('Feature') }}: {{ feature.featureName }} </h1>
+    <a-descriptions layout="vertical" bordered>
+      <a-descriptions-item :label="$t('Feature View Name')">
+        <router-link :to="`/featureviews/${feature.featureViewName}`">{{ feature.featureViewName }}</router-link>
+      </a-descriptions-item>
+      <a-descriptions-item :label="$t('Feature Name')">{{ feature.featureName }}</a-descriptions-item>
+      <a-descriptions-item :label="$t('Type')">{{ feature.type}}</a-descriptions-item>
+      <a-descriptions-item :label="$t('Description')">{{ feature.description}}</a-descriptions-item>
+    </a-descriptions>
+  </div>
 </template>
   
 <script>
-import axios from 'axios'
+import axios from 'axios';
 import { message } from 'ant-design-vue';
 import { onMounted, ref } from 'vue';
 
@@ -22,21 +22,25 @@ export default {
   props: {
     featureViewName: {
       type: String,
-      required: true
+      required: true,
     },
     featureName: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
-  setup(props) {
-    const data = ref("");
+  data() {
+    return {
+      feature: {}
+    };
+  },
 
-    const initData = () => {
-      axios.get(`/api/features/${props.featureViewName}/${props.featureName}`)
+  methods: {
+    initData() {
+      axios.get(`/api/features/${this.featureViewName}/${this.featureName}`)
         .then(response => {
-          data.value = response.data;
+          this.feature = response.data;
         })
         .catch(error => {
           message.error(error.message);
@@ -44,16 +48,11 @@ export default {
         .finally(() => {
 
         });
-      }
-
-    onMounted(() => {
-      initData();
-    });
-
-    return {
-      data
     }
+  },
+
+  mounted() {
+    this.initData();
   }
-  
-};
+}
 </script>

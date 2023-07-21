@@ -4,50 +4,47 @@
   <br/>
   <h1>{{ $t('Entity') }}: {{ data.name }} </h1>
   <a-descriptions layout="vertical" bordered>
-    <a-descriptions-item label="Name"> {{ data.name }}</a-descriptions-item>
-    <a-descriptions-item label="Primary Keys">{{ data.primaryKeys }}</a-descriptions-item>
+    <a-descriptions-item :label="$t('Name')"> {{ data.name }}</a-descriptions-item>
+    <a-descriptions-item :label="$t('Primary Keys')">{{ data.primaryKeys }}</a-descriptions-item>
   </a-descriptions>
 
 </div>
 </template>
-  
+
 <script>
-import axios from 'axios'
+import axios from 'axios';
 import { message } from 'ant-design-vue';
-import { onMounted, ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 export default {
   props: {
     name: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-
-  setup(props) {
-    const data = ref("");
-
-    const initData = () => {
-      axios.get(`/api/entities/${props.name}`)
-        .then(response => {
-          data.value = response.data;
+  data() {
+    return {
+      data: "",
+    };
+  },
+  methods: {
+    initData() {
+      axios
+        .get(`/api/entities/${this.name}`)
+        .then((response) => {
+          this.data = response.data;
         })
-        .catch(error => {
+        .catch((error) => {
           message.error(error.message);
         })
         .finally(() => {
-
+          // You can perform any additional logic here after the request completes.
         });
-      }
-
-    onMounted(() => {
-      initData();
-    });
-
-    return {
-      data
-    }
-  }
-  
+    },
+  },
+  mounted() {
+    this.initData();
+  },
 };
 </script>

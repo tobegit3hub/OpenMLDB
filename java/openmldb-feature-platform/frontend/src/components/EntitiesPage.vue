@@ -38,18 +38,18 @@ export default {
       loading: false,
       
       columns: [{
-        title: 'Name',
+        title: this.$t('Name'),
         dataIndex: 'name',
         key: 'name',
         slots: { customRender: 'name' }
       },
       {
-        title: 'Primary Keys',
+        title: this.$t('Primary Keys'),
         dataIndex: 'primaryKeys',
         key: 'primaryKeys',
       },
       {
-        title: 'Actions',
+        title: this.$t('Actions'),
         key: 'actions',
         slots: { customRender: 'custom' },
       }],

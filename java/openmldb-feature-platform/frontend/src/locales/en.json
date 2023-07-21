@@ -72,5 +72,8 @@
     "Name": "Name",
     "Dependent Tables": "Dependent Tables",
     "Feature Name": "Feature Name",
-    "Type": "Type"
+    "Type": "Type",
+    "Actions": "Actions",
+    "Limit": "Limit",
+    "Rows": "Rows"
 }
