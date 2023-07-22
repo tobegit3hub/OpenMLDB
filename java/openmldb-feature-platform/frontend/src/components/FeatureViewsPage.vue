@@ -9,7 +9,10 @@
 
   <br/>
   <!-- Data table -->
-  <a-table :columns="columns" :data-source="featureViews" :loading="loading">
+  <a-input v-model:value="searchText" placeholder="Search" @change="handleSearch" />
+  <br/><br/>
+
+  <a-table :columns="columns" :data-source="searchFilteredFeatureViews" :loading="loading">
     <template #name="{ text, record }">
       <router-link :to="`/featureviews/${record.name}`">{{ text }}</router-link>
     </template>
@@ -36,6 +39,9 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
+      searchText: "",
+      searchFilteredFeatureViews: [],
+
       featureViews: [],
 
       loading: false,
@@ -92,6 +98,7 @@ export default {
       axios.get(`/api/featureviews`)
         .then(response => {
           this.featureViews = response.data;
+          this.searchFilteredFeatureViews = this.featureViews;
         })
         .catch(error => {
           message.error(error.message);
@@ -111,6 +118,22 @@ export default {
         message.error(error.message);
       });
     },
+
+    matchSearch(item) {
+        return item.name.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.entityNames.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.db.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.featureNames.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.description.toLowerCase().includes(this.searchText.toLowerCase());
+    },
+
+    handleSearch() {
+      if (this.searchText === "") {
+        this.searchFilteredFeatureViews = this.featureViews;
+      } else {
+        this.searchFilteredFeatureViews = this.featureViews.filter((item) => this.matchSearch(item));
+      }
+    }
 
   },
 };

@@ -9,7 +9,10 @@
 
   <br/>
   <!-- Data table -->
-  <a-table :columns="columns" :data-source="features" :loading="loading">
+  <a-input v-model:value="searchText" placeholder="Search" @change="handleSearch" />
+  <br/><br/>
+
+  <a-table :columns="columns" :data-source="searchFilteredFeatures" :loading="loading">
     <template #featureView="{ text, record }">
         <router-link :to="`/featureviews/${record.featureViewName}`">{{ text }}</router-link>
       </template>
@@ -28,6 +31,9 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
+      searchText: "",
+      searchFilteredFeatures: [],
+
       features: [],
 
       loading: false,
@@ -71,6 +77,7 @@ export default {
       axios.get(`/api/features`)
         .then(response => {
           this.features = response.data;
+          this.searchFilteredFeatures = this.features;
         })
         .catch(error => {
           message.error(error.message);
@@ -78,6 +85,20 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+
+    matchSearch(item) {
+        return item.featureViewName.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.featureName.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.description.toLowerCase().includes(this.searchText.toLowerCase());
+    },
+
+    handleSearch() {
+      if (this.searchText === "") {
+        this.searchFilteredFeatures = this.features;
+      } else {
+        this.searchFilteredFeatures = this.features.filter((item) => this.matchSearch(item));
+      }
     }
 
   },

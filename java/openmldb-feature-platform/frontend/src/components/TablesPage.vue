@@ -8,6 +8,7 @@
   <br/>
   <h1>{{ $t('Databases') }}</h1>
   <!-- Databases table -->
+  <br/>
   <a-table :columns="databaseColumns" :data-source="databases">
     <template #database="{ text, record }">
       <router-link :to="`/databases/${record}`">{{ text }}</router-link>
@@ -16,7 +17,10 @@
 
   <h1>{{ $t('Data Tables') }}</h1>
   <!-- Tables table -->
-  <a-table :columns="columns" :data-source="tables">
+  <a-input v-model:value="searchText" placeholder="Search" @change="handleSearch" />
+  <br/><br/>
+
+  <a-table :columns="columns" :data-source="searchFilteredTables">
     <template #database="{ text, record }">
       <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
     </template>    
@@ -35,6 +39,9 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
+      searchText: "",
+      searchFilteredTables: [],
+
       databases: [],
 
       databaseColumns: [{
@@ -83,6 +90,7 @@ export default {
       axios.get(`/api/tables`)
         .then(response => {
           this.tables = response.data;
+          this.searchFilteredTables = this.tables;
         })
         .catch(error => {
           message.error(error.message);
@@ -90,6 +98,18 @@ export default {
         .finally(() => {});
     },
 
-  },
+    matchSearch(item) {
+        return item.table.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.db.toLowerCase().includes(this.searchText.toLowerCase());
+    },
+
+    handleSearch() {
+      if (this.searchText === "") {
+        this.searchFilteredTables = this.tables;
+      } else {
+        this.searchFilteredTables = this.tables.filter((item) => this.matchSearch(item));
+      }
+    }
+  }
 };
 </script>

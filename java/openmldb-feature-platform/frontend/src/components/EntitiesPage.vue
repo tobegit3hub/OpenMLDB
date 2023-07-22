@@ -9,7 +9,11 @@
 
   <br/>
   <!-- Data table -->
-  <a-table :columns="columns" :data-source="entities" :loading="loading">
+
+  <a-input v-model:value="searchText" placeholder="Search" @change="handleSearch" />
+  <br/><br/>
+
+  <a-table :columns="columns" :data-source="searchFilteredEntities" :loading="loading">
     <template #name="{ text, record }">
       <router-link :to="`/entities/${record.name}`">{{ text }}</router-link>
     </template>
@@ -33,6 +37,9 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
+      searchText: "",
+      searchFilteredEntities: [],
+
       entities: [],
 
       loading: false,
@@ -67,6 +74,7 @@ export default {
       axios.get(`/api/entities`)
         .then(response => {
           this.entities = response.data;
+          this.searchFilteredEntities = this.entities;
         })
         .catch(error => {
           message.error(error.message);
@@ -86,6 +94,19 @@ export default {
         message.error(error.message);
       });
     },
+
+    matchSearch(item) {
+        return item.name.toLowerCase().includes(this.searchText.toLowerCase())
+          || item.primaryKeys.toLowerCase().includes(this.searchText.toLowerCase());
+    },
+
+    handleSearch() {
+      if (this.searchText === "") {
+        this.searchFilteredEntities = this.entities;
+      } else {
+        this.searchFilteredEntities = this.entities.filter((item) => this.matchSearch(item));
+      }
+    }
 
   },
 };
