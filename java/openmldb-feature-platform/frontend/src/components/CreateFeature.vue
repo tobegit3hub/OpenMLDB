@@ -92,11 +92,11 @@
         isDisplayAddFeatureDescription: false,
   
         formState: {
-          name: 't1v1_v1',
+          name: '',
           entityNames: '',
-          db: 't1v1',
+          db: '',
           description: '',
-          sql: 'SELECT name, age + 10 AS new_age FROM user',
+          sql: '',
           featureDescriptionMap: {}
         }
       };

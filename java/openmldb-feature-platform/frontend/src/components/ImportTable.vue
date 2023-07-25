@@ -52,17 +52,27 @@
           </a-select>
         </a-form-item>
 
-      <a-form-item 
-        :label="$t('Deep Copy')"
-        :rules="[{ required: true, message: 'Please select is deep copy!' }]">
-        <a-select v-model="importHiveTableFormState.isDeepCopy">
-          <a-select-option :value="true">True</a-select-option>
-          <a-select-option :value="false">False</a-select-option>
-        </a-select>
-      </a-form-item>
+        <!-- Only display when click the button -->
+        <div v-if="isDisplayMoreOptions">
+          <a-form-item 
+            :label="$t('Deep Copy')"
+            :rules="[{ required: false, message: 'Please select is deep copy!' }]">
+            <a-select v-model="loadHiveDataFormState.isDeepCopy">
+              <a-select-option :value="true">True</a-select-option>
+              <a-select-option :value="false">False</a-select-option>
+            </a-select>
+          </a-form-item>
+
+          <a-form-item
+            label="SQL"
+            :rules="[{ required: false, message: 'Please input import SQL!' }]">
+            <a-input v-model:value="loadHiveDataFormState.sql" />
+          </a-form-item>
+        </div>
 
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
         <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
+        &nbsp;&nbsp;<a-button type="primary" @click="clickDisplayMoreOptions()">{{ $t('Display More Options') }}</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -94,24 +104,14 @@
       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
         <a-button type="primary" html-type="submit">{{ $t('Submit') }}</a-button>
       </a-form-item>
+
     </a-form>
   </div>
 
-  <a-button type="primary" @click="click_display_tables()">{{ $t('Display Tables') }}</a-button>
+  <a-button type="primary" @click="clickDisplayTables()">{{ $t('Display Tables') }}</a-button>
 
   <div v-if="isDisplayTable">
-    <br/>
-
-    <h1>{{ $t('Data Tables') }}</h1>
-    <!-- Tables table -->
-    <a-table :columns="columns" :data-source="tables">
-      <template #database="{ text, record }">
-        <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
-      </template>    
-      <template #table="{ text, record }">
-        <router-link :to="`/tables/${record.db}/${record.table}`">{{ text }}</router-link>
-      </template>
-    </a-table>
+    <TablesPage></TablesPage>
   </div>
 
 </div>
@@ -121,31 +121,21 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue';
 
+import TablesPage from './TablesPage.vue';
+
 export default {
+  components: {
+    TablesPage
+  },
+
   data() {
     return {
       isDisplayTable: false,
 
+      isDisplayMoreOptions: false,
+
       tables: [],
       
-      columns: [{
-        title: this.$t('Database'),
-        dataIndex: 'db',
-        key: 'db',
-        slots: { customRender: 'database' }
-      },
-      {
-        title: this.$t('Table'),
-        dataIndex: 'table',
-        key: 'table',
-        slots: { customRender: 'table' }
-      },
-      {
-        title: this.$t('Schema'),
-        dataIndex: 'schema',
-        key: 'schema',
-      }],
-
       formState: {
         sql: '',
       },
@@ -158,7 +148,8 @@ export default {
       loadHiveDataFormState: {
         hivePath: '',
         openmldbTable: '',
-        isDeepCopy: true
+        isDeepCopy: true,
+        sql: ''
       },
     };
   },
@@ -217,6 +208,10 @@ export default {
 
     handleLoadHiveData() {
       const sql = "LOAD DATA INFILE 'hive://" + this.loadHiveDataFormState.hivePath + "' INTO TABLE " + this.loadHiveDataFormState.openmldbTable + " OPTIONS(deep_copy=" + this.loadHiveDataFormState.isDeepCopy + ", mode='append')"
+      if (this.loadHiveDataFormState.sql !== "") {
+        sql = "LOAD DATA INFILE 'hive://" + this.loadHiveDataFormState.hivePath + "' INTO TABLE " + this.loadHiveDataFormState.openmldbTable + " OPTIONS(deep_copy=" + this.loadHiveDataFormState.isDeepCopy + ", mode='append', sql='" + this.loadHiveDataFormState.sql + "')"
+      }
+      
       axios.post(`/api/sql/execute`, {
         "sql": sql
       })
@@ -233,11 +228,19 @@ export default {
       });
     },
 
-    click_display_tables() {
+    clickDisplayTables() {
       if (this.isDisplayTable) {
         this.isDisplayTable = false;
       } else {
         this.isDisplayTable = true;
+      }
+    },
+
+    clickDisplayMoreOptions() {
+      if (this.isDisplayMoreOptions) {
+        this.isDisplayMoreOptions = false;
+      } else {
+        this.isDisplayMoreOptions = true;
       }
     }
 
