@@ -40,7 +40,10 @@ public class SqlService {
         sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.feature_views (name string, entity_names string, db string, description string, sql string, feature_names string)";
         openmldbStatement.execute(sql);
 
-        sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.feature_services (name string, feature_list string, db string, sql string, deployment string)";
+        sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.feature_services (name string, version string, feature_list string, db string, sql string, deployment string)";
+        openmldbStatement.execute(sql);
+
+        sql = "CREATE TABLE IF NOT EXISTS SYSTEM_FEATURE_PLATFORM.latest_feature_services (name string, version string, db string, deployment string)";
         openmldbStatement.execute(sql);
     }
 

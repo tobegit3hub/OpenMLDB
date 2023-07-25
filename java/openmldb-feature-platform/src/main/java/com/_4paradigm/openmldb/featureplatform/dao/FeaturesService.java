@@ -99,11 +99,31 @@ public class FeaturesService {
     }
 
     public List<Feature> getFeaturesByFeatureService(String featureServiceName) {
+        // tobe1: Get latest version
+
         List<Feature> outputFeatures = new ArrayList<>();
 
         FeatureServiceService featureServiceService = new FeatureServiceService(openmldbConnection, openmldbSqlExecutor);
 
         FeatureService featureService = featureServiceService.getFeatureServiceByName(featureServiceName);
+        String featureList = featureService.getFeatureList();
+
+        for (String featureListItem : featureList.split(",")) {
+            // TODO: Only support for feautre view name now
+            String featureViewName = featureListItem.trim();
+            List<Feature> features = getFeaturesByFeatureView(featureViewName);
+            outputFeatures.addAll(features);
+        }
+
+        return outputFeatures;
+    }
+
+    public List<Feature> getFeaturesByFeatureServiceAndVersion(String featureServiceName, String version) {
+        List<Feature> outputFeatures = new ArrayList<>();
+
+        FeatureServiceService featureServiceService = new FeatureServiceService(openmldbConnection, openmldbSqlExecutor);
+
+        FeatureService featureService = featureServiceService.getFeatureServiceByNameAndVersion(featureServiceName, version);
         String featureList = featureService.getFeatureList();
 
         for (String featureListItem : featureList.split(",")) {

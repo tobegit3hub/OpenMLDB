@@ -20,6 +20,14 @@
         </a-select>
       </a-form-item>
 
+      <a-form-item
+        :label='$t("Version")'
+        :rules="[{ required: false, message: 'Please input feature service version!' }]">
+        <a-select id="itemSelect" v-model:value="testFormState.version" @change="updateSelectedService">
+          <option v-for="version in featureServiceVersions" :value="version">{{ version }}</option>
+        </a-select>
+      </a-form-item>
+
       <div v-if="testFormState.name != ''">
         <br/>
         <h1>{{ $t('Request') }} {{ $t('Schema') }}</h1>
@@ -56,8 +64,11 @@ export default {
     return {
       featureServices: [],
 
+      featureServiceVersions: [],
+
       testFormState: {
         name: "",
+        version: "",
         testData: "",
       },
 
@@ -73,7 +84,17 @@ export default {
   methods: {
     updateSelectedService() {
       if (this.testFormState.name != "") {
-        axios.get(`/api/featureservices/${this.testFormState.name}/request/schema`)
+
+        axios.get(`/api/featureservices/${this.testFormState.name}/versions`)
+          .then(response => {
+            this.featureServiceVersions = response.data;
+            this.featureServiceVersions.push("");
+          })
+          .catch(error => {
+            message.error(error.message);
+          });
+
+        axios.get(`/api/featureservices/${this.testFormState.name}/${this.testFormState.version}/request/schema`)
           .then(response => {
             this.requestSchema = response.data;
 
@@ -82,13 +103,15 @@ export default {
             message.error(error.message);
           });
 
-        axios.get(`/api/featureservices/${this.testFormState.name}/request/demo`)
+        axios.get(`/api/featureservices/${this.testFormState.name}/${this.testFormState.version}/request/demo`)
           .then(response => {
             this.requestDemoData = response.data;
           })
           .catch(error => {
             message.error(error.message);
           });   
+
+          
       }
     },
 
@@ -97,6 +120,9 @@ export default {
       if (this.$route.query.featureservice != null) {
         // Url provides feature service name
         this.testFormState.name = this.$route.query.featureservice;
+        if (this.$route.query.version != null) {
+          this.testFormState.version = this.$route.query.version;
+        }
         this.updateSelectedService();
       }
 
@@ -107,10 +133,8 @@ export default {
         .catch(error => {
           message.error(error.message);
         })
-        .finally(() => {});
- 
+        .finally(() => {}); 
     },
-
 
     handleDelete(name) {
       axios.delete(`/api/featureservices/${name}`)
@@ -124,7 +148,7 @@ export default {
     },
 
     handleTestFormSubmit() {
-      axios.post(`/api/featureservices/${this.testFormState.name}/request`,
+      axios.post(`/api/featureservices/${this.testFormState.name}/${this.testFormState.version}/request`,
         JSON.parse(this.testFormState.testData)
       )
       .then(response => {

@@ -9,12 +9,15 @@
 
   <br/>
   <!-- Data table -->
-  <a-input v-model:value="searchText" placeholder="Search" @change="handleSearch" />
+  <a-input v-model:value="searchText" :placeholder="$t('Search')" @change="handleSearch" />
   <br/><br/>
 
   <a-table :columns="columns" :data-source="searchFilteredFeatureServices" :loading="loading">
     <template #name="{ text, record }">
       <router-link :to="`/featureservices/${record.name}`">{{ text }}</router-link>
+    </template>
+    <template #version="{ text, record }">
+      <router-link :to="`/featureservices/${record.name}/${record.version}`">{{ text }}</router-link>
     </template>
     <template #db="{ text, record }">
       <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
@@ -90,20 +93,15 @@ export default {
         slots: { customRender: 'name' }
       },
       {
+        title: this.$t('Version'),
+        dataIndex: 'version',
+        key: 'version',
+        slots: { customRender: 'version' }
+      },
+      {
         title: this.$t('Feature List'),
         dataIndex: 'featureList',
         key: 'featureList',
-      },
-      {
-        title: this.$t('Database'),
-        dataIndex: 'db',
-        key: 'db',
-        slots: { customRender: 'db' }
-      },
-      {
-        title: this.$t('Deployment'),
-        dataIndex: 'deployment',
-        key: 'deployment',
       },
       {
         title: this.$t('Actions'),
@@ -113,6 +111,7 @@ export default {
 
       createFromDeploymentFormState: {
         name: '',
+        version: '',
         db: '',
         deploymentName: ''
       },
@@ -143,6 +142,7 @@ export default {
     handleCreateFromDeploymentSubmit() {
       axios.post(`/api/featureservices/deployments`, {
         "name": this.createFromDeploymentFormState.name,
+        "version": this.createFromDeploymentFormState.version,
         "db": this.createFromDeploymentFormState.featureList,
         "deploymentName": this.createFromDeploymentFormState.deploymentName
       })

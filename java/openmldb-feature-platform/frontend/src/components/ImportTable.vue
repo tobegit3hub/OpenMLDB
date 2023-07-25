@@ -101,13 +101,6 @@
 
   <div v-if="isDisplayTable">
     <br/>
-    <h1>{{ $t('Databases') }}</h1>
-    <!-- Databases table -->
-    <a-table :columns="databaseColumns" :data-source="databases">
-      <template #database="{ text, record }">
-        <router-link :to="`/databases/${record}`">{{ text }}</router-link>
-      </template>
-    </a-table>
 
     <h1>{{ $t('Data Tables') }}</h1>
     <!-- Tables table -->
@@ -133,29 +126,22 @@ export default {
     return {
       isDisplayTable: false,
 
-      databases: [],
-
-      databaseColumns: [{
-        title: 'Database',
-        slots: { customRender: 'database' }
-      }],
-
       tables: [],
       
       columns: [{
-        title: 'Database',
+        title: this.$t('Database'),
         dataIndex: 'db',
         key: 'db',
         slots: { customRender: 'database' }
       },
       {
-        title: 'Table',
+        title: this.$t('Table'),
         dataIndex: 'table',
         key: 'table',
         slots: { customRender: 'table' }
       },
       {
-        title: 'Schema',
+        title: this.$t('Schema'),
         dataIndex: 'schema',
         key: 'schema',
       }],
@@ -183,15 +169,6 @@ export default {
 
   methods: {
     initData() {
-      axios.get(`/api/databases`)
-        .then(response => {
-          this.databases = response.data;
-        })
-        .catch(error => {
-          message.error(error.message);
-        })
-        .finally(() => {});
-
       axios.get(`/api/tables`)
         .then(response => {
           this.tables = response.data;

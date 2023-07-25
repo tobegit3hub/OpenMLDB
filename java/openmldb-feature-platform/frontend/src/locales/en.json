@@ -75,5 +75,13 @@
     "Type": "Type",
     "Actions": "Actions",
     "Limit": "Limit",
-    "Rows": "Rows"
+    "Rows": "Rows",
+    "Feature Service Version": "Feature Service Version",
+    "Version": "Version",
+    "Search": "Search",
+    "Latest Version": "Latest Version",
+    "Features Service Versions": "Features Service Versions",
+    "Update Latest Version": "Update Latest Version",
+    "Latest": "Latest",
+    "Not Latest": "Not Latest"
 }

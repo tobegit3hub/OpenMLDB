@@ -11,7 +11,6 @@
         <router-link to='/'>{{ $t('Feature Big Screen') }}</router-link>
       </a-menu-item>
 
-
       <a-sub-menu key="whole_process_wizard">
         <template #title>{{ $t('Whole Process Wizard') }}</template>
 

@@ -75,5 +75,13 @@
     "Type": "类型",
     "Actions": "操作",
     "Limit": "限制",
-    "Rows": "行"
+    "Rows": "行",
+    "Feature Service Version": "特征服务版本",
+    "Version": "版本",
+    "Search": "搜索",
+    "Latest Version": "最新版本",
+    "Features Service Versions": "特征服务版本",
+    "Update Latest Version": "更新最新版本",
+    "Latest": "最新",
+    "Not Latest": "非最新"
 }

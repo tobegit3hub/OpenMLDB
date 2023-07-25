@@ -10,7 +10,7 @@
   <br/>
   <!-- Data table -->
 
-  <a-input v-model:value="searchText" placeholder="Search" @change="handleSearch" />
+  <a-input v-model:value="searchText" :placeholder="$t('Search')" @change="handleSearch" />
   <br/><br/>
 
   <a-table :columns="columns" :data-source="searchFilteredEntities" :loading="loading">

@@ -19,13 +19,18 @@ public class FeatureController {
     }
 
     @GetMapping
-    public List<Feature> getFeatures(@RequestParam(value = "featureServiceName", required = false) String featureServiceName) {
+    public List<Feature> getFeatures(@RequestParam(value = "featureServiceName", required = false) String featureServiceName, @RequestParam(value = "featureServiceVersion", required = false) String featureServiceVersion) {
         if (featureServiceName == null) {
             return featureService.getFeatures();
         } else {
-            return featureService.getFeaturesByFeatureService(featureServiceName);
+            if (featureServiceVersion == null) {
+                return featureService.getFeaturesByFeatureService(featureServiceName);
+            } else {
+                return featureService.getFeaturesByFeatureServiceAndVersion(featureServiceName, featureServiceVersion);
+            }
         }
     }
+
 
     @GetMapping("/{feature_view_name}")
     public List<Feature> getFeaturesByFeatureView(@PathVariable String feature_view_name) {

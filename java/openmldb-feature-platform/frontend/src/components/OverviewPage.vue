@@ -104,14 +104,7 @@ export default {
 
       renderChart() {
         const chart = echarts.init(this.chartContainer);
-/*
-        const data = [
-          { name: '数据表', value: this.tableCount },
-          { name: '特征组', value: this.featureViewCount },
-          { name: '特征', value: 18 },
-          { name: '特征服务', value: 15 },
-        ];
-*/
+
         const option = {
           tooltip: {
             trigger: 'item',

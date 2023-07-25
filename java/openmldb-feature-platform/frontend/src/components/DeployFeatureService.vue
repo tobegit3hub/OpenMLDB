@@ -19,6 +19,12 @@
       </a-form-item>
 
       <a-form-item
+        :label="$t('Feature Service Version')"
+        :rules="[{ required: true, message: 'Please input version!' }]">
+        <a-input v-model:value="formState.version" />
+      </a-form-item>
+
+      <a-form-item
         :label="$t('Feature View List')"
         :rules="[{ required: true, message: 'Please input feature list!' }]">
 
@@ -39,8 +45,6 @@
 <script>
 import axios from 'axios'
 import { message } from 'ant-design-vue';
-import { Modal } from 'ant-design-vue';
-import { h } from 'vue';
 
 export default {
   data() {
@@ -49,6 +53,7 @@ export default {
 
       formState: {
         name: '',
+        version: '',
         featureList: []
       },
 
@@ -79,13 +84,14 @@ export default {
     handleSubmit() {
       axios.post(`/api/featureservices`, {
         "name": this.formState.name,
+        "version": this.formState.version,
         "featureList": this.formState.featureList.join(',')
       })
       .then(response => {
-        message.success(`Success to add feature service ${this.formState.name}`);
+        message.success(`Success to add feature service ${this.formState.name} and version ${this.formState.version}`);
 
         // Redirect to FeatureView detail page
-        this.$router.push(`/featureservices/${this.formState.name}`);
+        this.$router.push(`/featureservices/${this.formState.name}/${this.formState.version}`);
       })
       .catch(error => {
           if (error.response.data) {

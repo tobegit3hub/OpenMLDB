@@ -8,7 +8,6 @@ class HomeController {
 
     @GetMapping("/")
     public String index() {
-        // TODO: Render the single page app
         return "index.html";
     }
 }

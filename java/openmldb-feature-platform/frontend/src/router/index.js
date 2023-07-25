@@ -16,6 +16,7 @@ import EntityDetail from '../components/EntityDetail.vue'
 import FeatureDetail from '../components/FeatureDetail.vue'
 import FeatureViewDetail from '../components/FeatureViewDetail.vue'
 import FeatureServiceDetail from '../components/FeatureServiceDetail.vue'
+import FeatureServiceVersionDetail from '../components/FeatureServiceVersionDetail.vue'
 import CreateFeature from '../components/CreateFeature.vue'
 import DeployFeatureService from '../components/DeployFeatureService.vue'
 import TestFeatureService from '../components/TestFeatureService.vue'
@@ -40,6 +41,7 @@ const router = createRouter({
     { path: '/featureservices/deploy', component: DeployFeatureService},
     { path: '/featureservices/test', component: TestFeatureService},
     { path: '/featureservices/:name', component: FeatureServiceDetail, props: true },
+    { path: '/featureservices/:name/:version', component: FeatureServiceVersionDetail, props: true },
     { path: '/sql', component: SqlPage},
     { path: '/tutorial', component: TutorialPage},
     { path: '/404', redirect: "/" },
