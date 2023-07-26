@@ -4,7 +4,29 @@
 
   <br />
   <div>
-    <h1>{{ $t('Import Hive Table') }}</h1>
+    <h1>{{ $t('Create Database') }}</h1>
+    <a-form
+      :model="createDatabaseFormState"
+      name="basic"
+      :label-col="{ span: 8 }"
+      :wrapper-col="{ span: 16 }"
+      @submit="handleSubmitCreateDatabase">
+      <a-form-item
+        label="Database"
+        :rules="[{ required: true, message: 'Please input database!' }]">
+        <a-input v-model:value="createDatabaseFormState.database" />
+      </a-form-item>
+
+      <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+        <a-button type="primary" html-type="submit">{{ $t('Create') }}</a-button>
+      </a-form-item>
+
+    </a-form>
+  </div>
+
+  <br />
+  <div>
+    <h1>{{ $t('Map Hive Table') }}</h1>
     <a-form
       :model="importHiveTableFormState"
       name="basic"
@@ -77,6 +99,7 @@
     </a-form>
   </div>
 
+  <div v-if="isDisplayImportSql">
   <br />
   <div>
     <h1>{{ $t('Import Table') }}</h1>
@@ -84,8 +107,8 @@
       <a-typography-paragraph>
         <p>Use SQL to create or delete the databases or tables.</p>
         <p>eg. CREATE TABLE db1.user (name varchar, age int)</p>
-        <p>eg. CREATE TABLE db1.t1 LIKE HIVE 'hive://hive_db.t1';</p>
-        <p>eg. LOAD DATA INFILE 'hive://db1.t1' INTO TABLE db1.t1 OPTIONS(deep_copy=false, mode='append');</p>
+        <p>eg. CREATE TABLE db1.t1 LIKE HIVE 'hive://hive_db.t1'</p>
+        <p>eg. LOAD DATA INFILE 'hive://db1.t1' INTO TABLE db1.t1 OPTIONS(deep_copy=false, mode='append')</p>
       </a-typography-paragraph>
     </a-typography>
     <!-- Create form -->
@@ -107,8 +130,11 @@
 
     </a-form>
   </div>
+  </div>
 
-  <a-button type="primary" @click="clickDisplayTables()">{{ $t('Display Tables') }}</a-button>
+  <a-button type="primary" @click="clickDisplayImportSql()">{{ $t('Display Import SQL') }}</a-button>
+
+  &nbsp;&nbsp;<a-button type="primary" @click="clickDisplayTables()">{{ $t('Display Tables') }}</a-button>
 
   <div v-if="isDisplayTable">
     <TablesPage></TablesPage>
@@ -132,10 +158,16 @@ export default {
     return {
       isDisplayTable: false,
 
+      isDisplayImportSql: false,
+
       isDisplayMoreOptions: false,
 
       tables: [],
-      
+
+      createDatabaseFormState: {
+        database: '',
+      },
+
       formState: {
         sql: '',
       },
@@ -170,6 +202,22 @@ export default {
         .finally(() => {});
     },
 
+    handleSubmitCreateDatabase() {
+      const sql = "CREATE DATABASE IF NOT EXISTS " + this.createDatabaseFormState.database;
+      axios.post(`/api/sql/execute`, {
+        "sql": sql
+      })
+      .then(response => {
+        message.success(`Success to execute SQL: ${sql}`);
+      })
+      .catch(error => {
+        if (error.response.data) {
+            message.error(error.response.data);
+          } else {
+            message.error(error.message);
+          }
+      });
+    },
 
     handleSubmit() {
       axios.post(`/api/sql/execute`, {
@@ -226,6 +274,14 @@ export default {
             message.error(error.message);
           }
       });
+    },
+
+    clickDisplayImportSql() {
+      if (this.isDisplayImportSql) {
+        this.isDisplayImportSql = false;
+      } else {
+        this.isDisplayImportSql = true;
+      }
     },
 
     clickDisplayTables() {

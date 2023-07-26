@@ -84,5 +84,9 @@
     "Update Latest Version": "Update Latest Version",
     "Latest": "Latest",
     "Not Latest": "Not Latest",
-    "Display More Options": "Display More Options"
+    "Display More Options": "Display More Options",
+    "Create Database": "Create Database",
+    "Map Hive Table": "Map Hive Table",
+    "Display Import SQL": "Display Import SQL",
+    "Display All Versions": "Display All Versions"
 }

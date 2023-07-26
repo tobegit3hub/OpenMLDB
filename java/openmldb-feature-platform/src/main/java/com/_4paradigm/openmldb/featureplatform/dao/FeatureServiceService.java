@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com._4paradigm.openmldb.featureplatform.utils.TypeUtil;
@@ -40,6 +41,7 @@ public class FeatureServiceService {
         this.openmldbSqlExecutor = openmldbSqlExecutor;
     }
 
+
     public List<FeatureService> getFeatureServices() {
         String sql = "SELECT name, version, feature_list, db, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services";
 
@@ -53,6 +55,52 @@ public class FeatureServiceService {
             while (result.next()) {
                 FeatureService featureService = new FeatureService(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6));
                 featureServices.add(featureService);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return featureServices;
+    }
+
+    public List<FeatureService> getLatestFeatureServices() {
+        ArrayList<FeatureService> featureServices = new ArrayList<>();
+
+        try {
+
+            Map<String, String> latestVersionMap = new HashMap<>();
+
+            String sql = "SELECT name, version FROM SYSTEM_FEATURE_PLATFORM.latest_feature_services";
+
+            Statement openmldbStatement = openmldbConnection.createStatement();
+            openmldbStatement.execute(sql);
+            ResultSet result = openmldbStatement.getResultSet();
+
+            while (result.next()) {
+                String name = result.getString(1);
+                String version = result.getString(2);
+
+                latestVersionMap.put(name, version);
+            }
+
+            sql = "SELECT name, version, feature_list, db, sql, deployment FROM SYSTEM_FEATURE_PLATFORM.feature_services";
+            openmldbStatement = openmldbConnection.createStatement();
+            openmldbStatement.execute(sql);
+            result = openmldbStatement.getResultSet();
+
+            while (result.next()) {
+
+                String name = result.getString(1);
+                String version = result.getString(2);
+
+                if (!latestVersionMap.containsKey(name)) {
+                    System.out.println("Error and fail to find latest version of feature service name: " + name);
+                } else {
+                    if (latestVersionMap.get(name).equals(version)) {
+                        FeatureService featureService = new FeatureService(name, version, result.getString(3), result.getString(4), result.getString(5), result.getString(6));
+                        featureServices.add(featureService);
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

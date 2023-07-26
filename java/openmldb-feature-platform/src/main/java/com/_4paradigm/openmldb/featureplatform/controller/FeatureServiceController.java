@@ -31,6 +31,11 @@ public class FeatureServiceController {
         return featureServiceService.getFeatureServices();
     }
 
+    @GetMapping("/latest")
+    public List<FeatureService> getLatestFeatureServices() {
+        return featureServiceService.getLatestFeatureServices();
+    }
+
     @GetMapping("/{name}")
     public FeatureService getFeatureServiceByName(@PathVariable String name) {
         return featureServiceService.getFeatureServiceByName(name);

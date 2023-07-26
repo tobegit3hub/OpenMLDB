@@ -12,6 +12,11 @@
   <a-input v-model:value="searchText" :placeholder="$t('Search')" @change="handleSearch" />
   <br/><br/>
 
+  <div>
+    <a-checkbox v-model:checked="isDisplayAllVersion" @change="initData">{{ $t('Display All Versions')}}</a-checkbox>
+  </div>
+
+
   <a-table :columns="columns" :data-source="searchFilteredFeatureServices" :loading="loading">
     <template #name="{ text, record }">
       <router-link :to="`/featureservices/${record.name}`">{{ text }}</router-link>
@@ -79,6 +84,8 @@ import { message } from 'ant-design-vue';
 export default {
   data() {
     return {
+      isDisplayAllVersion: false,
+
       searchText: "",
       searchFilteredFeatureServices: [],
 
@@ -126,7 +133,13 @@ export default {
   methods: {
     initData() {
       this.loading = true;
-      axios.get(`/api/featureservices`)
+
+      let requestUrl = "/api/featureservices/latest"
+      if (this.isDisplayAllVersion) {
+        requestUrl = "/api/featureservices"
+      }
+
+      axios.get(requestUrl)
         .then(response => {
           this.featureServices = response.data;
           this.searchFilteredFeatureServices = this.featureServices;

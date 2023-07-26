@@ -82,7 +82,11 @@
     "Latest Version": "最新版本",
     "Features Service Versions": "特征服务版本",
     "Update Latest Version": "更新最新版本",
-    "Latest": "最新",
+    "Latest": "最新", 
     "Not Latest": "非最新",
-    "Display More Options": "显示更多选项"
+    "Display More Options": "显示更多选项",
+    "Create Database": "创建数据库",
+    "Map Hive Table": "映射Hive表",
+    "Display Import SQL": "显示SQL导入",
+    "Display All Versions": "显示所有版本"
 }

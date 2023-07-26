@@ -226,6 +226,16 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<FeatureService>>() {});
     }
 
+    public List<FeatureService> getLatestFeatureServices() throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/latest";
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<FeatureService>>() {});
+    }
+
     public boolean createFeatureService(String name, String featureList) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices";
         HttpPost postRequest = new HttpPost(endpoint);
