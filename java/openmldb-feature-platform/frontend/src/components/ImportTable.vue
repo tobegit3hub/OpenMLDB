@@ -12,7 +12,7 @@
       :wrapper-col="{ span: 16 }"
       @submit="handleSubmitCreateDatabase">
       <a-form-item
-        label="Database"
+        :label="$t('Database')"
         :rules="[{ required: true, message: 'Please input database!' }]">
         <a-input v-model:value="createDatabaseFormState.database" />
       </a-form-item>

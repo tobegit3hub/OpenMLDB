@@ -399,7 +399,7 @@ public class FeatureServiceService {
             Statement openmldbStatement = openmldbConnection.createStatement();
 
             // Delete the deployment
-            FeatureService featureService = getFeatureServiceByName(name);
+            FeatureService featureService = getFeatureServiceByNameAndVersion(name, version);
             if (!featureService.getDb().equals("")) {
                 openmldbStatement.execute("USE " + featureService.getDb());
             }
@@ -410,6 +410,12 @@ public class FeatureServiceService {
             // TODO: It would be better to use JDBC prepared statement from connection
             String sql = String.format("DELETE FROM SYSTEM_FEATURE_PLATFORM.feature_services WHERE name='%s' AND version='%s'", name, version);
             openmldbStatement.execute(sql);
+
+            // Delete if it is the latest version
+            if (getLatestVersion(name).equals(version)) {
+                sql = String.format("DELETE FROM SYSTEM_FEATURE_PLATFORM.latest_feature_services WHERE name='%s' AND version='%s'", name, version);
+                openmldbStatement.execute(sql);
+            }
 
             openmldbStatement.close();
             return true;
@@ -425,7 +431,7 @@ public class FeatureServiceService {
         if (!oldLatestVersion.equals(newVersion)) {
             Statement openmldbStatement = openmldbConnection.createStatement();
 
-            String sql = String.format("DELETE FROM SYSTEM_FEATURE_PLATFORM.latest_feature_services WHERE name='%s'", name);
+            String sql = String.format("DELETE FROM SYSTEM_FEATURE_PLATFORM.latest_feature_services WHERE name='%s' AND version='%s'", name, oldLatestVersion);
             openmldbStatement.execute(sql);
 
             FeatureService featureService = getFeatureServiceByNameAndVersion(name, newVersion);

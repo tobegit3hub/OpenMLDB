@@ -5,7 +5,7 @@
 
 <a-layout class="layout">
   <a-layout-sider :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
-    <a-menu theme="dark" mode="inline" class="navi-menu">
+    <a-menu theme="dark" mode="inline" class="navi-menu" :openKeys="['whole_process_wizard', 'advanced_management']">
 
       <a-menu-item key="1">
         <router-link to='/'>{{ $t('Feature Big Screen') }}</router-link>

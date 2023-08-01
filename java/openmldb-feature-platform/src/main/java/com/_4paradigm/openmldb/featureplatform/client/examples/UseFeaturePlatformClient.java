@@ -29,6 +29,7 @@ public class UseFeaturePlatformClient {
     }
 
     public static void accessFeatures() throws IOException {
+                /*
         // List all features
         List<Feature> features = client.getFeatures();
         System.out.println(features);
@@ -41,35 +42,48 @@ public class UseFeaturePlatformClient {
         // List all features of feature view
         List<Feature> features2 = client.getFeaturesFromFeatureView("featureview1");
         System.out.println(features2);
+         */
 
         // List all features of feature service
-        List<Feature> features3 = client.getFeaturesFromFeatureService("s3");
+        List<Feature> features3 = client.getFeaturesFromFeatureService("CLTV_S1");
         System.out.println(features3);
+
+
     }
 
     public static void accessFeatureViews() throws IOException {
+        /*
         // List all feature views
         List<FeatureView> featureViews = client.getFeatureViews();
         System.out.println(featureViews);
 
         // Create a feature view
         client.createFeatureView("featureview1", "", "", "SELECT name, age + 10 AS new_age FROM user");
-
+        */
         // Get a feature view
-        FeatureView featureView = client.getFeatureView("featureview1");
+        FeatureView featureView = client.getFeatureView("t1v1_v2");
         System.out.println(featureView);
 
+        /*
         // Delete a feature view
         client.deleteFeatureView("featureview1");
 
         List<String> tables = client.getFeatureViewDependentTables("featureview1");
         System.out.println(tables);
+
+         */
     }
 
-    public static void accessFeatureServices() throws IOException {/*
+    public static void accessFeatureServices() throws IOException {
+        /*
         // List all feature services
         List<FeatureService> featureServices = client.getFeatureServices();
         System.out.println(featureServices);
+
+        List<FeatureService> featureServices = client.getLatestFeatureServices();
+        System.out.println(featureServices);
+
+
 
         // Create a feature service
         client.createFeatureService("feature_service_1", "feature_view1, feature_view2");
@@ -77,9 +91,14 @@ public class UseFeaturePlatformClient {
         // Get a feature view
         FeatureService featureService = client.getFeatureService("feature_service_1");
         System.out.println(featureService);
-
+*/
         // Delete a feature view
-        client.deleteFeatureService("feature_service_1");
+        client.deleteFeatureService("s1", "v2");
+
+/*
+        HttpResponse response = client.requestFeatureService("s1", "v1", "{\"input\": [[\"abc\", 22]]}");
+        client.printResponse(response);
+
 
         HttpResponse response = client.requestFeatureService("service1", "{\"input\": [[\"abc\", 22]]}");
         client.printResponse(response);
@@ -94,9 +113,10 @@ public class UseFeaturePlatformClient {
 
         String demoData = client.getFeatureServiceRequestDemoData("featureservice1");
         System.out.println(demoData);
-*/
+
         String schema = client.getFeatureServiceOutputSchema("demo_table_deploy");
         System.out.println(schema);
+        */
     }
 
     public static void requestApiServer() throws IOException {
@@ -148,6 +168,10 @@ public class UseFeaturePlatformClient {
 
     public static void main(String[] args) {
         try {
+            //accessFeatureServices();
+            //accessFeatureViews();
+            //accessFeatureServices();
+            //accessFeatures();
             accessFeatureServices();
         } catch (IOException e) {
             e.printStackTrace();

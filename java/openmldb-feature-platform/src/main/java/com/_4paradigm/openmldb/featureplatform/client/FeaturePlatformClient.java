@@ -247,6 +247,17 @@ public class FeaturePlatformClient {
         return true;
     }
 
+    public boolean createFeatureService(String name, String version, String featureList) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"version\": \"%s\", \"featureList\":\"%s\"}", name, version, featureList)));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        printResponse(postResponse);
+        // TODO: Check response status code
+        return true;
+    }
+
     public boolean createFeatureServiceFromDeployment(String name, String db, String deploymentName) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/deployments";
         HttpPost postRequest = new HttpPost(endpoint);
@@ -257,8 +268,28 @@ public class FeaturePlatformClient {
         return true;
     }
 
+    public boolean createFeatureServiceFromDeployment(String name, String version, String db, String deploymentName) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/deployments";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(String.format("{\"name\":\"%s\", \"version\":\"%s\", \"db\":\"%s\", \"deploymentName\":\"%s\"}", name, version, db, deploymentName)));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        printResponse(postResponse);
+        return true;
+    }
+
     public FeatureService getFeatureService(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name;
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, FeatureService.class);
+    }
+
+    public FeatureService getFeatureService(String name, String version) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/" + version;
         HttpGet request = new HttpGet(endpoint);
         HttpResponse response = httpClient.execute(request);
 
@@ -277,8 +308,26 @@ public class FeaturePlatformClient {
         return objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
     }
 
+    public List<String> getFeatureServiceDependentTables(String name, String version) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/" + version + "/tables";
+        HttpGet request = new HttpGet(endpoint);
+        HttpResponse response = httpClient.execute(request);
+
+        HttpEntity entity = response.getEntity();
+        String responseBody = EntityUtils.toString(entity);
+        return objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
+    }
+
     public boolean deleteFeatureService(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name;
+        HttpDelete deleteRequest = new HttpDelete(endpoint);
+        HttpResponse deleteResponse = httpClient.execute(deleteRequest);
+        printResponse(deleteResponse);
+        return true;
+    }
+
+    public boolean deleteFeatureService(String name, String version) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/" + version;
         HttpDelete deleteRequest = new HttpDelete(endpoint);
         HttpResponse deleteResponse = httpClient.execute(deleteRequest);
         printResponse(deleteResponse);
@@ -292,6 +341,13 @@ public class FeaturePlatformClient {
         return EntityUtils.toString(getResponse.getEntity());
     }
 
+    public String getFeatureServiceRequestSchema(String name, String version) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/" + version + "/request/schema";
+        HttpGet getRequest = new HttpGet(endpoint);
+        HttpResponse getResponse = httpClient.execute(getRequest);
+        return EntityUtils.toString(getResponse.getEntity());
+    }
+
     public String getFeatureServiceOutputSchema(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name + "/output/schema";
         HttpGet getRequest = new HttpGet(endpoint);
@@ -299,8 +355,22 @@ public class FeaturePlatformClient {
         return EntityUtils.toString(getResponse.getEntity());
     }
 
+    public String getFeatureServiceOutputSchema(String name, String version) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/" + version + "/output/schema";
+        HttpGet getRequest = new HttpGet(endpoint);
+        HttpResponse getResponse = httpClient.execute(getRequest);
+        return EntityUtils.toString(getResponse.getEntity());
+    }
+
     public String getFeatureServiceRequestDemoData(String name) throws IOException {
         String endpoint = this.apiEndpoint + "featureservices/" + name + "/request/demo";
+        HttpGet getRequest = new HttpGet(endpoint);
+        HttpResponse getResponse = httpClient.execute(getRequest);
+        return EntityUtils.toString(getResponse.getEntity());
+    }
+
+    public String getFeatureServiceRequestDemoData(String name, String version) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + name + "/" + version + "/request/demo";
         HttpGet getRequest = new HttpGet(endpoint);
         HttpResponse getResponse = httpClient.execute(getRequest);
         return EntityUtils.toString(getResponse.getEntity());
@@ -333,8 +403,27 @@ public class FeaturePlatformClient {
         return postResponse;
     }
 
+    public HttpResponse requestFeatureService(String featureService, String version, String requestData) throws IOException {
+        String endpoint = this.apiEndpoint + "featureservices/" + featureService + "/" + version + "/request";
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(requestData, ContentType.APPLICATION_JSON));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        return postResponse;
+    }
+
     public HttpResponse requestApiServer(String apiServerEndpoint, String featureServiceName, String requestData) throws IOException {
         FeatureService featureService = getFeatureService(featureServiceName);
+        String endpoint = String.format("%s/dbs/%s/deployments/%s", apiServerEndpoint, featureService.getDb(), featureService.getDeployment());
+        HttpPost postRequest = new HttpPost(endpoint);
+        postRequest.setHeader("Content-Type", "application/json");
+        postRequest.setEntity(new StringEntity(requestData));
+        HttpResponse postResponse = httpClient.execute(postRequest);
+        return postResponse;
+    }
+
+    public HttpResponse requestApiServer(String apiServerEndpoint, String featureServiceName, String featureServiceVersion, String requestData) throws IOException {
+        FeatureService featureService = getFeatureService(featureServiceName, featureServiceVersion);
         String endpoint = String.format("%s/dbs/%s/deployments/%s", apiServerEndpoint, featureService.getDb(), featureService.getDeployment());
         HttpPost postRequest = new HttpPost(endpoint);
         postRequest.setHeader("Content-Type", "application/json");

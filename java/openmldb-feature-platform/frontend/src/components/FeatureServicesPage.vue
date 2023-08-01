@@ -26,16 +26,9 @@
     </template>
     <template #db="{ text, record }">
       <router-link :to="`/databases/${record.db}`">{{ text }}</router-link>
-    </template>  
-    <!-- The delete column-->
+    </template>
     <template v-slot:action="scope">
       <a-button type="primary"><router-link :to="`/featureservices/test?featureservice=${scope.record.name}`">{{ $t('Test Service') }}</router-link></a-button>
-      <br/>
-      <a-popconfirm
-          title="Sure to delete?"
-          @confirm="handleDelete(scope.record.name)">
-        <a-button type="primary" danger>{{ $t('Delete Service') }}</a-button>
-      </a-popconfirm>
     </template>
   </a-table>
 
@@ -161,17 +154,6 @@ export default {
       })
       .then(response => {
         message.success(`Success to add feature service ${this.formState.name}`);
-        this.initData();
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
-    },
-
-    handleDelete(name) {
-      axios.delete(`/api/featureservices/${name}`)
-      .then(response => {
-        message.success(`Success to delete feature service: ${name}`);
         this.initData();
       })
       .catch(error => {

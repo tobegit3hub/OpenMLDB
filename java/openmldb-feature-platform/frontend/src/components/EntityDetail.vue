@@ -3,9 +3,9 @@
 
   <br/>
   <h1>{{ $t('Entity') }}: {{ data.name }} </h1>
-  <a-descriptions layout="vertical" bordered>
-    <a-descriptions-item :label="$t('Name')"> {{ data.name }}</a-descriptions-item>
-    <a-descriptions-item :label="$t('Primary Keys')">{{ data.primaryKeys }}</a-descriptions-item>
+  <a-descriptions bordered>
+    <a-descriptions-item :span="24" :label="$t('Name')"> {{ data.name }}</a-descriptions-item>
+    <a-descriptions-item :span="24" :label="$t('Primary Keys')">{{ data.primaryKeys }}</a-descriptions-item>
   </a-descriptions>
 
 </div>

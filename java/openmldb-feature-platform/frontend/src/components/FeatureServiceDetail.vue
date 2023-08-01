@@ -8,13 +8,13 @@
     </h1>
 
     <br/>
-    <a-descriptions layout="vertical" bordered>
-      <a-descriptions-item :label="$t('Name')"> {{ data.name }}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Latest Version')"><router-link :to="`/featureservices/${data.name}/${data.version}`">{{ data.version }}</router-link></a-descriptions-item>
-      <a-descriptions-item :label="$t('Feature List')">{{ data.featureList }}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Database')"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
-      <a-descriptions-item :label="$t('SQL')">{{ data.sql }}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Deployment')">{{ data.deployment }}</a-descriptions-item>
+    <a-descriptions bordered>
+      <a-descriptions-item :span="24" :label="$t('Name')"> {{ data.name }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Latest Version')"><router-link :to="`/featureservices/${data.name}/${data.version}`">{{ data.version }}</router-link></a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Feature List')">{{ data.featureList }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Database')"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('SQL')">{{ data.sql }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Deployment')">{{ data.deployment }}</a-descriptions-item>
     </a-descriptions>
 
     <br/><br/>
@@ -41,12 +41,12 @@
         <a-popconfirm
             title="Sure to update as latest version?"
             @confirm="handleUpdteLatestVersion(scope.record.name, scope.record.version)">
-          <a-button type="primary">{{ $t('Update Latest Version') }}</a-button>
+          <a-button type="primary">{{ $t('Update Version') }}</a-button>
         </a-popconfirm>
         <br/>
         <a-popconfirm
             title="Sure to delete?"
-            @confirm="handleDelete(scope.record.name)">
+            @confirm="handleDelete(scope.record.name, scope.record.version)">
           <a-button type="primary" danger>{{ $t('Delete Service') }}</a-button>
         </a-popconfirm>
       </template>
@@ -137,10 +137,10 @@ export default {
         });
     },
 
-    handleDelete(name) {
-      axios.delete(`/api/featureservices/${name}`)
+    handleDelete(name, version) {
+      axios.delete(`/api/featureservices/${name}/${version}`)
       .then(response => {
-        message.success(`Success to delete feature service: ${name}`);
+        message.success(`Success to delete feature service: ${name} and version: ${version}`);
         this.initData();
       })
       .catch(error => {

@@ -6,17 +6,17 @@
       {{ $t('Feature View') }}: {{ data.name }} 
       &nbsp;&nbsp;<a-button type="primary"><router-link :to='`/featureservices/deploy?featureview=${data.name}`'>{{ $t('Create Service') }}</router-link></a-button>
     </h1>
-    <a-descriptions layout="vertical" bordered>
-      <a-descriptions-item :label='$t("Name")'> {{ data.name }} </a-descriptions-item>
-      <a-descriptions-item :label='$t("Entities")'>
+    <a-descriptions bordered>
+      <a-descriptions-item :span="24" :label='$t("Name")'> {{ data.name }} </a-descriptions-item>
+      <a-descriptions-item :span="24" :label='$t("Entities")'>
         <router-link v-for="entity in entities" :to="`/entities/${entity}`" :key="entity">{{ entity }} </router-link>
       </a-descriptions-item>
-      <a-descriptions-item :label='$t("Database")'><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
-      <a-descriptions-item :label='$t("SQL")'>{{ data.sql }}</a-descriptions-item>
-      <a-descriptions-item :label='$t("Features")'>
+      <a-descriptions-item :span="24" :label='$t("Database")'><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
+      <a-descriptions-item :span="24" :label='$t("SQL")'>{{ data.sql }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label='$t("Features")'>
         <router-link v-for="feature in features" :to="`/features/${feature.featureViewName}/${feature.featureName}`" :key="feature.featureName">{{ feature.featureName }}, </router-link>
       </a-descriptions-item>
-      <a-descriptions-item :label='$t("Description")'>{{ data.description }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label='$t("Description")'>{{ data.description }}</a-descriptions-item>
     </a-descriptions>
   
     <br/><br/>

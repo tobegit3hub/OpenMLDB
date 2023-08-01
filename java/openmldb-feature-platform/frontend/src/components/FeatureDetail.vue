@@ -2,13 +2,13 @@
   <div>
     <br/>
     <h1>{{ $t('Feature') }}: {{ feature.featureName }} </h1>
-    <a-descriptions layout="vertical" bordered>
-      <a-descriptions-item :label="$t('Feature View Name')">
+    <a-descriptions bordered>
+      <a-descriptions-item :span="24" :label="$t('Feature View Name')">
         <router-link :to="`/featureviews/${feature.featureViewName}`">{{ feature.featureViewName }}</router-link>
       </a-descriptions-item>
-      <a-descriptions-item :label="$t('Feature Name')">{{ feature.featureName }}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Type')">{{ feature.type}}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Description')">{{ feature.description}}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Feature Name')">{{ feature.featureName }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Type')">{{ feature.type}}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Description')">{{ feature.description}}</a-descriptions-item>
     </a-descriptions>
   </div>
 </template>

@@ -8,13 +8,13 @@
     </h1>
 
     <br/>
-    <a-descriptions layout="vertical" bordered>
-      <a-descriptions-item :label="$t('Name')"><router-link :to="`/featureservices/${data.name}`">{{ data.name }}</router-link></a-descriptions-item>
-      <a-descriptions-item :label="$t('Version')"> {{ data.version }}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Feature List')">{{ data.featureList }}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Database')"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
-      <a-descriptions-item :label="$t('SQL')">{{ data.sql }}</a-descriptions-item>
-      <a-descriptions-item :label="$t('Deployment')">{{ data.deployment }}</a-descriptions-item>
+    <a-descriptions bordered>
+      <a-descriptions-item :span="24" :label="$t('Name')"><router-link :to="`/featureservices/${data.name}`">{{ data.name }}</router-link></a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Version')"> {{ data.version }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Feature List')">{{ data.featureList }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Database')"><router-link :to="`/databases/${data.db}`">{{ data.db }}</router-link></a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('SQL')">{{ data.sql }}</a-descriptions-item>
+      <a-descriptions-item :span="24" :label="$t('Deployment')">{{ data.deployment }}</a-descriptions-item>
     </a-descriptions>
   
     <br/><br/>
