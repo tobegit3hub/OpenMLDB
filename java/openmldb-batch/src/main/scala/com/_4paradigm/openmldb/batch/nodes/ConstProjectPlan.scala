@@ -17,14 +17,13 @@
 package com._4paradigm.openmldb.batch.nodes
 
 import com._4paradigm.hybridse.sdk.UnsupportedHybridSeException
-import com._4paradigm.hybridse.node.{ConstNode, ExprType, DataType => HybridseDataType}
+import com._4paradigm.hybridse.node.{CastExprNode, ConstNode, ExprType, DataType => HybridseDataType}
 import com._4paradigm.hybridse.vm.PhysicalConstProjectNode
 import com._4paradigm.openmldb.batch.{PlanContext, SparkInstance}
 import com._4paradigm.openmldb.batch.utils.{DataTypeUtil, ExpressionUtil}
 import org.apache.spark.sql.{Column, SparkSession}
 import org.apache.spark.sql.functions.{to_date, when}
-import org.apache.spark.sql.types.{BooleanType, DateType, DoubleType, FloatType, IntegerType, LongType, ShortType,
-  StringType, TimestampType}
+import org.apache.spark.sql.types.{BooleanType, DateType, DoubleType, FloatType, IntegerType, LongType, ShortType, StringType, TimestampType}
 import java.sql.Timestamp
 import scala.collection.JavaConverters.asScalaBufferConverter
 
@@ -56,8 +55,42 @@ object ConstProjectPlan {
           castSparkOutputCol(ctx.getSparkSession, column, constNode.GetDataType(), outputColTypeList(i))
             .alias(outputColName)
 
+        case ExprType.kExprCast =>
+          val cast = CastExprNode.CastFrom(expr)
+          val castType = cast.getCast_type_
+
+          val subExpr = cast.expr()
+
+          subExpr.GetExprType() match {
+            case ExprType.kExprPrimary =>
+              val constNode = ConstNode.CastFrom(subExpr)
+              val outputColName = outputColNameList(i)
+
+              println("Try to handle sub expr")
+
+              // Create simple literal Spark column
+              val column = ExpressionUtil.constExprToSparkColumn(constNode)
+
+              // Match column type for output type
+              castSparkOutputCol(ctx.getSparkSession, column, constNode.GetDataType(), outputColTypeList(i))
+                .alias(outputColName)
+
+            case _ => throw new UnsupportedHybridSeException(
+              s"ConstProjectPlan can not handle expression type: ${expr.GetExprType()}")
+          }
+
+          /*
+          val (childCol, childType) =
+            createSparkColumn(spark, inputDf, node, cast.GetChild(0))
+          val castColumn = ConstProjectPlan.castSparkOutputCol(
+            spark, childCol, childType, castType)
+          castColumn -> castType
+
+           */
+
+
         case _ => throw new UnsupportedHybridSeException(
-          s"Should not handle non-const column for const project node")
+          s"ConstProjectPlan can not handle expression type: ${expr.GetExprType()}")
       }
     })
 
